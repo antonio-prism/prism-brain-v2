@@ -642,7 +642,7 @@ async def list_calculations(limit: int = Query(20, ge=1, le=100)):
     """List recent calculation batches."""
     with get_session_context() as session:
         calculations = session.query(CalculationLog).order_by(
-            CalculationLog.started_at.desc()
+            CalculationLog.start_time.desc()
         ).limit(limit).all()
 
         return {
@@ -653,9 +653,10 @@ async def list_calculations(limit: int = Query(20, ge=1, le=100)):
                     "events_processed": c.events_processed,
                     "events_succeeded": c.events_succeeded,
                     "events_failed": c.events_failed,
-                    "started_at": c.started_at.isoformat() if c.started_at else None,
-                    "completed_at": c.completed_at.isoformat() if c.completed_at else None,
-                    "error_summary": c.error_summary
+                    "started_at": c.start_time.isoformat() if c.start_time else None,
+                    "completed_at": c.end_time.isoformat() if c.end_time else None,
+                    "duration_seconds": c.duration_seconds,
+                    "errors": c.errors
                 }
                 for c in calculations
             ]
@@ -828,15 +829,17 @@ async def trigger_calculation(
 
             # Create calculation log
             end_time = datetime.utcnow()
+            duration_secs = int((end_time - start_time).total_seconds())
             calc_log = CalculationLog(
                 calculation_id=calculation_id,
                 status="COMPLETED" if events_failed == 0 else "COMPLETED_WITH_ERRORS",
                 events_processed=events_processed,
                 events_succeeded=events_succeeded,
                 events_failed=events_failed,
-                started_at=start_time,
-                completed_at=end_time,
-                error_summary=json.dumps(errors) if errors else None
+                start_time=start_time,
+                end_time=end_time,
+                duration_seconds=duration_secs,
+                errors=errors if errors else None
             )
             session.add(calc_log)
 
@@ -915,7 +918,7 @@ async def get_stats():
 
         # Latest calculation
         latest_calc = session.query(CalculationLog).order_by(
-            CalculationLog.started_at.desc()
+            CalculationLog.start_time.desc()
         ).first()
 
         return {
@@ -929,7 +932,7 @@ async def get_stats():
             "latest_calculation": {
                 "id": latest_calc.calculation_id if latest_calc else None,
                 "status": latest_calc.status if latest_calc else None,
-                "date": latest_calc.started_at.isoformat() if latest_calc else None
+                "date": latest_calc.start_time.isoformat() if latest_calc else None
             }
         }
 
