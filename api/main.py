@@ -74,11 +74,15 @@ class IndicatorWeightCreate(BaseModel):
     update_frequency_hours: int = 24
 
 class IndicatorValueCreate(BaseModel):
+    event_id: str
     indicator_name: str
     data_source: str
-    current_value: float
-    historical_values: List[float]
-    unit: str = "index"
+    value: float
+    timestamp: Optional[datetime] = None
+    raw_value: Optional[float] = None
+    historical_mean: Optional[float] = None
+    historical_std: Optional[float] = None
+    z_score: Optional[float] = None
     quality_score: float = 0.8
 
 
@@ -308,7 +312,13 @@ async def bulk_import_indicator_weights(weights: List[IndicatorWeightCreate]):
                     data_source=w.data_source,
                     beta_type=w.beta_type,
                     time_scale=w.time_scale,
-                    update_frequency_hours=w.update_frequency_hours
+                    # Default values for required score fields
+                    causal_proximity_score=0.5,
+                    data_quality_score=0.7,
+                    timeliness_score=0.6,
+                    predictive_lead_score=0.5,
+                    raw_score=w.normalized_weight,
+                    beta_value=0.5
                 )
                 session.add(weight)
                 imported += 1
@@ -334,13 +344,13 @@ async def list_indicator_values(
             "limit": limit,
             "values": [
                 {
+                    "event_id": v.event_id,
                     "indicator_name": v.indicator_name,
                     "data_source": v.data_source,
-                    "current_value": v.current_value,
-                    "historical_count": len(json.loads(v.historical_values)) if v.historical_values else 0,
-                    "unit": v.unit,
-                    "quality_score": v.quality_score,
-                    "value_date": v.value_date.isoformat() if v.value_date else None
+                    "value": v.value,
+                    "timestamp": v.timestamp.isoformat() if v.timestamp else None,
+                    "z_score": v.z_score,
+                    "quality_score": v.quality_score
                 }
                 for v in values
             ]
@@ -349,30 +359,34 @@ async def list_indicator_values(
 
 @app.post("/api/v1/indicator-values/bulk")
 async def bulk_import_indicator_values(values: List[IndicatorValueCreate]):
-    """Bulk import indicator values with historical data."""
+    """Bulk import indicator values (time series data points)."""
     with get_session_context() as session:
         imported = 0
         updated = 0
         for v in values:
+            timestamp = v.timestamp or datetime.utcnow()
             existing = session.query(IndicatorValue).filter(
+                IndicatorValue.event_id == v.event_id,
                 IndicatorValue.indicator_name == v.indicator_name,
-                IndicatorValue.data_source == v.data_source
+                IndicatorValue.timestamp == timestamp
             ).first()
             if existing:
-                existing.current_value = v.current_value
-                existing.historical_values = json.dumps(v.historical_values)
-                existing.value_date = datetime.utcnow()
+                existing.value = v.value
+                existing.raw_value = v.raw_value or v.value
                 existing.quality_score = v.quality_score
                 updated += 1
             else:
                 value = IndicatorValue(
+                    event_id=v.event_id,
                     indicator_name=v.indicator_name,
                     data_source=v.data_source,
-                    current_value=v.current_value,
-                    historical_values=json.dumps(v.historical_values),
-                    unit=v.unit,
-                    quality_score=v.quality_score,
-                    value_date=datetime.utcnow()
+                    timestamp=timestamp,
+                    value=v.value,
+                    raw_value=v.raw_value or v.value,
+                    historical_mean=v.historical_mean,
+                    historical_std=v.historical_std,
+                    z_score=v.z_score,
+                    quality_score=v.quality_score
                 )
                 session.add(value)
                 imported += 1
