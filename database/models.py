@@ -2,6 +2,7 @@
 PRISM Brain Database Models
 SQLAlchemy ORM models for PostgreSQL.
 Updated with Phase 4B-4E columns for signals, explainability, and dependencies.
+Column names aligned with main.py code expectations.
 """
 
 from sqlalchemy import (
@@ -99,9 +100,17 @@ class IndicatorValue(Base):
     value = Column(Float)
     raw_value = Column(Text)
     z_score = Column(Float)
-    source = Column(String(100))
-    fetched_at = Column(DateTime, default=datetime.utcnow)
-    data_quality = Column(String(50))
+    data_source = Column(String(100))
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    quality_score = Column(Float)
+    historical_mean = Column(Float)
+    historical_std = Column(Float)
+
+    # Phase 4B: Signal extraction columns
+    signal = Column(Float)
+    momentum = Column(Float)
+    trend = Column(String(20))
+    is_anomaly = Column(Boolean, default=False)
 
 
 class DataSourceHealth(Base):
@@ -116,7 +125,8 @@ class DataSourceHealth(Base):
     error_message = Column(Text)
     response_time_ms = Column(Integer)
     records_fetched = Column(Integer, default=0)
-    checked_at = Column(DateTime, default=datetime.utcnow)
+    check_time = Column(DateTime, default=datetime.utcnow)
+    success_rate_24h = Column(Float)
 
 
 class CalculationLog(Base):
@@ -125,12 +135,13 @@ class CalculationLog(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     calculation_id = Column(String(50), unique=True)
-    started_at = Column(DateTime, default=datetime.utcnow)
-    completed_at = Column(DateTime)
-    events_calculated = Column(Integer, default=0)
+    start_time = Column(DateTime, default=datetime.utcnow)
+    end_time = Column(DateTime)
+    events_processed = Column(Integer, default=0)
+    events_succeeded = Column(Integer, default=0)
     events_failed = Column(Integer, default=0)
-    total_duration_seconds = Column(Float)
+    duration_seconds = Column(Float)
     status = Column(String(50), default="running")
-    error_message = Column(Text)
+    errors = Column(Text)
     trigger = Column(String(50), default="manual")
     method = Column(String(50), default="bayesian")
