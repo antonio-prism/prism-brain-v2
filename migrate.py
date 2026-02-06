@@ -68,6 +68,11 @@ ALL_COLUMNS = {
         "probability_change_pct FLOAT",
         "dependency_adjustment FLOAT",
         "dependency_details JSON",
+        "calculation_id VARCHAR(50)",
+        "baseline_probability_pct FLOAT",
+        "ci_level FLOAT",
+        "ci_width_pct FLOAT",
+        "bootstrap_iterations INTEGER",
     ],
     "indicator_weights": [
         "id SERIAL",
