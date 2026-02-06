@@ -57,6 +57,11 @@ class RiskProbability(Base):
     total_adjustment = Column(Float)
     indicators_used = Column(Integer, default=0)
     calculation_method = Column(String(50), default="bayesian")
+    calculation_id = Column(String(50))
+    baseline_probability_pct = Column(Float)
+    ci_level = Column(Float)
+    ci_width_pct = Column(Float)
+    bootstrap_iterations = Column(Integer)
 
     # Phase 4B: Signal extraction columns
     signal = Column(Float)
