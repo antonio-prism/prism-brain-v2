@@ -1887,7 +1887,7 @@ async def trigger_enhanced_calculation(
                 start_time=start_time,
                 end_time=end_time,
                 duration_seconds=duration_secs,
-                errors=errors if errors else None
+                errors=json.dumps(errors) if errors else None
             )
             session.add(calc_log)
             session.commit()
