@@ -97,14 +97,15 @@ def regenerate_weights():
                 session.execute(
                     text("""
                         INSERT INTO indicator_weights
-                            (event_id, indicator_name, weight, data_source, beta_type, time_scale)
+                            (event_id, indicator_name, weight, normalized_weight, data_source, beta_type, time_scale)
                         VALUES
-                            (:event_id, :indicator_name, :weight, :data_source, :beta_type, :time_scale)
+                            (:event_id, :indicator_name, :weight, :normalized_weight, :data_source, :beta_type, :time_scale)
                     """),
                     {
                         "event_id": event_id,
                         "indicator_name": ind["name"],
                         "weight": ind["weight"],
+                        "normalized_weight": ind["weight"],
                         "data_source": ind["source"],
                         "beta_type": ind["beta"],
                         "time_scale": ind["time_scale"],
