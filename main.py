@@ -34,6 +34,10 @@ from database.models import (
     RiskEvent, RiskProbability, IndicatorWeight,
     DataSourceHealth, CalculationLog, IndicatorValue
 )
+from config.category_indicators import (
+    get_category_prefix, get_default_baseline, get_indicators_for_event,
+    CATEGORY_INDICATOR_MAP
+)
 
 # Optional ML imports - degrade gracefully if not available
 try:
@@ -166,12 +170,19 @@ class ProbabilityCalculator:
         """
         Calculate signal from indicator data.
         Uses z-score if available, otherwise normalizes value to [-1, 1].
+
+        FIX: Use tanh(z/2) instead of z/3 clamping.
+        Rationale: tanh provides smooth non-linear mapping that preserves
+        the full dynamic range. A z-score of 2 (95th percentile) now maps
+        to signal 0.76 instead of 0.67. A z-score of 3 maps to 0.91
+        instead of 1.0. This gives more realistic probability adjustments.
         """
         if z_score is not None:
-            # Clamp z-score to [-3, 3] and normalize to [-1, 1]
-            return max(-1.0, min(1.0, z_score / 3.0))
+            # Use tanh for smooth bounded mapping [-1, 1]
+            return math.tanh(z_score / 2.0)
         else:
-            # Assume value is 0-1, center around 0.5
+            # No z-score: use value directly with centering
+            # Assume value is 0-1 range, center around 0.5
             return max(-1.0, min(1.0, (value - 0.5) * 2))
 
     def calculate_event_probability(
@@ -1142,6 +1153,31 @@ async def list_indicator_weights(
         }
 
 
+@app.post("/api/v1/events/apply-baselines")
+async def apply_category_baselines():
+    """Apply differentiated baseline probabilities to all events based on category."""
+    with get_session_context() as session:
+        events = session.query(RiskEvent).all()
+        updated = 0
+        categories_found = {}
+        for event in events:
+            new_baseline = get_default_baseline(event.event_id)
+            prefix = get_category_prefix(event.event_id)
+            if prefix not in categories_found:
+                categories_found[prefix] = {"count": 0, "baseline": new_baseline}
+            categories_found[prefix]["count"] += 1
+            if event.baseline_probability != new_baseline:
+                event.baseline_probability = new_baseline
+                updated += 1
+        session.commit()
+        return {
+            "total_events": len(events),
+            "updated": updated,
+            "categories": categories_found,
+            "message": f"Applied differentiated baselines to {updated} events across {len(categories_found)} categories"
+        }
+
+
 @app.post("/api/v1/indicator-weights/bulk")
 async def bulk_import_indicator_weights(weights: List[IndicatorWeightCreate]):
     """Bulk import indicator weights."""
@@ -1681,7 +1717,11 @@ async def trigger_enhanced_calculation(
                 events_processed += 1
                 try:
                     weights = weights_by_event.get(event.event_id, [])
-                    baseline_scale = event.baseline_probability or 3
+                    stored_baseline = event.baseline_probability
+        if stored_baseline and 1 <= stored_baseline <= 5:
+            baseline_scale = stored_baseline
+        else:
+            baseline_scale = get_default_baseline(event.event_id)
                     baseline_prob = probability_calculator.scale_to_probability(baseline_scale)
                     all_baselines[event.event_id] = baseline_prob
 
