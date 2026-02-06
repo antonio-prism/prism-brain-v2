@@ -63,7 +63,7 @@ ALL_COLUMNS = {
         "ml_probability_pct FLOAT",
         "attribution JSON",
         "explanation TEXT",
-        "recommendation VARCHAR(100)",
+        "recommendation JSON",
         "previous_probability_pct FLOAT",
         "probability_change_pct FLOAT",
         "dependency_adjustment FLOAT",
@@ -157,6 +157,23 @@ with engine.connect() as conn:
             print(f"  RENAMED: {table}.{old_col} -> {new_col}")
         except Exception:
             print(f"  SKIP: {table}.{old_col} (already correct or missing)")
+            conn.rollback()
+    conn.commit()
+
+
+    # Step 1.5: Fix column types that need changing
+    print()
+    print("Step 1.5: Fixing column types...")
+    type_changes = [
+        ("risk_probabilities", "recommendation", "JSON USING recommendation::JSON"),
+        ("indicator_values", "raw_value", "FLOAT USING raw_value::FLOAT"),
+    ]
+    for table, col, new_type in type_changes:
+        try:
+            conn.execute(text(f"ALTER TABLE {table} ALTER COLUMN {col} TYPE {new_type}"))
+            print(f"  CHANGED: {table}.{col} -> {new_type.split()[0]}")
+        except Exception:
+            print(f"  SKIP: {table}.{col} (already correct or empty)")
             conn.rollback()
     conn.commit()
 
