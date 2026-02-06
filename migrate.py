@@ -47,8 +47,9 @@ ALL_COLUMNS = {
         "calculation_date TIMESTAMP DEFAULT NOW()",
         "data_sources_used INTEGER DEFAULT 0",
         "flags TEXT",
-        "ci_lower FLOAT",
-        "ci_upper FLOAT",
+        "ci_lower_pct FLOAT",
+        "ci_upper_pct FLOAT",
+        "change_direction VARCHAR(20)", "methodology_tier VARCHAR(50)",
         "precision_band VARCHAR(50)",
         "log_odds FLOAT",
         "total_adjustment FLOAT",
@@ -135,6 +136,8 @@ RENAME_COLUMNS = [
     ("indicator_values", "source", "data_source"),
     ("indicator_values", "data_quality", "quality_score"),
     ("data_source_health", "checked_at", "check_time"),
+    ("risk_probabilities", "ci_lower", "ci_lower_pct"),
+    ("risk_probabilities", "ci_upper", "ci_upper_pct"),
 ]
 
 print("=== PRISM Brain Database Migration v4 (COMPREHENSIVE) ===")
