@@ -103,7 +103,7 @@ class IndicatorValue(Base):
     event_id = Column(String(50), nullable=False, index=True)
     indicator_name = Column(String(200), nullable=False)
     value = Column(Float)
-    raw_value = Column(Text)
+    raw_value = Column(Float)
     z_score = Column(Float)
     data_source = Column(String(100))
     timestamp = Column(DateTime, default=datetime.utcnow)
