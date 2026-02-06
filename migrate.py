@@ -1,6 +1,6 @@
 """
-PRISM Brain Database Migration Script v2
-Adds all Phase 4B-4E columns AND fixes column name mismatches.
+PRISM Brain Database Migration Script v3
+Adds missing id columns, renames mismatched columns, adds Phase 4B-4E columns.
 Run as pre-deploy command on Railway.
 """
 import os
@@ -13,6 +13,16 @@ if not DATABASE_URL:
     sys.exit(1)
 
 engine = create_engine(DATABASE_URL)
+
+# Step 0: Add missing id (primary key) columns to tables that were created without them
+ADD_ID_COLUMNS = [
+    ("risk_events", "id"),
+    ("risk_probabilities", "id"),
+    ("indicator_weights", "id"),
+    ("indicator_values", "id"),
+    ("data_source_health", "id"),
+    ("calculation_logs", "id"),
+]
 
 # Step 1: Rename columns where models.py was out of sync with main.py
 RENAME_COLUMNS = [
@@ -59,22 +69,46 @@ ADD_COLUMNS = [
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS trend VARCHAR(20)",
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS is_anomaly BOOLEAN DEFAULT FALSE",
     # calculation_logs: ensure correct column names exist
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS calculation_id VARCHAR(50)",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS start_time TIMESTAMP DEFAULT NOW()",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS end_time TIMESTAMP",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_processed INTEGER DEFAULT 0",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_succeeded INTEGER DEFAULT 0",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS duration_seconds FLOAT",
     "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS errors TEXT",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'running'",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS trigger VARCHAR(50) DEFAULT 'manual'",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS method VARCHAR(50) DEFAULT 'bayesian'",
     # data_source_health: ensure correct column names exist
     "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS check_time TIMESTAMP DEFAULT NOW()",
     "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS success_rate_24h FLOAT",
 ]
 
-print("=== PRISM Brain Database Migration v2 ===")
+print("=== PRISM Brain Database Migration v3 ===")
 print()
 
 with engine.connect() as conn:
+    # Step 0: Add missing id columns
+    print("Step 0: Adding missing id (primary key) columns...")
+    for table, col in ADD_ID_COLUMNS:
+        try:
+            # Check if column exists
+            result = conn.execute(text(
+                f"SELECT column_name FROM information_schema.columns "
+                f"WHERE table_name = '{table}' AND column_name = '{col}'"
+            ))
+            if result.fetchone() is None:
+                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} SERIAL"))
+                print(f"  ADDED: {table}.{col} (SERIAL)")
+            else:
+                print(f"  SKIP: {table}.{col} (already exists)")
+        except Exception as e:
+            print(f"  ERROR: {table}.{col}: {e}")
+            conn.rollback()
+    conn.commit()
+
     # Step 1: Try column renames (safe: fails silently if old name doesn't exist)
+    print()
     print("Step 1: Renaming mismatched columns...")
     for table, old_col, new_col in RENAME_COLUMNS:
         try:
@@ -83,7 +117,6 @@ with engine.connect() as conn:
         except Exception as e:
             print(f"  SKIP: {table}.{old_col} -> {new_col} (already correct or not found)")
             conn.rollback()
-
     conn.commit()
 
     # Step 2: Add all columns (IF NOT EXISTS = safe to re-run)
