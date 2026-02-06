@@ -36,7 +36,7 @@ from database.models import (
 )
 from config.category_indicators import (
     get_category_prefix, get_default_baseline, get_indicators_for_event,
-    CATEGORY_INDICATOR_MAP
+    get_event_sensitivity, CATEGORY_INDICATOR_MAP
 )
 
 # Optional ML imports - degrade gracefully if not available
@@ -1722,6 +1722,10 @@ async def trigger_enhanced_calculation(
                         baseline_scale = stored_baseline
                     else:
                         baseline_scale = get_default_baseline(event.event_id)
+                    # Get event-specific sensitivity profile
+                    sensitivity = get_event_sensitivity(event.event_id)
+                    baseline_scale = baseline_scale + sensitivity["baseline_offset"]
+                    baseline_scale = max(1.0, min(5.0, baseline_scale))
                     baseline_prob = probability_calculator.scale_to_probability(baseline_scale)
                     all_baselines[event.event_id] = baseline_prob
 
@@ -1749,7 +1753,8 @@ async def trigger_enhanced_calculation(
                             signal_details.append(sig_detail)
 
                             indicator_signals.append(signal)
-                            indicator_weights_list.append(w.normalized_weight)
+                            adj_weight = w.normalized_weight * sensitivity.get("weight_multipliers", {}).get(w.indicator_name, 1.0) * sensitivity.get("severity_factor", 1.0)
+                            indicator_weights_list.append(adj_weight)
                             indicator_names.append(w.indicator_name)
 
                             beta = BETA_PARAMETERS.get(w.beta_type, 0.7)
