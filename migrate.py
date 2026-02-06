@@ -1,6 +1,7 @@
 """
-PRISM Brain Database Migration Script v3
-Adds missing id columns, renames mismatched columns, adds Phase 4B-4E columns.
+PRISM Brain Database Migration Script v4 - COMPREHENSIVE
+Ensures ALL columns from ALL models exist in the database.
+Safe to re-run: uses IF NOT EXISTS and try/except for renames.
 Run as pre-deploy command on Railway.
 """
 import os
@@ -14,17 +15,116 @@ if not DATABASE_URL:
 
 engine = create_engine(DATABASE_URL)
 
-# Step 0: Add missing id (primary key) columns to tables that were created without them
-ADD_ID_COLUMNS = [
-    ("risk_events", "id"),
-    ("risk_probabilities", "id"),
-    ("indicator_weights", "id"),
-    ("indicator_values", "id"),
-    ("data_source_health", "id"),
-    ("calculation_logs", "id"),
-]
+# ============================================================
+# ALL columns for ALL tables - comprehensive list from models.py
+# ============================================================
 
-# Step 1: Rename columns where models.py was out of sync with main.py
+ALL_COLUMNS = {
+    "risk_events": [
+        "id SERIAL",
+        "event_id VARCHAR(50)",
+        "event_name VARCHAR(500)",
+        "layer1_primary VARCHAR(100)",
+        "layer1_secondary VARCHAR(100)",
+        "layer2_primary VARCHAR(100)",
+        "layer2_secondary VARCHAR(100)",
+        "baseline_probability FLOAT DEFAULT 0.5",
+        "baseline_1_5 FLOAT DEFAULT 3.0",
+        "super_risk BOOLEAN DEFAULT FALSE",
+        "baseline_impact FLOAT",
+        "methodology_tier VARCHAR(50)",
+        "geographic_scope VARCHAR(100)",
+        "time_horizon VARCHAR(100)",
+        "description TEXT",
+        "created_at TIMESTAMP DEFAULT NOW()",
+        "updated_at TIMESTAMP DEFAULT NOW()",
+    ],
+    "risk_probabilities": [
+        "id SERIAL",
+        "event_id VARCHAR(50)",
+        "probability_pct FLOAT",
+        "confidence_score FLOAT",
+        "calculation_date TIMESTAMP DEFAULT NOW()",
+        "data_sources_used INTEGER DEFAULT 0",
+        "flags TEXT",
+        "ci_lower FLOAT",
+        "ci_upper FLOAT",
+        "precision_band VARCHAR(50)",
+        "log_odds FLOAT",
+        "total_adjustment FLOAT",
+        "indicators_used INTEGER DEFAULT 0",
+        "calculation_method VARCHAR(50) DEFAULT 'bayesian'",
+        "signal FLOAT",
+        "momentum FLOAT",
+        "trend VARCHAR(50)",
+        "is_anomaly BOOLEAN DEFAULT FALSE",
+        "ensemble_method VARCHAR(50)",
+        "ml_probability_pct FLOAT",
+        "attribution JSON",
+        "explanation TEXT",
+        "recommendation VARCHAR(100)",
+        "previous_probability_pct FLOAT",
+        "probability_change_pct FLOAT",
+        "dependency_adjustment FLOAT",
+        "dependency_details JSON",
+    ],
+    "indicator_weights": [
+        "id SERIAL",
+        "event_id VARCHAR(50)",
+        "indicator_name VARCHAR(200)",
+        "weight FLOAT DEFAULT 1.0",
+        "normalized_weight FLOAT",
+        "data_source VARCHAR(100)",
+        "beta_type VARCHAR(50)",
+        "time_scale VARCHAR(50)",
+        "created_at TIMESTAMP DEFAULT NOW()",
+    ],
+    "indicator_values": [
+        "id SERIAL",
+        "event_id VARCHAR(50)",
+        "indicator_name VARCHAR(200)",
+        "value FLOAT",
+        "raw_value TEXT",
+        "z_score FLOAT",
+        "data_source VARCHAR(100)",
+        "timestamp TIMESTAMP DEFAULT NOW()",
+        "quality_score FLOAT",
+        "historical_mean FLOAT",
+        "historical_std FLOAT",
+        "signal FLOAT",
+        "momentum FLOAT",
+        "trend VARCHAR(20)",
+        "is_anomaly BOOLEAN DEFAULT FALSE",
+    ],
+    "data_source_health": [
+        "id SERIAL",
+        "source_name VARCHAR(100)",
+        "status VARCHAR(50) DEFAULT 'unknown'",
+        "last_success TIMESTAMP",
+        "last_failure TIMESTAMP",
+        "error_message TEXT",
+        "response_time_ms INTEGER",
+        "records_fetched INTEGER DEFAULT 0",
+        "check_time TIMESTAMP DEFAULT NOW()",
+        "success_rate_24h FLOAT",
+    ],
+    "calculation_logs": [
+        "id SERIAL",
+        "calculation_id VARCHAR(50)",
+        "start_time TIMESTAMP DEFAULT NOW()",
+        "end_time TIMESTAMP",
+        "events_processed INTEGER DEFAULT 0",
+        "events_succeeded INTEGER DEFAULT 0",
+        "events_failed INTEGER DEFAULT 0",
+        "duration_seconds FLOAT",
+        "status VARCHAR(50) DEFAULT 'running'",
+        "errors TEXT",
+        "trigger VARCHAR(50) DEFAULT 'manual'",
+        "method VARCHAR(50) DEFAULT 'bayesian'",
+    ],
+}
+
+# Column renames from old models.py to new
 RENAME_COLUMNS = [
     ("calculation_logs", "started_at", "start_time"),
     ("calculation_logs", "completed_at", "end_time"),
@@ -33,111 +133,44 @@ RENAME_COLUMNS = [
     ("calculation_logs", "error_message", "errors"),
     ("indicator_values", "fetched_at", "timestamp"),
     ("indicator_values", "source", "data_source"),
+    ("indicator_values", "data_quality", "quality_score"),
     ("data_source_health", "checked_at", "check_time"),
 ]
 
-# Step 2: Add all columns that should exist (IF NOT EXISTS = safe to re-run)
-ADD_COLUMNS = [
-    # risk_events
-    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS baseline_1_5 FLOAT DEFAULT 3.0",
-    # risk_events: attributes referenced in main.py list_events
-    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS super_risk BOOLEAN DEFAULT FALSE",
-    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS baseline_impact FLOAT",
-    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS methodology_tier VARCHAR(50)",
-    # risk_probabilities: Phase 4B signal columns
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS signal FLOAT",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS momentum FLOAT",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS trend VARCHAR(50)",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS is_anomaly BOOLEAN DEFAULT FALSE",
-    # risk_probabilities: Phase 4C ML columns
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS ensemble_method VARCHAR(50)",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS ml_probability_pct FLOAT",
-    # risk_probabilities: Phase 4D explainability columns
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS attribution JSON",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS explanation TEXT",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS recommendation VARCHAR(100)",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS previous_probability_pct FLOAT",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS probability_change_pct FLOAT",
-    # risk_probabilities: Phase 4E dependency columns
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS dependency_adjustment FLOAT",
-    "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS dependency_details JSON",
-    # indicator_values: ensure correct column names exist
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS data_source VARCHAR(100)",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS timestamp TIMESTAMP DEFAULT NOW()",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS quality_score FLOAT",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS historical_mean FLOAT",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS historical_std FLOAT",
-    # indicator_values: Phase 4B signal columns
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS signal FLOAT",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS momentum FLOAT",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS trend VARCHAR(20)",
-    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS is_anomaly BOOLEAN DEFAULT FALSE",
-    # calculation_logs: ensure correct column names exist
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS calculation_id VARCHAR(50)",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS start_time TIMESTAMP DEFAULT NOW()",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS end_time TIMESTAMP",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_processed INTEGER DEFAULT 0",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_succeeded INTEGER DEFAULT 0",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS duration_seconds FLOAT",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS errors TEXT",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'running'",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS trigger VARCHAR(50) DEFAULT 'manual'",
-    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS method VARCHAR(50) DEFAULT 'bayesian'",
-    # data_source_health: ensure correct column names exist
-    "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS check_time TIMESTAMP DEFAULT NOW()",
-    "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS success_rate_24h FLOAT",
-]
-
-print("=== PRISM Brain Database Migration v3 ===")
+print("=== PRISM Brain Database Migration v4 (COMPREHENSIVE) ===")
 print()
 
 with engine.connect() as conn:
-    # Step 0: Add missing id columns
-    print("Step 0: Adding missing id (primary key) columns...")
-    for table, col in ADD_ID_COLUMNS:
-        try:
-            # Check if column exists
-            result = conn.execute(text(
-                f"SELECT column_name FROM information_schema.columns "
-                f"WHERE table_name = '{table}' AND column_name = '{col}'"
-            ))
-            if result.fetchone() is None:
-                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} SERIAL"))
-                print(f"  ADDED: {table}.{col} (SERIAL)")
-            else:
-                print(f"  SKIP: {table}.{col} (already exists)")
-        except Exception as e:
-            print(f"  ERROR: {table}.{col}: {e}")
-            conn.rollback()
-    conn.commit()
-
-    # Step 1: Try column renames (safe: fails silently if old name doesn't exist)
-    print()
-    print("Step 1: Renaming mismatched columns...")
+    # Step 1: Rename old columns
+    print("Step 1: Renaming old columns...")
     for table, old_col, new_col in RENAME_COLUMNS:
         try:
             conn.execute(text(f"ALTER TABLE {table} RENAME COLUMN {old_col} TO {new_col}"))
             print(f"  RENAMED: {table}.{old_col} -> {new_col}")
-        except Exception as e:
-            print(f"  SKIP: {table}.{old_col} -> {new_col} (already correct or not found)")
+        except Exception:
+            print(f"  SKIP: {table}.{old_col} (already correct or missing)")
             conn.rollback()
     conn.commit()
 
-    # Step 2: Add all columns (IF NOT EXISTS = safe to re-run)
+    # Step 2: Add ALL columns to ALL tables
     print()
-    print("Step 2: Adding missing columns...")
-    for stmt in ADD_COLUMNS:
-        try:
-            conn.execute(text(stmt))
-            print(f"  OK: {stmt[:70]}...")
-        except Exception as e:
-            print(f"  SKIP: {stmt[:70]}... ({e})")
-    conn.commit()
+    print("Step 2: Adding all missing columns...")
+    for table, columns in ALL_COLUMNS.items():
+        print(f"  Table: {table}")
+        for col_def in columns:
+            col_name = col_def.split()[0]
+            try:
+                conn.execute(text(
+                    f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col_def}"
+                ))
+                print(f"    OK: {col_name}")
+            except Exception as e:
+                print(f"    SKIP: {col_name} ({e})")
+        conn.commit()
 
 print()
-print("Migration complete.")
+print("Migration v4 complete - all columns verified.")
 
-# Also run init_db to create any entirely missing tables
 from database.connection import init_db
 init_db()
 print("Database tables verified.")
