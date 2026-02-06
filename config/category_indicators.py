@@ -21,6 +21,7 @@ Indicator names MUST match the exact keys returned by DataFetcher methods.
 CATEGORY_INDICATOR_MAP = {
     "GEO": {
         "description": "Natural catastrophes: earthquakes, tsunamis, volcanic eruptions, landslides",
+        "default_baseline": 2,
         "indicators": [
             {"name": "usgs_earthquake_count",   "source": "USGS",       "weight": 0.25, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "usgs_significant_count",  "source": "USGS",       "weight": 0.20, "beta": "direct_causal",       "time_scale": "fast"},
@@ -32,6 +33,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "PHYS": {
         "description": "Physical infrastructure risks: bridges, dams, power grids, transportation",
+        "default_baseline": 2,
         "indicators": [
             {"name": "usgs_earthquake_count",   "source": "USGS",       "weight": 0.20, "beta": "strong_correlation",  "time_scale": "fast"},
             {"name": "usgs_max_magnitude",      "source": "USGS",       "weight": 0.15, "beta": "strong_correlation",  "time_scale": "fast"},
@@ -44,6 +46,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "ENRG": {
         "description": "Energy sector risks: oil spills, grid failures, price shocks, supply disruptions",
+        "default_baseline": 3,
         "indicators": [
             {"name": "eia_crude_oil_price",     "source": "EIA",        "weight": 0.25, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "eia_natural_gas_price",   "source": "EIA",        "weight": 0.20, "beta": "direct_causal",       "time_scale": "fast"},
@@ -56,6 +59,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "CYBER": {
         "description": "Cyber threats: ransomware, data breaches, critical infrastructure attacks",
+        "default_baseline": 4,
         "indicators": [
             {"name": "otx_threat_pulse_count",  "source": "OTX",        "weight": 0.20, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "otx_malware_indicators",  "source": "OTX",        "weight": 0.15, "beta": "strong_correlation",  "time_scale": "fast"},
@@ -68,6 +72,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "TECH": {
         "description": "Technology risks: AI failures, semiconductor shortages, tech monopoly, digital divide",
+        "default_baseline": 3,
         "indicators": [
             {"name": "nvd_total_cves",          "source": "NVD",        "weight": 0.15, "beta": "moderate_correlation","time_scale": "fast"},
             {"name": "nvd_critical_count",      "source": "NVD",        "weight": 0.15, "beta": "strong_correlation",  "time_scale": "fast"},
@@ -81,6 +86,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "SUPL": {
         "description": "Supply chain risks: shipping disruptions, raw material shortages, trade wars",
+        "default_baseline": 3,
         "indicators": [
             {"name": "eia_crude_oil_price",     "source": "EIA",        "weight": 0.15, "beta": "strong_correlation",  "time_scale": "fast"},
             {"name": "eia_energy_volatility",   "source": "EIA",        "weight": 0.10, "beta": "moderate_correlation","time_scale": "fast"},
@@ -94,6 +100,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "SYST": {
         "description": "Systemic risks: financial contagion, pandemic cascades, infrastructure interdependence",
+        "default_baseline": 2,
         "indicators": [
             {"name": "fred_vix_index",          "source": "FRED",       "weight": 0.15, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "fred_unemployment_rate",  "source": "FRED",       "weight": 0.10, "beta": "strong_correlation",  "time_scale": "medium"},
@@ -109,6 +116,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "CLIM": {
         "description": "Climate risks: sea level rise, droughts, wildfires, biodiversity loss",
+        "default_baseline": 3,
         "indicators": [
             {"name": "noaa_temp_anomaly",       "source": "NOAA",       "weight": 0.25, "beta": "direct_causal",       "time_scale": "slow"},
             {"name": "noaa_extreme_events",     "source": "NOAA",       "weight": 0.20, "beta": "direct_causal",       "time_scale": "slow"},
@@ -121,6 +129,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "CYB": {
         "description": "Legacy cyber event (maps to same indicators as CYBER)",
+        "default_baseline": 4,
         "indicators": [
             {"name": "otx_threat_pulse_count",  "source": "OTX",        "weight": 0.20, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "otx_ransomware_activity", "source": "OTX",        "weight": 0.15, "beta": "direct_causal",       "time_scale": "fast"},
@@ -132,6 +141,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "ECO": {
         "description": "Legacy economic event",
+        "default_baseline": 3,
         "indicators": [
             {"name": "fred_unemployment_rate",  "source": "FRED",       "weight": 0.20, "beta": "direct_causal",       "time_scale": "medium"},
             {"name": "fred_inflation_rate",     "source": "FRED",       "weight": 0.15, "beta": "strong_correlation",  "time_scale": "medium"},
@@ -143,6 +153,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "POL": {
         "description": "Legacy geopolitical event",
+        "default_baseline": 3,
         "indicators": [
             {"name": "acled_conflict_events",   "source": "ACLED",      "weight": 0.25, "beta": "direct_causal",       "time_scale": "medium"},
             {"name": "acled_fatalities",        "source": "ACLED",      "weight": 0.15, "beta": "strong_correlation",  "time_scale": "medium"},
@@ -154,6 +165,7 @@ CATEGORY_INDICATOR_MAP = {
     },
     "CLI": {
         "description": "Legacy climate event (maps to same indicators as CLIM)",
+        "default_baseline": 3,
         "indicators": [
             {"name": "noaa_temp_anomaly",       "source": "NOAA",       "weight": 0.25, "beta": "direct_causal",       "time_scale": "slow"},
             {"name": "noaa_extreme_events",     "source": "NOAA",       "weight": 0.20, "beta": "direct_causal",       "time_scale": "slow"},
@@ -181,6 +193,13 @@ def get_indicators_for_event(event_id: str) -> list:
 
 def get_all_categories() -> list:
     return list(CATEGORY_INDICATOR_MAP.keys())
+
+
+def get_default_baseline(event_id: str) -> int:
+    """Get the default baseline scale (1-5) for an event based on its category."""
+    prefix = get_category_prefix(event_id)
+    category = CATEGORY_INDICATOR_MAP.get(prefix, {})
+    return category.get("default_baseline", 3)
 
 
 def validate_weights():
