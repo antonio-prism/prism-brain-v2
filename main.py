@@ -2735,9 +2735,13 @@ async def refresh_data(
                 # BUGFIX #1: Use complete source mapping
                 source = indicator_to_source(indicator_name)
 
-                # Find events with weights for this source
+                # ACCURACY FIX: Match on BOTH source AND indicator_name
+                # Previously matched only on data_source, which meant ALL events
+                # with any indicator from this source got the SAME values.
+                # Now each event only gets values for indicators it actually uses.
                 matching_weights = session.query(IndicatorWeight).filter(
-                    IndicatorWeight.data_source == source
+                    IndicatorWeight.data_source == source,
+                    IndicatorWeight.indicator_name == indicator_name
                 ).all()
 
                 for weight in matching_weights:
