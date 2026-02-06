@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime, timedelta
+from pathlib import Path
 from pydantic import BaseModel
 from collections import defaultdict
 import logging
@@ -953,6 +954,17 @@ async def health_check():
         ]
     }
 
+
+
+# ============== Dashboard ==============
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard():
+    """Serve the interactive PRISM Brain dashboard."""
+    dashboard_path = Path(__file__).parent / "static" / "dashboard.html"
+    if dashboard_path.exists():
+        return HTMLResponse(content=dashboard_path.read_text(), status_code=200)
+    return HTMLResponse(content="<h1>Dashboard not found</h1><p>static/dashboard.html is missing.</p>", status_code=404)
 
 # ============== Events Endpoints ==============
 
