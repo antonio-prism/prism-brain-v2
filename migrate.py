@@ -85,7 +85,7 @@ ALL_COLUMNS = {
         "event_id VARCHAR(50)",
         "indicator_name VARCHAR(200)",
         "value FLOAT",
-        "raw_value TEXT",
+        "raw_value FLOAT",
         "z_score FLOAT",
         "data_source VARCHAR(100)",
         "timestamp TIMESTAMP DEFAULT NOW()",
