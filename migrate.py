@@ -1,6 +1,6 @@
 """
-PRISM Brain Database Migration Script
-Adds all Phase 4B-4E columns to existing tables.
+PRISM Brain Database Migration Script v2
+Adds all Phase 4B-4E columns AND fixes column name mismatches.
 Run as pre-deploy command on Railway.
 """
 import os
@@ -14,8 +14,21 @@ if not DATABASE_URL:
 
 engine = create_engine(DATABASE_URL)
 
-ALTER_STATEMENTS = [
-    # risk_events: new columns added in v3.0.0
+# Step 1: Rename columns where models.py was out of sync with main.py
+RENAME_COLUMNS = [
+    ("calculation_logs", "started_at", "start_time"),
+    ("calculation_logs", "completed_at", "end_time"),
+    ("calculation_logs", "events_calculated", "events_processed"),
+    ("calculation_logs", "total_duration_seconds", "duration_seconds"),
+    ("calculation_logs", "error_message", "errors"),
+    ("indicator_values", "fetched_at", "timestamp"),
+    ("indicator_values", "source", "data_source"),
+    ("data_source_health", "checked_at", "check_time"),
+]
+
+# Step 2: Add all columns that should exist (IF NOT EXISTS = safe to re-run)
+ADD_COLUMNS = [
+    # risk_events
     "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS baseline_1_5 FLOAT DEFAULT 3.0",
     # risk_probabilities: Phase 4B signal columns
     "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS signal FLOAT",
@@ -34,25 +47,60 @@ ALTER_STATEMENTS = [
     # risk_probabilities: Phase 4E dependency columns
     "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS dependency_adjustment FLOAT",
     "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS dependency_details JSON",
+    # indicator_values: ensure correct column names exist
+    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS data_source VARCHAR(100)",
+    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS timestamp TIMESTAMP DEFAULT NOW()",
+    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS quality_score FLOAT",
+    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS historical_mean FLOAT",
+    "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS historical_std FLOAT",
     # indicator_values: Phase 4B signal columns
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS signal FLOAT",
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS momentum FLOAT",
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS trend VARCHAR(20)",
     "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS is_anomaly BOOLEAN DEFAULT FALSE",
+    # calculation_logs: ensure correct column names exist
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS start_time TIMESTAMP DEFAULT NOW()",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS end_time TIMESTAMP",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_processed INTEGER DEFAULT 0",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS events_succeeded INTEGER DEFAULT 0",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS duration_seconds FLOAT",
+    "ALTER TABLE calculation_logs ADD COLUMN IF NOT EXISTS errors TEXT",
+    # data_source_health: ensure correct column names exist
+    "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS check_time TIMESTAMP DEFAULT NOW()",
+    "ALTER TABLE data_source_health ADD COLUMN IF NOT EXISTS success_rate_24h FLOAT",
 ]
 
-print("Running PRISM Brain database migration...")
+print("=== PRISM Brain Database Migration v2 ===")
+print()
+
 with engine.connect() as conn:
-    for stmt in ALTER_STATEMENTS:
+    # Step 1: Try column renames (safe: fails silently if old name doesn't exist)
+    print("Step 1: Renaming mismatched columns...")
+    for table, old_col, new_col in RENAME_COLUMNS:
+        try:
+            conn.execute(text(f"ALTER TABLE {table} RENAME COLUMN {old_col} TO {new_col}"))
+            print(f"  RENAMED: {table}.{old_col} -> {new_col}")
+        except Exception as e:
+            print(f"  SKIP: {table}.{old_col} -> {new_col} (already correct or not found)")
+            conn.rollback()
+
+    conn.commit()
+
+    # Step 2: Add all columns (IF NOT EXISTS = safe to re-run)
+    print()
+    print("Step 2: Adding missing columns...")
+    for stmt in ADD_COLUMNS:
         try:
             conn.execute(text(stmt))
-            print(f"  OK: {stmt[:60]}...")
+            print(f"  OK: {stmt[:70]}...")
         except Exception as e:
-            print(f"  SKIP: {stmt[:60]}... ({e})")
+            print(f"  SKIP: {stmt[:70]}... ({e})")
     conn.commit()
+
+print()
 print("Migration complete.")
 
-# Also run init_db to create any missing tables
+# Also run init_db to create any entirely missing tables
 from database.connection import init_db
 init_db()
 print("Database tables verified.")
