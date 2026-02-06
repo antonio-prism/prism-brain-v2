@@ -132,6 +132,283 @@ async function fetchAll(){
       Promise.all([fetch(API+'/events?limit=500&offset=0').then(r=>r.json()).catch(()=>({events:[]})),fetch(API+'/events?limit=500&offset=500').then(r=>r.json()).catch(()=>({events:[]}))]).then(([a,b])=>({events:[...(a.events||[]),...(b.events||[])]}))
     ]);
     stats=r1;dashSummary=r2;sourceHealth=r3.sources||[];
+    allProbs=(()=>{const raw=[...(r4.probabilities||[])];const map={};for(const p of raw){if(!map[p.event_id]||new Date(p.calculation_date)>new Date(map[p.event_id].calculation_date))map[p.event_id]=p;}return Object.values(map);})();allEvents=(()=>{const raw=[...(r5.events||[])];const map={};for(const e of raw){map[e.event_id]=e;}return Object.values(map);})();
+    mergeData();
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    renderAll();
+  }catch(e){console.error('Fetch error:',e);document.querySelector('.loading div:last-child').textContent='Error: '+e.message;}
+}
+
+function mergeData(){
+  const probMap={};
+  allProbs.forEach(p=>{probMap[p.event_id]=p});
+  allEvents.forEach(e=>{
+    const p=probMap[e.event_id]||{};
+    e.probability_pct=p.probability_pct||e.probability_pct||0;
+    e.confidence_score=p.confidence_score||0;
+    e.change_direction=p.change_direction||'stable';
+    e.category_prefix=catPrefix(e.event_id);
+  });
+  categories={};
+  allEvents.forEach(e=>{
+    const c=e.category_prefix;
+    if(!categories[c])categories[c]={events:[],name:e.layer1_category||c};
+    categories[c].events.push(e);
+  });
+}
+function renderAll(){renderOverview();renderCategories();renderEventsTable();renderSources();setupTabs();}
+
+function renderOverview(){
+  const evts=allEvents,avgP=evts.length?evts.reduce((s,e)=>s+e.probability_pct,0)/evts.length:0;
+  const high=evts.filter(e=>e.probability_pct>=40).length,elev=evts.filter(e=>e.probability_pct>=25&&e.probability_pct<40).length;
+  const mod=evts.filter(e=>e.probability_pct>=10&&e.probability_pct<25).length,low=evts.filter(e=>e.probability_pct<10).length;
+  const activeSrc=sourceHealth.filter(s=>s.status==='healthy'||s.status==='active').length;
+  const cards=[
+    {label:'Total Events',value:evts.length,bg:'linear-gradient(135deg,#3b82f6,#2563eb)',sub:Object.keys(categories).length+' categories'},
+    {label:'Average Risk',value:pct(avgP),bg:'linear-gradient(135deg,#8b5cf6,#7c3aed)',sub:'Across all events'},
+    {label:'High Risk',value:high,bg:'linear-gradient(135deg,#ef4444,#dc2626)',sub:'>40% probability'},
+    {label:'Elevated',value:elev,bg:'linear-gradient(135deg,#f97316,#ea580c)',sub:'25-40% probability'},
+    {label:'Moderate',value:mod,bg:'linear-gradient(135deg,#eab308,#ca8a04)',sub:'10-25% probability'},
+    {label:'Data Sources',value:activeSrc+'/'+sourceHealth.length,bg:'linear-gradient(135deg,#14b8a6,#0d9488)',sub:'Active feeds'}
+  ];
+  document.getElementById('stat-cards').innerHTML=cards.map(c=>'<div class="stat-card" style="background:'+c.bg+'"><div class="label">'+c.label+'</div><div class="value">'+c.value+'</div><div class="sub">'+c.sub+'</div></div>').join('');
+  // Top 10 risks
+  const top=allEvents.slice().sort((a,b)=>b.probability_pct-a.probability_pct).slice(0,10);
+  document.getElementById('top-risks').innerHTML=top.map((e,i)=>'<div class="risk-row"><span class="risk-rank">'+(i+1)+'</span><div class="risk-name"><div class="title">'+((e.name||e.event_id).substring(0,50))+'</div><div class="id">'+e.event_id+'</div></div>'+trendArrow(e.change_direction)+probBar(e.probability_pct)+'</div>').join('');
+  // Risk level cards
+  const levels=[{name:'High',cls:'risk-high',count:high,range:'>40%'},{name:'Elevated',cls:'risk-elevated',count:elev,range:'25-40%'},{name:'Moderate',cls:'risk-moderate',count:mod,range:'10-25%'},{name:'Low',cls:'risk-low',count:low,range:'<10%'}];
+  document.getElementById('risk-levels').innerHTML=levels.map(l=>'<div class="level-card '+l.cls+'"><div class="level-num">'+l.count+'</div><div class="level-name">'+l.name+'</div><div class="level-range">'+l.range+'</div></div>').join('');
+  // Charts
+  renderCharts();
+}
+
+function renderCharts(){
+  const catNames=Object.keys(categories).sort();
+  const catAvgs=catNames.map(c=>{const evts=categories[c].events;return evts.reduce((s,e)=>s+e.probability_pct,0)/evts.length;});
+  const colors=catNames.map(c=>COLORS[c]||'#94a3b8');
+  new Chart(document.getElementById('chart-cat-bar'),{type:'bar',data:{labels:catNames,datasets:[{label:'Avg Probability %',data:catAvgs,backgroundColor:colors.map(c=>c+'cc'),borderColor:colors,borderWidth:1}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+  const catCounts=catNames.map(c=>categories[c].events.length);
+  new Chart(document.getElementById('chart-pie'),{type:'doughnut',data:{labels:catNames,datasets:[{data:catCounts,backgroundColor:colors.map(c=>c+'cc'),borderWidth:2}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}});
+}
+function renderCategories(){
+  const catNames=Object.keys(categories).sort();
+  document.getElementById('cat-cards').innerHTML=catNames.map(c=>{
+    const evts=categories[c].events,avg=evts.reduce((s,e)=>s+e.probability_pct,0)/evts.length;
+    const high=evts.filter(e=>e.probability_pct>=25).length;
+    const rl=riskLevel(avg);
+    return'<div class="card cat-card" onclick="showCatDetail(\''+c+'\')">'+'<div class="cat-header"><span class="cat-icon">'+((ICONS[c])||'📊')+'</span><div><strong>'+c+'</strong><div style="font-size:11px;color:var(--muted)">'+((categories[c].name)||c)+'</div></div></div>'+'<div class="cat-stats"><div class="cat-avg" style="color:'+riskColor(avg)+'">'+pct(avg)+'</div><div class="cat-count"><div class="num">'+evts.length+'</div><div style="font-size:11px;color:var(--muted)">events</div></div></div>'+'<div class="cat-tags"><span class="cat-tag '+rl.cls+'">'+rl.name+'</span>'+((high>0)?'<span class="cat-tag risk-elevated">'+high+' elevated+</span>':'')+'</div></div>';
+  }).join('');
+}
+
+function showCatDetail(c){
+  document.getElementById('cat-grid-view').classList.add('hidden');
+  document.getElementById('cat-detail-view').classList.remove('hidden');
+  document.getElementById('cat-detail-title').textContent=(ICONS[c]||'📊')+' '+c+' — '+(categories[c].name||c);
+  const evts=categories[c].events,avg=evts.reduce((s,e)=>s+e.probability_pct,0)/evts.length;
+  const high=evts.filter(e=>e.probability_pct>=40).length;
+  document.getElementById('cat-detail-stats').innerHTML=[
+    {l:'Events',v:evts.length,bg:'linear-gradient(135deg,#3b82f6,#2563eb)'},
+    {l:'Avg Risk',v:pct(avg),bg:'linear-gradient(135deg,#8b5cf6,#7c3aed)'},
+    {l:'High Risk',v:high,bg:'linear-gradient(135deg,#ef4444,#dc2626)'},
+    {l:'Max Risk',v:pct(Math.max(...evts.map(e=>e.probability_pct))),bg:'linear-gradient(135deg,#f97316,#ea580c)'}
+  ].map(s=>'<div class="stat-card" style="background:'+s.bg+'"><div class="label">'+s.l+'</div><div class="value">'+s.v+'</div></div>').join('');
+  window.__catDetailEvts=evts;renderCatDetailTable();
+}
+function showCatGrid(){document.getElementById('cat-grid-view').classList.remove('hidden');document.getElementById('cat-detail-view').classList.add('hidden');}
+function renderCatDetailTable(){
+  const evts=(window.__catDetailEvts||[]).slice().sort((a,b)=>catSort.dir==='desc'?b[catSort.key]-a[catSort.key]:a[catSort.key]-b[catSort.key]);
+  document.getElementById('cat-detail-tbody').innerHTML=evts.map(e=>{const rl=riskLevel(e.probability_pct);return'<tr><td><strong>'+(e.name||e.event_id).substring(0,60)+'</strong><br><span style="font-size:11px;color:var(--muted)">'+e.event_id+'</span></td><td>'+probBar(e.probability_pct)+'</td><td>'+pct(e.confidence_score)+'</td><td>'+trendArrow(e.change_direction)+'</td><td><span class="badge '+rl.cls+'">'+rl.name+'</span></td></tr>';}).join('');
+}
+function sortCatTable(key){catSort.dir=(catSort.key===key&&catSort.dir==='desc')?'asc':'desc';catSort.key=key;renderCatDetailTable();}
+
+function renderEventsTable(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  const fc=document.getElementById('filter-cat').value;
+  let evts=allEvents.filter(e=>{const matchQ=!q||(e.event_id+' '+(e.name||'')).toLowerCase().includes(q);const matchC=!fc||e.category_prefix===fc;return matchQ&&matchC;});
+  evts.sort((a,b)=>evtSort.dir==='desc'?((b[evtSort.key]||0)>(a[evtSort.key]||0)?1:-1):((a[evtSort.key]||0)>(b[evtSort.key]||0)?1:-1));
+  document.getElementById('event-count').textContent=evts.length+' events';
+  const cats=[...new Set(allEvents.map(e=>e.category_prefix))].sort();
+  const sel=document.getElementById('filter-cat');
+  if(sel.options.length<=1)cats.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  document.getElementById('events-tbody').innerHTML=evts.slice(0,200).map(e=>{const rl=riskLevel(e.probability_pct);return'<tr><td style="font-family:monospace;font-size:12px">'+e.event_id+'</td><td>'+(e.name||'-').substring(0,50)+'</td><td><span class="badge" style="background:'+(COLORS[e.category_prefix]||'#94a3b8')+'22;color:'+(COLORS[e.category_prefix]||'#94a3b8')+'">'+e.category_prefix+'</span></td><td>'+probBar(e.probability_pct)+'</td><td>'+pct(e.confidence_score)+'</td><td><span class="badge '+rl.cls+'">'+rl.name+'</span></td></tr>';}).join('');
+}
+function sortEvtTable(key){evtSort.dir=(evtSort.key===key&&evtSort.dir==='desc')?'asc':'desc';evtSort.key=key;renderEventsTable();}
+function renderSources(){
+  document.getElementById('source-cards').innerHTML=sourceHealth.map(s=>{
+    const ok=s.status==='healthy'||s.status==='active';
+    const dotColor=ok?'#22c55e':'#ef4444';
+    const statusText=ok?'✅ Healthy':'⚠️ '+s.status;
+    const lastFetch=s.last_fetch?new Date(s.last_fetch).toLocaleString():'Never';
+    return'<div class="card src-card"><div class="src-header"><div class="src-dot" style="background:'+dotColor+'"></div><span class="src-name">'+s.source+'</span></div><div class="src-status">'+statusText+'</div><div class="src-detail">Last fetch: '+lastFetch+'</div><div class="src-detail">Indicators: '+(s.indicator_count||s.indicators||'?')+'</div></div>';
+  }).join('');
+  if(!sourceHealth.length)document.getElementById('source-cards').innerHTML='<div class="card"><p style="color:var(--muted)">No data source information available. Trigger a data refresh first.</p></div>';
+}
+
+function setupTabs(){
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const tab=t.dataset.tab;
+      ['overview','categories','events','sources'].forEach(v=>{
+        document.getElementById('view-'+v).classList.toggle('hidden',v!==tab);
+      });
+    });
+  });
+}
+
+// Update header
+function updateHeader(){
+  if(stats){
+    document.getElementById('hdr-events').textContent=stats.total_events||905;
+    if(stats.last_calculation)document.getElementById('hdr-calc').textContent=new Date(stats.last_calculation).toLocaleString();
+  }
+  document.getElementById('footer-ts').textContent='Dashboard loaded: '+new Date().toLocaleString();
+}
+
+// Auto-refresh every 5 minutes
+setInterval(()=>{fetchAll()},300000);
+
+// Init
+fetchAll().then(()=>updateHeader());
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISM Brain — Risk Intelligence Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--muted:#64748b;--light:#94a3b8;--blue:#3b82f6;--green:#22c55e;--red:#ef4444;--orange:#f97316;--yellow:#eab308;--purple:#8b5cf6;--cyan:#06b6d4;--pink:#ec4899;--teal:#14b8a6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.header{background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.header .sub{color:#94a3b8;font-size:13px;margin-top:2px}
+.header .status{text-align:right;font-size:12px;color:#94a3b8}
+.header .dot{display:inline-block;width:10px;height:10px;background:#22c55e;border-radius:50%;margin-left:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tabs{background:#fff;border-bottom:1px solid var(--border);display:flex;gap:0;padding:0 24px;position:sticky;top:0;z-index:10}
+.tab{padding:12px 20px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--blue);border-color:var(--blue)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid{display:grid;gap:20px}
+.grid-6{grid-template-columns:repeat(6,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.grid-6,.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card h2{font-size:16px;font-weight:600;margin-bottom:16px}
+.stat-card{border-radius:12px;padding:20px;color:#fff}
+.stat-card .label{font-size:12px;opacity:.8;margin-bottom:4px}
+.stat-card .value{font-size:28px;font-weight:700}
+.stat-card .sub{font-size:11px;opacity:.6;margin-top:4px}
+.risk-high{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.risk-elevated{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+.risk-moderate{background:#fefce8;color:#854d0e;border:1px solid #fde68a}
+.risk-low{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;background:#f8fafc;border-bottom:1px solid var(--border);color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none}
+td{padding:10px 12px;border-bottom:1px solid #f1f5f9}
+tr:hover td{background:#f0f9ff}
+.sort-arrow{color:var(--blue);margin-left:4px}
+.risk-row{display:flex;align-items:center;gap:12px;padding:8px 4px;border-radius:8px}
+.risk-row:hover{background:#f8fafc}
+.risk-rank{width:20px;font-size:12px;color:var(--light);font-family:monospace}
+.risk-name{flex:1}
+.risk-name .title{font-size:13px;font-weight:500}
+.risk-name .id{font-size:11px;color:var(--muted)}
+.arrow-up{color:var(--red);font-weight:700;font-size:16px}
+.arrow-down{color:var(--green);font-weight:700;font-size:16px}
+.arrow-stable{color:var(--light);font-size:16px}
+.prob-bar{display:flex;align-items:center;gap:8px}
+.bar-track{width:80px;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.prob-val{font-family:monospace;font-weight:700;font-size:13px}
+.cat-card{cursor:pointer;transition:all .2s}
+.cat-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-2px);border-color:var(--blue)}
+.cat-icon{font-size:24px}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cat-stats{display:flex;justify-content:space-between;align-items:flex-end}
+.cat-avg{font-size:28px;font-weight:700}
+.cat-count{text-align:right}
+.cat-count .num{font-size:20px;font-weight:600;color:var(--text)}
+.cat-tags{display:flex;gap:8px;margin-top:10px;font-size:11px;flex-wrap:wrap}
+.cat-tag{padding:2px 8px;border-radius:4px}
+.src-card{border-radius:12px;padding:16px}
+.src-card .src-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.src-dot{width:10px;height:10px;border-radius:50%}
+.src-name{font-weight:700}
+.src-status{font-size:13px}
+.src-detail{font-size:11px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.toolbar input,.toolbar select{padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.toolbar input{flex:1;max-width:360px}
+.toolbar .count{font-size:13px;color:var(--muted)}
+.level-card{border-radius:12px;padding:20px;text-align:center}
+.level-card .level-num{font-size:32px;font-weight:700}
+.level-card .level-name{font-size:14px;font-weight:600;margin-top:4px}
+.level-card .level-range{font-size:11px;opacity:.7;margin-top:2px}
+.back-btn{font-size:13px;color:var(--blue);cursor:pointer;font-weight:500}
+.back-btn:hover{text-decoration:underline}
+.section-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.hidden{display:none !important}
+.table-wrap{max-height:520px;overflow-y:auto;border-radius:8px;border:1px solid var(--border)}
+.table-wrap thead{position:sticky;top:0;z-index:2}
+.footer{border-top:1px solid var(--border);background:#fff;margin-top:32px;padding:16px 24px;display:flex;justify-content:space-between;font-size:11px;color:var(--light)}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh}
+.spinner{width:48px;height:48px;border:4px solid #e2e8f0;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="header"><div><h1>PRISM Brain</h1><div class="sub">Risk Intelligence Dashboard — <span id="hdr-version">v3.0.0</span></div></div><div><div class="status">Last calculation: <span id="hdr-calc">—</span></div><div class="status"><span id="hdr-events">905</span> events tracked <span class="dot"></span></div></div></div>
+<div class="tabs" id="tabs"><div class="tab active" data-tab="overview">Overview</div><div class="tab" data-tab="categories">Categories</div><div class="tab" data-tab="events">All Events</div><div class="tab" data-tab="sources">Data Sources</div></div>
+<div id="loading" class="loading"><div class="spinner"></div><div style="font-size:18px;font-weight:600;color:#334155;">Loading PRISM Brain Data...</div><div style="font-size:13px;color:#94a3b8;margin-top:6px;">Connecting to API</div></div>
+<div id="app" class="hidden">
+<!-- OVERVIEW -->
+<div id="view-overview" class="container"><div class="grid grid-6" id="stat-cards"></div><div class="grid grid-2" style="margin-top:20px;"><div class="card"><h2>Average Risk by Category</h2><canvas id="chart-cat-bar" height="320"></canvas></div><div class="card"><h2>Top 10 Highest Risks</h2><div id="top-risks"></div></div></div><div class="grid grid-2" style="margin-top:20px;"><div class="card"><h2>Events by Category</h2><canvas id="chart-pie" height="280"></canvas></div><div class="card"><h2>Risk Level Distribution</h2><div class="grid grid-2" id="risk-levels" style="margin-top:8px;"></div></div></div></div>
+<!-- CATEGORIES -->
+<div id="view-categories" class="container hidden"><div id="cat-grid-view"><div class="section-title">Categories</div><div class="section-sub">Click a category to see its events</div><div class="grid grid-3" id="cat-cards"></div></div><div id="cat-detail-view" class="hidden"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div class="section-title" id="cat-detail-title"></div><span class="back-btn" onclick="showCatGrid()">← Back to All Categories</span></div><div class="grid grid-4" id="cat-detail-stats" style="margin-bottom:16px;"></div><div class="card" style="padding:0;"><div class="table-wrap"><table id="cat-detail-table"><thead><tr><th>Event</th><th onclick="sortCatTable('probability_pct')">Probability <span id="sort-cat-prob" class="sort-arrow"></span></th><th onclick="sortCatTable('confidence_score')">Confidence <span id="sort-cat-conf" class="sort-arrow"></span></th><th>Trend</th><th>Risk Level</th></tr></thead><tbody id="cat-detail-tbody"></tbody></table></div></div></div></div>
+<!-- ALL EVENTS -->
+<div id="view-events" class="container hidden"><div class="section-title">All Events</div><div class="toolbar"><input type="text" id="search-input" placeholder="Search events by name or ID..." oninput="renderEventsTable()"><select id="filter-cat" onchange="renderEventsTable()"><option value="">All Categories</option></select><span class="count" id="event-count"></span></div><div class="card" style="padding:0;"><div class="table-wrap"><table><thead><tr><th onclick="sortEvtTable('event_id')">Event ID <span id="sort-evt-id" class="sort-arrow"></span></th><th>Name</th><th>Category</th><th onclick="sortEvtTable('probability_pct')">Probability <span id="sort-evt-prob" class="sort-arrow"></span></th><th onclick="sortEvtTable('confidence_score')">Confidence <span id="sort-evt-conf" class="sort-arrow"></span></th><th>Risk Level</th></tr></thead><tbody id="events-tbody"></tbody></table></div></div></div>
+<!-- DATA SOURCES -->
+<div id="view-sources" class="container hidden"><div class="section-title">Data Sources</div><div class="section-sub">Real-time status of all connected data feeds</div><div class="grid grid-3" id="source-cards"></div></div>
+</div>
+<div class="footer"><span>PRISM Brain Risk Intelligence Engine</span><span id="footer-ts"></span></div>
+<script>
+const API = window.location.origin + '/api/v1';
+const COLORS = {GEO:'#ef4444',PHYS:'#f97316',ENRG:'#eab308',CYBER:'#8b5cf6',CYB:'#8b5cf6',TECH:'#06b6d4',SUPL:'#ec4899',SYST:'#64748b',CLIM:'#22c55e',CLI:'#22c55e',ECO:'#3b82f6',POL:'#dc2626',HLT:'#14b8a6',SOC:'#a855f7'};
+const ICONS = {GEO:'🌋',PHYS:'💥',ENRG:'⚡',CYBER:'🔒',CYB:'🔒',TECH:'💻',SUPL:'📦',SYST:'⚙️',CLIM:'🌍',CLI:'🌍',ECO:'💰',POL:'🏙️',HLT:'🏥',SOC:'👥'};
+let allProbs=[], allEvents=[], categories={}, sourceHealth=[], dashSummary=null, stats=null;
+let evtSort={key:'probability_pct',dir:'desc'}, catSort={key:'probability_pct',dir:'desc'};
+
+function riskLevel(p){if(p>=40)return{name:'High',cls:'risk-high'};if(p>=25)return{name:'Elevated',cls:'risk-elevated'};if(p>=10)return{name:'Moderate',cls:'risk-moderate'};return{name:'Low',cls:'risk-low'}}
+function riskColor(p){if(p>=40)return'var(--red)';if(p>=25)return'var(--orange)';if(p>=10)return'var(--yellow)';return'var(--green)'}
+function pct(v){return(v||0).toFixed(1)+'%'}
+function probBar(p){return'<div class="prob-bar"><div class="bar-track"><div class="bar-fill" style="width:'+Math.min(p,100)+'%;background:'+riskColor(p)+';"></div></div><span class="prob-val" style="color:'+riskColor(p)+'">'+pct(p)+'</span></div>'}
+function trendArrow(d){if(d==='increasing')return'<span class="arrow-up">↑</span>';if(d==='decreasing')return'<span class="arrow-down">↓</span>';return'<span class="arrow-stable">→</span>'}
+function catPrefix(id){return(id||'').split('_')[0]||'UNK'}
+
+async function fetchAll(){
+  try{
+    const[r1,r2,r3,r4,r5]=await Promise.all([
+      fetch(API+'/stats').then(r=>r.json()).catch(()=>({})),
+      fetch(API+'/dashboard/summary').then(r=>r.json()).catch(()=>({})),
+      fetch(API+'/data-sources/health').then(r=>r.json()).catch(()=>({sources:[]})),
+      Promise.all([fetch(API+'/probabilities?limit=500&offset=0').then(r=>r.json()).catch(()=>({probabilities:[]})),fetch(API+'/probabilities?limit=500&offset=500').then(r=>r.json()).catch(()=>({probabilities:[]}))]).then(([a,b])=>({probabilities:[...(a.probabilities||[]),...(b.probabilities||[])]})),
+      Promise.all([fetch(API+'/events?limit=500&offset=0').then(r=>r.json()).catch(()=>({events:[]})),fetch(API+'/events?limit=500&offset=500').then(r=>r.json()).catch(()=>({events:[]}))]).then(([a,b])=>({events:[...(a.events||[]),...(b.events||[])]}))
+    ]);
+    stats=r1;dashSummary=r2;sourceHealth=r3.sources||[];
     allProbs=r4.probabilities||[];allEvents=r5.events||[];
     mergeData();
     document.getElementById('loading').classList.add('hidden');
