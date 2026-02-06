@@ -76,7 +76,7 @@ class RiskProbability(Base):
     # Phase 4D: Explainability columns
     attribution = Column(JSON)
     explanation = Column(Text)
-    recommendation = Column(String(100))
+    recommendation = Column(JSON)
     previous_probability_pct = Column(Float)
     probability_change_pct = Column(Float)
 
