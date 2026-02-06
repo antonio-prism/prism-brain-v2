@@ -180,6 +180,7 @@ async function fetchAll(){
     }
     for(var m=0;m<allProbs.length;m++){
       allProbs[m].event_name=namesMap[allProbs[m].event_id]||allProbs[m].event_id;
+      allProbs[m].current_probability=(allProbs[m].probability_pct||0)/100;
     }
 
     document.getElementById('loading').style.display='none';
