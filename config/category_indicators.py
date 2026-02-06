@@ -10,6 +10,10 @@ relate to its risk domain.
 
 Indicator names MUST match the exact keys returned by DataFetcher methods.
 """
+import re
+import hashlib
+import math
+
 
 # Beta parameters control how strongly an indicator influences probability.
 # These must match the BETA_PARAMETERS dict in main.py:
@@ -201,6 +205,74 @@ def get_default_baseline(event_id: str) -> int:
     category = CATEGORY_INDICATOR_MAP.get(prefix, {})
     return category.get("default_baseline", 3)
 
+
+# Approximate category sizes for severity scaling
+CATEGORY_SIZES = {
+    "GEO": 75, "PHYS": 60, "ENRG": 80, "CYBER": 65, "TECH": 85,
+    "SUPL": 90, "SYST": 50, "CLIM": 100, "CYB": 100, "ECO": 50,
+    "POL": 50, "CLI": 100
+}
+
+
+def get_event_sensitivity(event_id: str) -> dict:
+    """
+    Returns event-specific sensitivity profile for probability differentiation.
+    Creates unique adjustments per event based on severity position within category.
+    
+    Returns dict with:
+    - baseline_offset: adjustment to category baseline (float, -0.8 to +0.8)
+    - weight_multipliers: dict of indicator_name -> multiplier
+    - severity_factor: overall signal scaling (0.6 to 1.4)
+    """
+    prefix = get_category_prefix(event_id)
+    category = CATEGORY_INDICATOR_MAP.get(prefix, {})
+    indicators = category.get("indicators", [])
+    
+    # Extract event number from ID (e.g., GEO-001 -> 1, CYB_050 -> 50)
+    num_match = re.search(r"(\d+)$", event_id)
+    event_num = int(num_match.group(1)) if num_match else 1
+    
+    # Get category size
+    cat_size = CATEGORY_SIZES.get(prefix, 75)
+    
+    # Severity position: 0.0 (most severe) to 1.0 (least severe)
+    severity_pos = min(1.0, (event_num - 1) / max(cat_size - 1, 1))
+    
+    # Baseline offset: severe events get higher baseline, mild get lower
+    baseline_offset = 0.8 * (1.0 - 2.0 * severity_pos)
+    
+    # Severity factor: amplifies signals for severe events
+    severity_factor = 1.4 - 0.8 * severity_pos
+    
+    # Weight multipliers per indicator based on beta type and severity
+    weight_multipliers = {}
+    for ind in indicators:
+        name = ind["name"]
+        beta = ind["beta"]
+        if beta == "direct_causal":
+            mult = 1.3 - 0.6 * severity_pos
+        elif beta == "strong_correlation":
+            mult = 1.15 - 0.3 * severity_pos
+        elif beta == "moderate_correlation":
+            mult = 0.9 + 0.3 * severity_pos
+        else:
+            mult = 0.8 + 0.5 * severity_pos
+        weight_multipliers[name] = mult
+    
+    # Add deterministic variation from event_id hash
+    hash_val = int(hashlib.md5(event_id.encode()).hexdigest()[:8], 16)
+    hash_noise = ((hash_val % 1000) / 1000.0 - 0.5) * 0.2
+    baseline_offset += hash_noise
+    
+    # Clamp baseline_offset so final baseline stays in valid range
+    baseline_offset = max(-1.5, min(1.5, baseline_offset))
+    
+    return {
+        "baseline_offset": round(baseline_offset, 4),
+        "weight_multipliers": weight_multipliers,
+        "severity_factor": round(severity_factor, 4),
+        "severity_position": round(severity_pos, 4)
+    }
 
 def validate_weights():
     issues = {}
