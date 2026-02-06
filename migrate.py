@@ -177,3 +177,14 @@ print("Migration v4 complete - all columns verified.")
 from database.connection import init_db
 init_db()
 print("Database tables verified.")
+
+# Step 3: Regenerate indicator weights with correct fetcher indicator names
+print()
+print("Step 3: Regenerating indicator weights...")
+try:
+    from regenerate_weights import regenerate_weights
+    regenerate_weights()
+    print("Weight regeneration complete.")
+except Exception as e:
+    print(f"WARNING: Weight regeneration failed: {e}")
+    print("Weights will use existing values. Run regenerate_weights.py manually if needed.")
