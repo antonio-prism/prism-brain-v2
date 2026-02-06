@@ -166,6 +166,7 @@ with engine.connect() as conn:
     print("Step 1.5: Fixing column types...")
     type_changes = [
         ("risk_probabilities", "recommendation", "JSON USING recommendation::JSON"),
+        ("risk_probabilities", "flags", "TEXT USING flags::TEXT"),
         ("indicator_values", "raw_value", "FLOAT USING raw_value::FLOAT"),
     ]
     for table, col, new_type in type_changes:
