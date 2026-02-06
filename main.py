@@ -1718,10 +1718,10 @@ async def trigger_enhanced_calculation(
                 try:
                     weights = weights_by_event.get(event.event_id, [])
                     stored_baseline = event.baseline_probability
-        if stored_baseline and 1 <= stored_baseline <= 5:
-            baseline_scale = stored_baseline
-        else:
-            baseline_scale = get_default_baseline(event.event_id)
+                    if stored_baseline and 1 <= stored_baseline <= 5:
+                        baseline_scale = stored_baseline
+                    else:
+                        baseline_scale = get_default_baseline(event.event_id)
                     baseline_prob = probability_calculator.scale_to_probability(baseline_scale)
                     all_baselines[event.event_id] = baseline_prob
 
