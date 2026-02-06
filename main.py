@@ -117,13 +117,13 @@ class IndicatorValueCreate(BaseModel):
 
 # Beta parameters for different correlation types
 BETA_PARAMETERS = {
-    "HIGH": 1.2,
-    "MODERATE": 0.8,
-    "LOW": 0.4,
-    "direct_causal": 1.2,
-    "strong_correlation": 1.0,
-    "moderate_correlation": 0.7,
-    "weak_correlation": 0.4
+    "HIGH": 2.0,
+    "MODERATE": 1.2,
+    "LOW": 0.6,
+    "direct_causal": 2.0,
+    "strong_correlation": 1.5,
+    "moderate_correlation": 1.0,
+    "weak_correlation": 0.6
 }
 
 class ProbabilityCalculator:
@@ -303,8 +303,15 @@ class SignalExtractor:
 
         Returns: (z_score, mean, std)
         """
-        if not historical_values or len(historical_values) < 2:
-            return 0.0, current_value, 1.0
+        if not historical_values or len(historical_values) < 3:
+            # FIX Issue 1 & 6: Use sensible defaults when insufficient history
+            # Instead of returning z=0 (no signal), use default distribution
+            # so that current data values produce meaningful signals.
+            # Default: mean=0.5, std=0.25 assumes normalized 0-1 range.
+            default_mean = 0.5
+            default_std = 0.25
+            z_score = (current_value - default_mean) / default_std
+            return z_score, default_mean, default_std
 
         mean = statistics.mean(historical_values)
         std = statistics.stdev(historical_values)
