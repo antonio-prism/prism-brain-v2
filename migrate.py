@@ -40,6 +40,10 @@ RENAME_COLUMNS = [
 ADD_COLUMNS = [
     # risk_events
     "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS baseline_1_5 FLOAT DEFAULT 3.0",
+    # risk_events: attributes referenced in main.py list_events
+    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS super_risk BOOLEAN DEFAULT FALSE",
+    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS baseline_impact FLOAT",
+    "ALTER TABLE risk_events ADD COLUMN IF NOT EXISTS methodology_tier VARCHAR(50)",
     # risk_probabilities: Phase 4B signal columns
     "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS signal FLOAT",
     "ALTER TABLE risk_probabilities ADD COLUMN IF NOT EXISTS momentum FLOAT",
