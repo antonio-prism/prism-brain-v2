@@ -128,8 +128,8 @@ async function fetchAll(){
       fetch(API+'/stats').then(r=>r.json()).catch(()=>({})),
       fetch(API+'/dashboard/summary').then(r=>r.json()).catch(()=>({})),
       fetch(API+'/data-sources/health').then(r=>r.json()).catch(()=>({sources:[]})),
-      fetch(API+'/probabilities?limit=1000').then(r=>r.json()).catch(()=>({probabilities:[]})),
-      fetch(API+'/events?limit=1000').then(r=>r.json()).catch(()=>({events:[]}))
+      Promise.all([fetch(API+'/probabilities?limit=500&offset=0').then(r=>r.json()).catch(()=>({probabilities:[]})),fetch(API+'/probabilities?limit=500&offset=500').then(r=>r.json()).catch(()=>({probabilities:[]}))]).then(([a,b])=>({probabilities:[...(a.probabilities||[]),...(b.probabilities||[])]})),
+      Promise.all([fetch(API+'/events?limit=500&offset=0').then(r=>r.json()).catch(()=>({events:[]})),fetch(API+'/events?limit=500&offset=500').then(r=>r.json()).catch(()=>({events:[]}))]).then(([a,b])=>({events:[...(a.events||[]),...(b.events||[])]}))
     ]);
     stats=r1;dashSummary=r2;sourceHealth=r3.sources||[];
     allProbs=r4.probabilities||[];allEvents=r5.events||[];
