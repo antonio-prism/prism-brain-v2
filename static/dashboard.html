@@ -133,7 +133,7 @@ async function fetchAll(){
     ]);
     stats=r1;dashSummary=r2;sourceHealth=r3.sources||[];
     allProbs=(()=>{const raw=[...(r4.probabilities||[])];const map={};for(const p of raw){if(!map[p.event_id]||new Date(p.calculation_date)>new Date(map[p.event_id].calculation_date))map[p.event_id]=p;}return Object.values(map);})();allEvents=(()=>{const raw=[...(r5.events||[])];const map={};for(const e of raw){map[e.event_id]=e;}return Object.values(map);})();
-    mergeData();
+    const namesMap={};allEvents.forEach(e=>{if(e.event_name)namesMap[e.event_id]=e.event_name;});allProbs.forEach(p=>{p.event_name=namesMap[p.event_id]||p.event_id;});function eName(id){return(typeof namesMap!=="undefined"&&namesMap[id])?namesMap[id]:id;}mergeData();
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     renderAll();
@@ -231,7 +231,7 @@ function renderEventsTable(){
   const cats=[...new Set(allEvents.map(e=>e.category_prefix))].sort();
   const sel=document.getElementById('filter-cat');
   if(sel.options.length<=1)cats.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
-  document.getElementById('events-tbody').innerHTML=evts.slice(0,200).map(e=>{const rl=riskLevel(e.probability_pct);return'<tr><td style="font-family:monospace;font-size:12px">'+e.event_id+'</td><td>'+(e.name||'-').substring(0,50)+'</td><td><span class="badge" style="background:'+(COLORS[e.category_prefix]||'#94a3b8')+'22;color:'+(COLORS[e.category_prefix]||'#94a3b8')+'">'+e.category_prefix+'</span></td><td>'+probBar(e.probability_pct)+'</td><td>'+pct(e.confidence_score)+'</td><td><span class="badge '+rl.cls+'">'+rl.name+'</span></td></tr>';}).join('');
+  document.getElementById('events-tbody').innerHTML=evts.slice(0,200).map(e=>{const rl=riskLevel(e.probability_pct);return'<tr><td style="font-family:monospace;font-size:12px">'+e.event_id+'</td><td>'+(e.name||namesMap[p.event_id]||p.event_id).substring(0,50)+'</td><td><span class="badge" style="background:'+(COLORS[e.category_prefix]||'#94a3b8')+'22;color:'+(COLORS[e.category_prefix]||'#94a3b8')+'">'+e.category_prefix+'</span></td><td>'+probBar(e.probability_pct)+'</td><td>'+pct(e.confidence_score)+'</td><td><span class="badge '+rl.cls+'">'+rl.name+'</span></td></tr>';}).join('');
 }
 function sortEvtTable(key){evtSort.dir=(evtSort.key===key&&evtSort.dir==='desc')?'asc':'desc';evtSort.key=key;renderEventsTable();}
 function renderSources(){
@@ -275,5 +275,6 @@ fetchAll().then(()=>updateHeader());
 </script>
 </body>
 </html>
+
 
 
