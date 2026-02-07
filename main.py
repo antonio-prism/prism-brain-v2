@@ -2677,7 +2677,7 @@ class DataFetcher:
                 end_date = datetime.utcnow()
                 start_date = end_date - timedelta(days=30)
 
-                data_url = "https://api.acleddata.com/acled/read"
+                data_url = "https://acleddata.com/api/acled/read"
                 data_headers = {'Authorization': f'Bearer {access_token}'}
                 params = {
                     'event_date': f"{start_date.strftime('%Y-%m-%d')}|{end_date.strftime('%Y-%m-%d')}",
