@@ -2747,64 +2747,73 @@ class DataFetcher:
             return {'source': 'GPR', 'status': 'error', 'indicators': {'gpr_index_value': 120.0, 'gpr_risk_level': 0.45}}
 
     async def fetch_bls_labor(self) -> Dict[str, Any]:
-        """Fetch Bureau of Labor Statistics labor market data."""
-        url = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
-        payload = {
-            'seriesid': ['LNS14000000', 'CES0000000001', 'CUUR0000SA0'],
-            'startyear': '2025',
-            'endyear': '2026'
+        """Fetch Bureau of Labor Statistics labor market data using individual series requests."""
+        headers = {'User-Agent': 'PRISM-Brain/1.0 (risk-intelligence)'}
+        series_map = {
+            'LNS14000000': 'bls_unemployment_rate',
+            'CES0000000001': 'bls_nonfarm_payrolls',
+            'CUUR0000SA0': 'bls_cpi_index'
         }
+        defaults = {'bls_unemployment_rate': 4.1, 'bls_nonfarm_payrolls': 150.0, 'bls_cpi_index': 310.0}
+        indicators = dict(defaults)
+        any_success = False
+
         try:
-            async with aiohttp.ClientSession(timeout=self.timeout) as session:
-                async with session.post(url, json=payload) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        unemployment_rate = 4.1
-                        nonfarm_payrolls = 150.0
-                        cpi_index = 310.0
-                        if 'Results' in data and 'series' in data['Results']:
-                            for series in data['Results']['series']:
-                                sid = series.get('seriesID', '')
-                                if sid == 'LNS14000000' and series.get('data'):
-                                    unemployment_rate = float(series['data'][0]['value'])
-                                elif sid == 'CES0000000001' and series.get('data'):
-                                    nonfarm_payrolls = float(series['data'][0]['value'])
-                                elif sid == 'CUUR0000SA0' and series.get('data'):
-                                    cpi_index = float(series['data'][0]['value'])
-                        return {
-                            'source': 'BLS',
-                            'status': 'success',
-                            'indicators': {
-                                'bls_unemployment_rate': unemployment_rate,
-                                'bls_nonfarm_payrolls': nonfarm_payrolls,
-                                'bls_cpi_index': cpi_index
-                            }
-                        }
-                    else:
-                        raise Exception(f"BLS API returned {response.status}")
+            async with aiohttp.ClientSession(timeout=self.timeout, headers=headers) as session:
+                for series_id, indicator_name in series_map.items():
+                    try:
+                        url = f"https://api.bls.gov/publicAPI/v1/timeseries/data/{series_id}"
+                        async with session.get(url) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                if data.get('status') == 'REQUEST_SUCCEEDED':
+                                    series_data = data.get('Results', {}).get('series', [])
+                                    if series_data and series_data[0].get('data'):
+                                        val = series_data[0]['data'][0].get('value', '')
+                                        if val:
+                                            indicators[indicator_name] = float(val)
+                                            any_success = True
+                    except Exception as inner_e:
+                        logger.warning(f"BLS series {series_id} failed: {inner_e}")
+                        continue
+
+            status = 'success' if any_success else 'error'
+            return {'source': 'BLS', 'status': status, 'indicators': indicators}
+
         except Exception as e:
             logger.error(f"BLS fetch error: {e}")
-            return {'source': 'BLS', 'status': 'error', 'indicators': {'bls_unemployment_rate': 4.1, 'bls_nonfarm_payrolls': 150.0, 'bls_cpi_index': 310.0}}
+            return {'source': 'BLS', 'status': 'error', 'indicators': defaults}
 
     async def fetch_mitre_attack(self) -> Dict[str, Any]:
-        """Fetch MITRE ATT&CK Framework technique data from GitHub."""
-        url = "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
+        """Fetch MITRE ATT&CK technique count via GitHub Contents API (lightweight)."""
+        headers = {
+            'User-Agent': 'PRISM-Brain/1.0',
+            'Accept': 'application/vnd.github.v3+json'
+        }
         try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=60)) as session:
+            async with aiohttp.ClientSession(timeout=self.timeout, headers=headers) as session:
+                # Use GitHub Trees API to list all files recursively (much lighter than full STIX)
+                url = "https://api.github.com/repos/mitre/cti/git/trees/master:enterprise-attack/attack-pattern"
                 async with session.get(url) as response:
                     if response.status == 200:
                         data = await response.json()
-                        technique_count = 0
+                        tree = data.get('tree', [])
+                        technique_count = len([f for f in tree if f.get('path', '').endswith('.json')])
+
+                        # Check recent commits for additions in last 90 days
+                        commits_url = "https://api.github.com/repos/mitre/cti/commits?path=enterprise-attack/attack-pattern&per_page=5"
                         recent_additions = 0
-                        if 'objects' in data:
-                            cutoff = (datetime.utcnow() - timedelta(days=90)).isoformat()
-                            for obj in data['objects']:
-                                if obj.get('type') == 'attack-pattern':
-                                    technique_count += 1
-                                modified = obj.get('modified', '')
-                                if modified and modified >= cutoff:
-                                    recent_additions += 1
+                        try:
+                            async with session.get(commits_url) as cr:
+                                if cr.status == 200:
+                                    commits = await cr.json()
+                                    cutoff = (datetime.utcnow() - timedelta(days=90)).isoformat()
+                                    recent_additions = len([cm for cm in commits if cm.get('commit', {}).get('committer', {}).get('date', '') >= cutoff])
+                        except Exception:
+                            recent_additions = 3  # fallback
+
                         threat_complexity = min(technique_count / 1000.0, 1.0)
+
                         return {
                             'source': 'MITRE',
                             'status': 'success',
@@ -2815,10 +2824,11 @@ class DataFetcher:
                             }
                         }
                     else:
-                        raise Exception(f"MITRE GitHub returned {response.status}")
+                        raise Exception(f"GitHub API returned {response.status}")
+
         except Exception as e:
             logger.error(f"MITRE fetch error: {e}")
-            return {'source': 'MITRE', 'status': 'error', 'indicators': {'mitre_technique_count': 625, 'mitre_recent_additions': 15, 'mitre_threat_complexity': 0.625}}
+            return {'source': 'MITRE', 'status': 'error', 'indicators': {'mitre_technique_count': 625, 'mitre_recent_additions': 3, 'mitre_threat_complexity': 0.625}}
 
     async def fetch_epss_scores(self) -> Dict[str, Any]:
         """Fetch FIRST EPSS (Exploit Prediction Scoring System) top CVEs."""
