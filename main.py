@@ -2640,34 +2640,43 @@ class DataFetcher:
             return {'source': 'ACLED', 'status': 'no_credentials', 'indicators': defaults}
 
         try:
-            from urllib.parse import urlencode
-            async with aiohttp.ClientSession(timeout=self.timeout) as session:
+            acled_timeout = aiohttp.ClientTimeout(total=60)
+            async with aiohttp.ClientSession(timeout=acled_timeout) as session:
                 # Step 1: OAuth authentication
                 auth_url = "https://acleddata.com/oauth/token"
-                auth_body = urlencode({
+                auth_data = {
                     'username': email,
                     'password': password,
                     'grant_type': 'password',
                     'client_id': 'acled'
-                })
-                auth_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                }
+                auth_headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'PRISM-Brain/1.0'
+                }
 
-                async with session.post(auth_url, data=auth_body, headers=auth_headers) as auth_response:
+                async with session.post(auth_url, data=auth_data, headers=auth_headers) as auth_response:
+                    auth_text = await auth_response.text()
                     if auth_response.status != 200:
-                        error_text = await auth_response.text()
-                        logger.error(f"ACLED OAuth failed: status={auth_response.status}, body={error_text[:500]}")
+                        logger.error(f"ACLED OAuth failed: status={auth_response.status}, body={auth_text[:500]}")
                         return {
                             'source': 'ACLED', 'status': 'auth_failed',
                             'indicators': defaults,
-                            'error_detail': f"OAuth {auth_response.status}: {error_text[:200]}"
+                            'error_detail': f"OAuth {auth_response.status}: {auth_text[:200]}"
                         }
 
-                    auth_result = await auth_response.json()
-                    access_token = auth_result.get('access_token')
-
-                    if not access_token:
-                        logger.error(f"ACLED OAuth: no token in response: {str(auth_result)[:300]}")
+                    try:
+                        auth_result = json.loads(auth_text)
+                    except Exception:
+                        logger.error(f"ACLED OAuth: invalid JSON response: {auth_text[:300]}")
                         return {'source': 'ACLED', 'status': 'auth_failed', 'indicators': defaults}
+
+                    access_token = auth_result.get('access_token')
+                    if not access_token:
+                        logger.error(f"ACLED OAuth: no token in response: {auth_text[:300]}")
+                        return {'source': 'ACLED', 'status': 'auth_failed', 'indicators': defaults}
+
+                    logger.info(f"ACLED OAuth success, token obtained")
 
                 # Step 2: Fetch conflict data
                 end_date = datetime.utcnow()
@@ -2707,7 +2716,7 @@ class DataFetcher:
                         logger.error(f"ACLED data fetch failed: status={response.status}, body={error_text[:300]}")
 
         except Exception as e:
-            logger.error(f"ACLED fetch error: {e}")
+            logger.error(f"ACLED fetch error: {type(e).__name__}: {e}")
 
         return {'source': 'ACLED', 'status': 'error', 'indicators': defaults}
 
