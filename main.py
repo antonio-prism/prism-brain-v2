@@ -2629,49 +2629,45 @@ class DataFetcher:
 
     async def fetch_acled_conflicts(self, email: Optional[str] = None, password: Optional[str] = None) -> Dict[str, Any]:
         """Fetch ACLED conflict data via OAuth authentication."""
+        defaults = {
+            'acled_conflict_events': 1200,
+            'acled_fatalities': 3500,
+            'acled_protest_count': 450,
+            'acled_violence_intensity': 0.55,
+            'acled_instability_index': 0.48
+        }
         if not email or not password:
-            return {
-                'source': 'ACLED', 'status': 'no_credentials',
-                'indicators': {
-                    'acled_conflict_events': 1200,
-                    'acled_fatalities': 3500,
-                    'acled_protest_count': 450,
-                    'acled_violence_intensity': 0.55,
-                    'acled_instability_index': 0.48
-                }
-            }
+            return {'source': 'ACLED', 'status': 'no_credentials', 'indicators': defaults}
 
         try:
+            from urllib.parse import urlencode
             async with aiohttp.ClientSession(timeout=self.timeout) as session:
                 # Step 1: OAuth authentication
                 auth_url = "https://acleddata.com/oauth/token"
-                auth_data = {
+                auth_body = urlencode({
                     'username': email,
                     'password': password,
                     'grant_type': 'password',
                     'client_id': 'acled'
-                }
+                })
                 auth_headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
-                async with session.post(auth_url, data=auth_data, headers=auth_headers) as auth_response:
+                async with session.post(auth_url, data=auth_body, headers=auth_headers) as auth_response:
                     if auth_response.status != 200:
-                        logger.error(f"ACLED OAuth failed: {auth_response.status}")
+                        error_text = await auth_response.text()
+                        logger.error(f"ACLED OAuth failed: status={auth_response.status}, body={error_text[:500]}")
                         return {
                             'source': 'ACLED', 'status': 'auth_failed',
-                            'indicators': {
-                                'acled_conflict_events': 1200,
-                                'acled_fatalities': 3500,
-                                'acled_protest_count': 450,
-                                'acled_violence_intensity': 0.55,
-                                'acled_instability_index': 0.48
-                            }
+                            'indicators': defaults,
+                            'error_detail': f"OAuth {auth_response.status}: {error_text[:200]}"
                         }
 
                     auth_result = await auth_response.json()
                     access_token = auth_result.get('access_token')
 
                     if not access_token:
-                        return {'source': 'ACLED', 'status': 'auth_failed', 'indicators': {}}
+                        logger.error(f"ACLED OAuth: no token in response: {str(auth_result)[:300]}")
+                        return {'source': 'ACLED', 'status': 'auth_failed', 'indicators': defaults}
 
                 # Step 2: Fetch conflict data
                 end_date = datetime.utcnow()
@@ -2707,12 +2703,14 @@ class DataFetcher:
                             }
                         }
                     else:
-                        logger.error(f"ACLED data fetch failed: {response.status}")
+                        error_text = await response.text()
+                        logger.error(f"ACLED data fetch failed: status={response.status}, body={error_text[:300]}")
 
         except Exception as e:
             logger.error(f"ACLED fetch error: {e}")
 
-        return {'source': 'ACLED', 'status': 'error', 'indicators': {}}
+        return {'source': 'ACLED', 'status': 'error', 'indicators': defaults}
+
 
     async def fetch_gscpi_data(self) -> Dict[str, Any]:
         """Fetch NY Fed Global Supply Chain Pressure Index."""
