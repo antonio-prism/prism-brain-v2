@@ -2746,35 +2746,36 @@ class DataFetcher:
             logger.error(f"GPR fetch error: {e}")
             return {'source': 'GPR', 'status': 'error', 'indicators': {'gpr_index_value': 120.0, 'gpr_risk_level': 0.45}}
 
-    async def fetch_bls_labor(self) -> Dict[str, Any]:
-        """Fetch Bureau of Labor Statistics labor market data using individual series requests."""
-        headers = {'User-Agent': 'PRISM-Brain/1.0 (risk-intelligence)'}
-        series_map = {
-            'LNS14000000': 'bls_unemployment_rate',
-            'CES0000000001': 'bls_nonfarm_payrolls',
-            'CUUR0000SA0': 'bls_cpi_index'
-        }
+    async def fetch_bls_labor(self, fred_api_key: Optional[str] = None) -> Dict[str, Any]:
+        """Fetch BLS labor market data via FRED API (BLS direct API blocks cloud server IPs)."""
         defaults = {'bls_unemployment_rate': 4.1, 'bls_nonfarm_payrolls': 150.0, 'bls_cpi_index': 310.0}
+        if not fred_api_key:
+            logger.warning("No FRED API key for BLS data - using defaults")
+            return {'source': 'BLS', 'status': 'no_api_key', 'indicators': defaults}
+        
+        # Map FRED series IDs to BLS indicator names
+        series_map = {
+            'UNRATE': 'bls_unemployment_rate',
+            'PAYEMS': 'bls_nonfarm_payrolls',
+            'CPIAUCSL': 'bls_cpi_index'
+        }
         indicators = dict(defaults)
         any_success = False
 
         try:
-            async with aiohttp.ClientSession(timeout=self.timeout, headers=headers) as session:
+            async with aiohttp.ClientSession(timeout=self.timeout) as session:
                 for series_id, indicator_name in series_map.items():
                     try:
-                        url = f"https://api.bls.gov/publicAPI/v1/timeseries/data/{series_id}"
+                        url = f"https://api.stlouisfed.org/fred/series/observations?series_id={series_id}&api_key={fred_api_key}&file_type=json&sort_order=desc&limit=1"
                         async with session.get(url) as response:
                             if response.status == 200:
                                 data = await response.json()
-                                if data.get('status') == 'REQUEST_SUCCEEDED':
-                                    series_data = data.get('Results', {}).get('series', [])
-                                    if series_data and series_data[0].get('data'):
-                                        val = series_data[0]['data'][0].get('value', '')
-                                        if val:
-                                            indicators[indicator_name] = float(val)
-                                            any_success = True
+                                observations = data.get('observations', [])
+                                if observations and observations[0].get('value', '.') != '.':
+                                    indicators[indicator_name] = float(observations[0]['value'])
+                                    any_success = True
                     except Exception as inner_e:
-                        logger.warning(f"BLS series {series_id} failed: {inner_e}")
+                        logger.warning(f"BLS/FRED series {series_id} failed: {inner_e}")
                         continue
 
             status = 'success' if any_success else 'error'
@@ -2783,6 +2784,7 @@ class DataFetcher:
         except Exception as e:
             logger.error(f"BLS fetch error: {e}")
             return {'source': 'BLS', 'status': 'error', 'indicators': defaults}
+
 
     async def fetch_mitre_attack(self) -> Dict[str, Any]:
         """Fetch MITRE ATT&CK technique count via GitHub Contents API (lightweight)."""
@@ -2937,7 +2939,7 @@ class DataFetcher:
             self.fetch_acled_conflicts(api_keys.get('ACLED_EMAIL'), api_keys.get('ACLED_PASSWORD')),
             self.fetch_gscpi_data(),
             self.fetch_gpr_index(),
-            self.fetch_bls_labor(),
+            self.fetch_bls_labor(api_keys.get('FRED')),
             self.fetch_mitre_attack(),
             self.fetch_epss_scores(),
             self.fetch_wef_risks(),
