@@ -34,6 +34,10 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "noaa_climate_risk",       "source": "NOAA",       "weight": 0.09, "beta": "moderate_correlation","time_scale": "slow"},
             {"name": "gdelt_crisis_intensity",  "source": "GDELT",      "weight": 0.09, "beta": "weak_correlation",    "time_scale": "fast"},
             {"name": "gpr_index_value",             "source": "GPR",         "weight": 0.07, "beta": "strong_correlation",  "time_scale": "fast"},
+        
+            {"name": "emdat_total_disasters",            "source": "EMDAT",             "weight": 0.10, "beta": "strong_correlation",  "time_scale": "medium"},
+            {"name": "emdat_disaster_deaths",            "source": "EMDAT",             "weight": 0.08, "beta": "moderate_correlation","time_scale": "medium"},
+            {"name": "sipri_militarization_risk",       "source": "SIPRI",             "weight": 0.05, "beta": "weak_correlation",    "time_scale": "slow"},
         ]
     },
     "PHYS": {
@@ -47,6 +51,9 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "eia_crude_oil_price",     "source": "EIA",        "weight": 0.10, "beta": "weak_correlation",    "time_scale": "medium"},
             {"name": "gdelt_crisis_intensity",  "source": "GDELT",      "weight": 0.10, "beta": "weak_correlation",    "time_scale": "fast"},
             {"name": "world_bank_gdp_growth",   "source": "WORLD_BANK", "weight": 0.10, "beta": "weak_correlation",    "time_scale": "slow"},
+        
+            {"name": "emdat_disaster_frequency_index",   "source": "EMDAT",             "weight": 0.10, "beta": "strong_correlation",  "time_scale": "medium"},
+            {"name": "emdat_economic_damage_billion",    "source": "EMDAT",             "weight": 0.08, "beta": "moderate_correlation","time_scale": "medium"},
         ]
     },
     "ENRG": {
@@ -62,6 +69,10 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "fred_vix_index",          "source": "FRED",       "weight": 0.09, "beta": "weak_correlation",    "time_scale": "fast"},
             {"name": "wef_economic_risk_score",     "source": "WEF",         "weight": 0.04, "beta": "weak_correlation",    "time_scale": "slow"},
             {"name": "minerals_copper_criticality", "source": "USGS_MINERALS","weight": 0.05, "beta": "moderate_correlation","time_scale": "slow"},
+        
+            {"name": "irena_renewable_capacity_gw",     "source": "IRENA",             "weight": 0.08, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "irena_renewable_share_pct",       "source": "IRENA",             "weight": 0.06, "beta": "weak_correlation",    "time_scale": "slow"},
+            {"name": "eurostat_gdp_growth",             "source": "EUROSTAT",          "weight": 0.05, "beta": "weak_correlation",    "time_scale": "medium"},
         ]
     },
     "CYBER": {
@@ -93,6 +104,8 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "imf_world_gdp_growth",    "source": "IMF",        "weight": 0.13, "beta": "moderate_correlation","time_scale": "slow"},
             {"name": "mitre_technique_count",       "source": "MITRE",       "weight": 0.05, "beta": "moderate_correlation","time_scale": "fast"},
             {"name": "epss_high_risk_count",        "source": "EPSS",        "weight": 0.05, "beta": "strong_correlation",  "time_scale": "fast"},
+        
+            {"name": "irena_energy_transition_index",   "source": "IRENA",             "weight": 0.06, "beta": "weak_correlation",    "time_scale": "slow"},
         ]
     },
     "SUPL": {
@@ -109,6 +122,12 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "fred_vix_index",          "source": "FRED",       "weight": 0.13, "beta": "moderate_correlation","time_scale": "fast"},
             {"name": "gscpi_index",                 "source": "GSCPI",       "weight": 0.07, "beta": "direct_causal",       "time_scale": "fast"},
             {"name": "minerals_rare_earth_criticality","source":"USGS_MINERALS","weight": 0.05, "beta": "strong_correlation",  "time_scale": "slow"},
+        
+            {"name": "gta_trade_restriction_ratio",      "source": "GTA",               "weight": 0.12, "beta": "direct_causal",       "time_scale": "medium"},
+            {"name": "fbx_shipping_stress",              "source": "FREIGHTOS",         "weight": 0.14, "beta": "direct_causal",       "time_scale": "fast"},
+            {"name": "fbx_global_container_rate",        "source": "FREIGHTOS",         "weight": 0.10, "beta": "strong_correlation",  "time_scale": "fast"},
+            {"name": "wb_logistics_risk",                "source": "WORLD_BANK_LPI",    "weight": 0.08, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "eurostat_trade_balance",           "source": "EUROSTAT",          "weight": 0.06, "beta": "weak_correlation",    "time_scale": "medium"},
         ]
     },
     "SYST": {
@@ -127,6 +146,11 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "fao_food_security_risk",  "source": "FAO",        "weight": 0.09, "beta": "moderate_correlation","time_scale": "slow"},
             {"name": "wef_geo_risk_score",          "source": "WEF",         "weight": 0.05, "beta": "moderate_correlation","time_scale": "slow"},
             {"name": "bls_cpi_index",               "source": "BLS",         "weight": 0.05, "beta": "weak_correlation",    "time_scale": "medium"},
+        
+            {"name": "ti_governance_risk",              "source": "TRANSPARENCY_INTL", "weight": 0.08, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "sipri_global_milex_trillion",     "source": "SIPRI",             "weight": 0.06, "beta": "weak_correlation",    "time_scale": "slow"},
+            {"name": "gta_protectionism_index",         "source": "GTA",               "weight": 0.06, "beta": "weak_correlation",    "time_scale": "medium"},
+            {"name": "eurostat_inflation",              "source": "EUROSTAT",          "weight": 0.07, "beta": "moderate_correlation","time_scale": "medium"},
         ]
     },
     "CLIM": {
@@ -143,6 +167,9 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "copernicus_temp_anomaly",     "source": "COPERNICUS",  "weight": 0.07, "beta": "direct_causal",       "time_scale": "slow"},
             {"name": "copernicus_climate_risk_score","source": "COPERNICUS",  "weight": 0.05, "beta": "strong_correlation",  "time_scale": "slow"},
             {"name": "wef_env_risk_score",          "source": "WEF",         "weight": 0.03, "beta": "moderate_correlation","time_scale": "slow"},
+        
+            {"name": "irena_energy_transition_index",   "source": "IRENA",             "weight": 0.08, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "emdat_disaster_frequency_index",   "source": "EMDAT",             "weight": 0.10, "beta": "strong_correlation",  "time_scale": "medium"},
         ]
     },
     "CYB": {
@@ -169,6 +196,11 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "fred_fed_funds_rate",     "source": "FRED",       "weight": 0.13, "beta": "moderate_correlation","time_scale": "medium"},
             {"name": "bls_unemployment_rate",      "source": "BLS",         "weight": 0.07, "beta": "strong_correlation",  "time_scale": "medium"},
             {"name": "wef_economic_risk_score",     "source": "WEF",         "weight": 0.04, "beta": "moderate_correlation","time_scale": "slow"},
+        
+            {"name": "eurostat_gdp_growth",            "source": "EUROSTAT",          "weight": 0.12, "beta": "strong_correlation",  "time_scale": "medium"},
+            {"name": "eurostat_unemployment",            "source": "EUROSTAT",          "weight": 0.10, "beta": "strong_correlation",  "time_scale": "medium"},
+            {"name": "wb_lpi_global_avg",                "source": "WORLD_BANK_LPI",    "weight": 0.08, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "gta_trade_restriction_ratio",      "source": "GTA",               "weight": 0.07, "beta": "moderate_correlation","time_scale": "medium"},
         ]
     },
     "POL": {
@@ -182,6 +214,10 @@ CATEGORY_INDICATOR_MAP = {
             {"name": "acled_instability_index", "source": "ACLED",      "weight": 0.14, "beta": "strong_correlation",  "time_scale": "medium"},
             {"name": "world_bank_gdp_growth",   "source": "WORLD_BANK", "weight": 0.09, "beta": "weak_correlation",    "time_scale": "slow"},
             {"name": "gpr_risk_level",             "source": "GPR",         "weight": 0.07, "beta": "direct_causal",       "time_scale": "fast"},
+        
+            {"name": "sipri_militarization_risk",    "source": "SIPRI",             "weight": 0.12, "beta": "strong_correlation",  "time_scale": "slow"},
+            {"name": "ti_governance_risk",              "source": "TRANSPARENCY_INTL", "weight": 0.10, "beta": "moderate_correlation","time_scale": "slow"},
+            {"name": "gta_protectionism_index",         "source": "GTA",               "weight": 0.08, "beta": "moderate_correlation","time_scale": "medium"},
         ]
     },
     "CLI": {
