@@ -1629,7 +1629,7 @@ async def list_calculations(limit: int = Query(20, ge=1, le=100)):
 @app.post("/api/v1/calculations/trigger")
 async def trigger_calculation(
     event_ids: Optional[List[str]] = None,
-    limit: int = Query(100, ge=1, le=1000, description="Max events to process")
+    limit: int = Query(1000, ge=1, le=1000, description="Max events to process")
 ):
     """
     Trigger probability calculations (legacy endpoint).
@@ -2079,6 +2079,15 @@ SOURCE_PREFIX_MAP = {
     'wef_': 'WEF',
     'minerals_': 'USGS_MINERALS',
     'copernicus_': 'COPERNICUS',
+    # Phase 2 source prefixes
+    'ti_': 'TRANSPARENCY_INTL',
+    'lpi_': 'WORLD_BANK_LPI',
+    'eurostat_': 'EUROSTAT',
+    'sipri_': 'SIPRI',
+    'irena_': 'IRENA',
+    'gta_': 'GTA',
+    'fbx_': 'FREIGHTOS',
+    'emdat_': 'EMDAT',
 }
 
 
@@ -3351,7 +3360,7 @@ data_fetcher = DataFetcher()
 @app.post("/api/v1/data/refresh")
 async def refresh_data(
     recalculate: bool = Query(True, description="Trigger probability recalculation after refresh"),
-    limit: int = Query(100, description="Max events to recalculate")
+    limit: int = Query(1000, description="Max events to recalculate")
 ):
     """
     Refresh indicator data from all 12 external sources.
