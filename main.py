@@ -2709,7 +2709,7 @@ class DataFetcher:
         start_date = end_date - timedelta(days=30)
         
         try:
-            acled_timeout = aiohttp.ClientTimeout(total=45)
+            acled_timeout = aiohttp.ClientTimeout(total=15)
             async with aiohttp.ClientSession(timeout=acled_timeout) as session:
                 
                 # === PRIMARY: ACLED Direct REST API (no OAuth) ===
@@ -2720,7 +2720,7 @@ class DataFetcher:
                         'email': email,
                         'event_date': start_date.strftime('%Y-%m-%d') + '|' + end_date.strftime('%Y-%m-%d'),
                         'event_date_where': 'BETWEEN',
-                        'limit': '5000'
+                        'limit': '1000'
                     }
                     async with session.get(data_url, params=params) as response:
                         if response.status == 200:
@@ -2756,7 +2756,7 @@ class DataFetcher:
                         'grant_type': 'password',
                         'client_id': 'acled-api'
                     }
-                    async with session.post(auth_url, data=auth_data, timeout=aiohttp.ClientTimeout(total=20)) as auth_resp:
+                    async with session.post(auth_url, data=auth_data, timeout=aiohttp.ClientTimeout(total=8)) as auth_resp:
                         if auth_resp.status == 200:
                             auth_result = await auth_resp.json()
                             access_token = auth_result.get('access_token')
@@ -2766,7 +2766,7 @@ class DataFetcher:
                                 oauth_params = {
                                     'event_date': start_date.strftime('%Y-%m-%d') + '|' + end_date.strftime('%Y-%m-%d'),
                                     'event_date_where': 'BETWEEN',
-                                    'limit': '5000'
+                                    'limit': '1000'
                                 }
                                 async with session.get(oauth_url, headers=oauth_headers, params=oauth_params) as data_resp:
                                     if data_resp.status == 200:
