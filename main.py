@@ -2550,99 +2550,62 @@ class DataFetcher:
         }
 
     async def fetch_fao_food(self, fred_api_key: Optional[str] = None) -> Dict[str, Any]:
-        """Fetch food price and agriculture data.
-        Uses FRED Global Food Price Index (PFOODINDEXM) as primary source,
-        FAOSTAT REST API as secondary, original FAO JSON as tertiary.
-        """
+        """Fetch food price data. FRED primary, original FAO JSON backup."""
         defaults = {
-            'fao_food_price_index': 118.5,
-            'fao_price_volatility': 0.15,
-            'fao_food_security_risk': 0.37,
-            'fao_supply_stress': 0.4
+            'fao_food_price_index': 118.5, 'fao_price_volatility': 0.15,
+            'fao_food_security_risk': 0.37, 'fao_supply_stress': 0.4
         }
-        indicators = {}
-        
         try:
-            async with aiohttp.ClientSession(timeout=self.timeout) as session:
-                # === PRIMARY: FRED Global Food Price Index (IMF source) ===
-                if fred_api_key:
-                    try:
-                        fred_url = f"https://api.stlouisfed.org/fred/series/observations?series_id=PFOODINDEXM&api_key={fred_api_key}&file_type=json&sort_order=desc&limit=24"
-                        async with session.get(fred_url) as resp:
-                            if resp.status == 200:
-                                fred_data = await resp.json()
-                                obs = [o for o in fred_data.get('observations', []) if o.get('value', '.') != '.']
-                                if len(obs) >= 2:
-                                    latest = float(obs[0]['value'])
-                                    values = [float(o['value']) for o in obs[:12] if o.get('value', '.') != '.']
-                                    avg_val = sum(values) / len(values)
-                                    volatility = (max(values) - min(values)) / avg_val if avg_val else 0.1
-                                    indicators['fao_food_price_index'] = latest
-                                    indicators['fao_price_volatility'] = min(1.0, volatility)
-                                    indicators['fao_food_security_risk'] = min(1.0, max(0, (latest - 100) / 50))
-                                    indicators['fao_supply_stress'] = min(1.0, volatility * 1.5)
-                                    logger.info(f"FAO via FRED: food_price_index={latest:.1f}, volatility={volatility:.3f}")
-                    except Exception as e:
-                        logger.warning(f"FAO FRED source failed: {e}")
-                
-                # === SECONDARY: FAOSTAT REST API (Producer Price Index) ===
-                if len(indicators) < 4:
-                    try:
-                        faostat_url = "https://fenixservices.fao.org/faostat/api/v1/en/data/CP?area=5000&element=210099&item=22013&year=2024,2025,2026&show_code=1&output_type=objects&limit=50"
-                        async with session.get(faostat_url) as resp:
-                            if resp.status == 200:
-                                fao_data = await resp.json()
-                                records = fao_data.get('data', [])
-                                if records:
-                                    values = [float(r['Value']) for r in records if r.get('Value')]
-                                    if values:
-                                        latest = values[-1]
-                                        avg_val = sum(values) / len(values)
-                                        vol = (max(values) - min(values)) / avg_val if avg_val else 0.1
-                                        if 'fao_food_price_index' not in indicators:
-                                            indicators['fao_food_price_index'] = latest
-                                        if 'fao_price_volatility' not in indicators:
-                                            indicators['fao_price_volatility'] = min(1.0, vol)
-                                        if 'fao_food_security_risk' not in indicators:
-                                            indicators['fao_food_security_risk'] = min(1.0, max(0, (latest - 100) / 50))
-                                        if 'fao_supply_stress' not in indicators:
-                                            indicators['fao_supply_stress'] = min(1.0, vol * 1.5)
-                                        logger.info(f"FAO via FAOSTAT API: {len(values)} records")
-                    except Exception as e:
-                        logger.warning(f"FAO FAOSTAT source failed: {e}")
-                
-                # === TERTIARY: Original FAO Food Price Index JSON ===
-                if len(indicators) < 4:
-                    try:
-                        fpi_url = "https://www.fao.org/worldfoodsituation/foodpricesindex/data/IndexJson.json"
-                        async with session.get(fpi_url) as resp:
-                            if resp.status == 200:
-                                ct = resp.headers.get('Content-Type', '')
-                                if 'json' in ct.lower() or resp.content_type == 'application/json':
-                                    data = await resp.json()
-                                    if isinstance(data, list) and len(data) > 0:
-                                        recent = sorted(data, key=lambda x: x.get('Date', ''), reverse=True)[:12]
-                                        if recent:
-                                            lv = float(recent[0].get('Food Price Index', 120))
-                                            vals = [float(r.get('Food Price Index', 120)) for r in recent]
-                                            av = sum(vals) / len(vals)
-                                            vo = (max(vals) - min(vals)) / av if av else 0.1
-                                            indicators.setdefault('fao_food_price_index', lv)
-                                            indicators.setdefault('fao_price_volatility', min(1.0, vo))
-                                            indicators.setdefault('fao_food_security_risk', min(1.0, max(0, (lv - 100) / 50)))
-                                            indicators.setdefault('fao_supply_stress', min(1.0, vo * 2))
-                                            logger.info(f"FAO via original JSON: index={lv}")
-                    except Exception as e:
-                        logger.warning(f"FAO original JSON source failed: {e}")
-                
-                if indicators:
-                    for k, v in defaults.items():
-                        indicators.setdefault(k, v)
-                    return {'source': 'FAO', 'status': 'success', 'indicators': indicators}
-        
+            return await asyncio.wait_for(self._fetch_fao_impl(fred_api_key, defaults), timeout=25)
+        except asyncio.TimeoutError:
+            logger.warning('FAO fetch timed out after 25s')
+            return {'source': 'FAO', 'status': 'estimated', 'indicators': defaults}
         except Exception as e:
-            logger.error(f"FAO fetch error: {e}")
-        
+            logger.error(f'FAO fetch error: {e}')
+            return {'source': 'FAO', 'status': 'estimated', 'indicators': defaults}
+
+    async def _fetch_fao_impl(self, fred_api_key, defaults) -> Dict[str, Any]:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15)) as session:
+            # PRIMARY: FRED Global Food Price Index
+            if fred_api_key:
+                try:
+                    url = f"https://api.stlouisfed.org/fred/series/observations?series_id=PFOODINDEXM&api_key={fred_api_key}&file_type=json&sort_order=desc&limit=24"
+                    async with session.get(url) as resp:
+                        if resp.status == 200:
+                            data = await resp.json()
+                            obs = [o for o in data.get('observations', []) if o.get('value', '.') != '.']
+                            if len(obs) >= 2:
+                                latest = float(obs[0]['value'])
+                                values = [float(o['value']) for o in obs[:12]]
+                                avg_val = sum(values) / len(values)
+                                vol = (max(values) - min(values)) / avg_val if avg_val else 0.1
+                                logger.info(f'FAO via FRED: index={latest:.1f}, vol={vol:.3f}')
+                                return {'source': 'FAO', 'status': 'success', 'indicators': {
+                                    'fao_food_price_index': latest,
+                                    'fao_price_volatility': min(1.0, vol),
+                                    'fao_food_security_risk': min(1.0, max(0, (latest - 100) / 50)),
+                                    'fao_supply_stress': min(1.0, vol * 1.5)
+                                }}
+                except Exception as e:
+                    logger.warning(f'FAO FRED failed: {e}')
+            # BACKUP: Original FAO JSON
+            try:
+                async with session.get("https://www.fao.org/worldfoodsituation/foodpricesindex/data/IndexJson.json") as resp:
+                    if resp.status == 200 and 'json' in resp.headers.get('Content-Type', '').lower():
+                        data = await resp.json()
+                        if isinstance(data, list) and data:
+                            recent = sorted(data, key=lambda x: x.get('Date', ''), reverse=True)[:12]
+                            lv = float(recent[0].get('Food Price Index', 120))
+                            vals = [float(r.get('Food Price Index', 120)) for r in recent]
+                            av = sum(vals) / len(vals)
+                            vo = (max(vals) - min(vals)) / av if av else 0.1
+                            return {'source': 'FAO', 'status': 'success', 'indicators': {
+                                'fao_food_price_index': lv, 'fao_price_volatility': min(1.0, vo),
+                                'fao_food_security_risk': min(1.0, max(0, (lv - 100) / 50)),
+                                'fao_supply_stress': min(1.0, vo * 2)
+                            }}
+            except Exception as e:
+                logger.warning(f'FAO JSON failed: {e}')
         return {'source': 'FAO', 'status': 'estimated', 'indicators': defaults}
 
 
@@ -2689,138 +2652,71 @@ class DataFetcher:
         return {'source': 'OTX', 'status': 'error', 'indicators': {}}
 
     async def fetch_acled_conflicts(self, email: Optional[str] = None, password: Optional[str] = None) -> Dict[str, Any]:
-        """Fetch conflict data using multiple approaches.
-        1. Primary: ACLED direct REST API (email+key as params, no OAuth needed)
-        2. Secondary: ACLED OAuth (original approach)
-        3. Tertiary: UCDP Uppsala Conflict Data (free, no auth)
-        4. Fallback: Intelligent estimates
-        """
+        """Fetch conflict data. Direct ACLED API primary, UCDP backup, with hard timeout."""
         defaults = {
-            'acled_conflict_events': 1200,
-            'acled_fatalities': 3500,
-            'acled_protest_count': 450,
-            'acled_violence_intensity': 0.55,
+            'acled_conflict_events': 1200, 'acled_fatalities': 3500,
+            'acled_protest_count': 450, 'acled_violence_intensity': 0.55,
             'acled_instability_index': 0.48
         }
         if not email or not password:
             return {'source': 'ACLED', 'status': 'no_credentials', 'indicators': defaults}
-        
+        try:
+            return await asyncio.wait_for(self._fetch_acled_impl(email, password, defaults), timeout=20)
+        except asyncio.TimeoutError:
+            logger.warning('ACLED fetch timed out after 20s')
+            return {'source': 'ACLED', 'status': 'error', 'indicators': defaults}
+        except Exception as e:
+            logger.error(f'ACLED fetch error: {e}')
+            return {'source': 'ACLED', 'status': 'error', 'indicators': defaults}
+
+    async def _fetch_acled_impl(self, email, password, defaults) -> Dict[str, Any]:
         end_date = datetime.utcnow()
         start_date = end_date - timedelta(days=30)
-        
-        try:
-            acled_timeout = aiohttp.ClientTimeout(total=15)
-            async with aiohttp.ClientSession(timeout=acled_timeout) as session:
-                
-                # === PRIMARY: ACLED Direct REST API (no OAuth) ===
-                try:
-                    data_url = "https://api.acleddata.com/acled/read"
-                    params = {
-                        'key': password,
-                        'email': email,
-                        'event_date': start_date.strftime('%Y-%m-%d') + '|' + end_date.strftime('%Y-%m-%d'),
-                        'event_date_where': 'BETWEEN',
-                        'limit': '1000'
-                    }
-                    async with session.get(data_url, params=params) as response:
-                        if response.status == 200:
-                            data = await response.json()
-                            events = data.get('data', [])
-                            if events and len(events) > 10:
-                                count = len(events)
-                                fatalities = sum(int(e.get('fatalities', 0)) for e in events)
-                                protests = sum(1 for e in events if 'protest' in str(e.get('event_type', '')).lower())
-                                violence = sum(1 for e in events if 'violence' in str(e.get('event_type', '')).lower())
-                                logger.info(f"ACLED direct API: {count} events, {fatalities} fatalities")
-                                return {
-                                    'source': 'ACLED',
-                                    'status': 'success',
-                                    'indicators': {
-                                        'acled_conflict_events': count,
-                                        'acled_fatalities': fatalities,
-                                        'acled_protest_count': protests,
-                                        'acled_violence_intensity': min(1.0, violence / 1000),
-                                        'acled_instability_index': min(1.0, (count + fatalities) / 10000)
-                                    }
-                                }
-                        logger.warning(f'ACLED direct API returned status {response.status}')
-                except Exception as e:
-                    logger.warning(f'ACLED direct API failed: {e}')
-                
-                # === SECONDARY: ACLED OAuth approach ===
-                try:
-                    auth_url = "https://acleddata.com/oauth/token"
-                    auth_data = {
-                        'username': email,
-                        'password': password,
-                        'grant_type': 'password',
-                        'client_id': 'acled-api'
-                    }
-                    async with session.post(auth_url, data=auth_data, timeout=aiohttp.ClientTimeout(total=8)) as auth_resp:
-                        if auth_resp.status == 200:
-                            auth_result = await auth_resp.json()
-                            access_token = auth_result.get('access_token')
-                            if access_token:
-                                oauth_url = "https://acleddata.com/api/acled/read"
-                                oauth_headers = {'Authorization': f'Bearer {access_token}'}
-                                oauth_params = {
-                                    'event_date': start_date.strftime('%Y-%m-%d') + '|' + end_date.strftime('%Y-%m-%d'),
-                                    'event_date_where': 'BETWEEN',
-                                    'limit': '1000'
-                                }
-                                async with session.get(oauth_url, headers=oauth_headers, params=oauth_params) as data_resp:
-                                    if data_resp.status == 200:
-                                        data = await data_resp.json()
-                                        events = data.get('data', [])
-                                        if events:
-                                            count = len(events)
-                                            fatalities = sum(int(e.get('fatalities', 0)) for e in events)
-                                            protests = sum(1 for e in events if 'protest' in str(e.get('event_type', '')).lower())
-                                            violence = sum(1 for e in events if 'violence' in str(e.get('event_type', '')).lower())
-                                            logger.info(f'ACLED OAuth: {count} events')
-                                            return {
-                                                'source': 'ACLED', 'status': 'success',
-                                                'indicators': {
-                                                    'acled_conflict_events': count,
-                                                    'acled_fatalities': fatalities,
-                                                    'acled_protest_count': protests,
-                                                    'acled_violence_intensity': min(1.0, violence / 1000),
-                                                    'acled_instability_index': min(1.0, (count + fatalities) / 10000)
-                                                }
-                                            }
-                except Exception as e:
-                    logger.warning(f'ACLED OAuth failed: {e}')
-                
-                # === TERTIARY: UCDP Uppsala Conflict Data (free, no auth) ===
-                try:
-                    ucdp_url = 'https://ucdpapi.pcr.uu.se/api/gedevents/24.1?pagesize=1000&StartDate=' + start_date.strftime('%Y-%m-%d') + '&EndDate=' + end_date.strftime('%Y-%m-%d')
-                    async with session.get(ucdp_url) as ucdp_resp:
-                        if ucdp_resp.status == 200:
-                            ucdp_data = await ucdp_resp.json()
-                            events = ucdp_data.get('Result', [])
-                            if events:
-                                count = len(events)
-                                fatalities = sum(int(e.get('best', e.get('deaths_a', 0)) or 0) for e in events)
-                                state_based = sum(1 for e in events if e.get('type_of_violence', 0) == 1)
-                                non_state = sum(1 for e in events if e.get('type_of_violence', 0) == 2)
-                                one_sided = sum(1 for e in events if e.get('type_of_violence', 0) == 3)
-                                logger.info(f'ACLED via UCDP backup: {count} events, {fatalities} fatalities')
-                                return {
-                                    'source': 'ACLED', 'status': 'success',
-                                    'indicators': {
-                                        'acled_conflict_events': count,
-                                        'acled_fatalities': fatalities,
-                                        'acled_protest_count': non_state + one_sided,
-                                        'acled_violence_intensity': min(1.0, (state_based + one_sided) / max(count, 1)),
-                                        'acled_instability_index': min(1.0, (count + fatalities) / 10000)
-                                    }
-                                }
-                except Exception as e:
-                    logger.warning(f'UCDP backup failed: {e}')
-        
-        except Exception as e:
-            logger.error(f'ACLED fetch error: {type(e).__name__}: {e}')
-        
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=12)) as session:
+            # PRIMARY: ACLED direct REST API (email+key as params)
+            try:
+                params = {'key': password, 'email': email,
+                    'event_date': start_date.strftime('%Y-%m-%d') + '|' + end_date.strftime('%Y-%m-%d'),
+                    'event_date_where': 'BETWEEN', 'limit': '1000'}
+                async with session.get("https://api.acleddata.com/acled/read", params=params) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        events = data.get('data', [])
+                        if events and len(events) > 10:
+                            count = len(events)
+                            fatalities = sum(int(e.get('fatalities', 0)) for e in events)
+                            protests = sum(1 for e in events if 'protest' in str(e.get('event_type', '')).lower())
+                            violence = sum(1 for e in events if 'violence' in str(e.get('event_type', '')).lower())
+                            logger.info(f'ACLED direct: {count} events, {fatalities} fatalities')
+                            return {'source': 'ACLED', 'status': 'success', 'indicators': {
+                                'acled_conflict_events': count, 'acled_fatalities': fatalities,
+                                'acled_protest_count': protests,
+                                'acled_violence_intensity': min(1.0, violence / 1000),
+                                'acled_instability_index': min(1.0, (count + fatalities) / 10000)
+                            }}
+            except Exception as e:
+                logger.warning(f'ACLED direct API failed: {e}')
+            # BACKUP: UCDP Uppsala (free, no auth)
+            try:
+                ucdp_url = 'https://ucdpapi.pcr.uu.se/api/gedevents/24.1?pagesize=500'
+                ucdp_url += '&StartDate=' + start_date.strftime('%Y-%m-%d')
+                ucdp_url += '&EndDate=' + end_date.strftime('%Y-%m-%d')
+                async with session.get(ucdp_url) as resp:
+                    if resp.status == 200:
+                        udata = await resp.json()
+                        events = udata.get('Result', [])
+                        if events:
+                            count = len(events)
+                            fatalities = sum(int(e.get('best', 0) or 0) for e in events)
+                            logger.info(f'ACLED via UCDP: {count} events')
+                            return {'source': 'ACLED', 'status': 'success', 'indicators': {
+                                'acled_conflict_events': count, 'acled_fatalities': fatalities,
+                                'acled_protest_count': int(count * 0.3),
+                                'acled_violence_intensity': min(1.0, fatalities / max(count, 1) / 10),
+                                'acled_instability_index': min(1.0, (count + fatalities) / 10000)
+                            }}
+            except Exception as e:
+                logger.warning(f'UCDP backup failed: {e}')
         return {'source': 'ACLED', 'status': 'error', 'indicators': defaults}
 
 
