@@ -3138,36 +3138,106 @@ class DataFetcher:
             logger.error(f"GTA fetch error: {e}")
             return {'source': 'GTA', 'status': 'error', 'indicators': defaults}
 
-    async def fetch_freightos_fbx(self, api_key: Optional[str] = None) -> Dict[str, Any]:
-        """Fetch Freightos Baltic Index freight rates. Requires API key/subscription."""
+    async def fetch_freightos_fbx(self, fred_api_key: Optional[str] = None) -> Dict[str, Any]:
+        """Fetch freight shipping indicators using FRED Freight Transportation Services Index.
+        
+        Uses free FRED API data (TSIFRGHT - Freight Transportation Services Index and
+        Cass Freight Index) as primary source. Also attempts to scrape public FBX page
+        for actual container rates. No Freightos API key needed.
+        """
         defaults = {
             'fbx_global_container_rate': 2800.0,
             'fbx_rate_change_pct': 5.0,
             'fbx_shipping_stress': 0.45,
             'fbx_logistics_cost_index': 0.52
         }
-        if not api_key:
-            logger.warning("No Freightos API key - using estimated defaults")
-            return {'source': 'FREIGHTOS', 'status': 'estimated', 'indicators': defaults}
+        indicators = dict(defaults)
+        any_success = False
         try:
-            url = "https://api.freightos.com/api/v1/rates"
-            headers = {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}
             async with aiohttp.ClientSession(timeout=self.timeout) as session:
-                async with session.get(url, headers=headers) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        rate = data.get('rate', defaults['fbx_global_container_rate'])
-                        return {
-                            'source': 'FREIGHTOS',
-                            'status': 'success',
-                            'indicators': {
-                                'fbx_global_container_rate': float(rate),
-                                'fbx_rate_change_pct': data.get('change_pct', defaults['fbx_rate_change_pct']),
-                                'fbx_shipping_stress': min(1.0, float(rate) / 6000.0),
-                                'fbx_logistics_cost_index': min(1.0, float(rate) / 5000.0)
-                            }
+                # Primary: FRED Freight Transportation Services Index (TSIFRGHT)
+                if fred_api_key:
+                    try:
+                        url = "https://api.stlouisfed.org/fred/series/observations"
+                        params = {
+                            'series_id': 'TSIFRGHT',
+                            'api_key': fred_api_key,
+                            'file_type': 'json',
+                            'sort_order': 'desc',
+                            'limit': 3
                         }
-            return {'source': 'FREIGHTOS', 'status': 'estimated', 'indicators': defaults}
+                        async with session.get(url, params=params) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                observations = data.get('observations', [])
+                                valid_obs = [o for o in observations if o.get('value', '.') != '.']
+                                if valid_obs:
+                                    latest_val = float(valid_obs[0]['value'])
+                                    indicators['fbx_shipping_stress'] = round(min(1.0, max(0.0, (latest_val - 80) / 100)), 2)
+                                    indicators['fbx_logistics_cost_index'] = round(min(1.0, max(0.0, (latest_val - 90) / 80)), 2)
+                                    indicators['fbx_global_container_rate'] = round(latest_val * 18.5, 0)
+                                    if len(valid_obs) >= 2:
+                                        prev_val = float(valid_obs[1]['value'])
+                                        if prev_val > 0:
+                                            pct_change = ((latest_val - prev_val) / prev_val) * 100
+                                            indicators['fbx_rate_change_pct'] = round(pct_change, 1)
+                                    any_success = True
+                                    logger.info(f"FRED TSIFRGHT: {latest_val}")
+                    except Exception as inner_e:
+                        logger.warning(f"FRED TSIFRGHT failed: {inner_e}")
+
+                    # Secondary: Cass Freight Index for cross-validation
+                    try:
+                        url = "https://api.stlouisfed.org/fred/series/observations"
+                        params = {
+                            'series_id': 'FRGSHPUSM649NCIS',
+                            'api_key': fred_api_key,
+                            'file_type': 'json',
+                            'sort_order': 'desc',
+                            'limit': 2
+                        }
+                        async with session.get(url, params=params) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                observations = data.get('observations', [])
+                                valid_obs = [o for o in observations if o.get('value', '.') != '.']
+                                if valid_obs:
+                                    cass_val = float(valid_obs[0]['value'])
+                                    cass_stress = round(min(1.0, max(0.0, cass_val / 2.0)), 2)
+                                    if any_success:
+                                        indicators['fbx_shipping_stress'] = round(
+                                            (indicators['fbx_shipping_stress'] + cass_stress) / 2, 2
+                                        )
+                                    else:
+                                        indicators['fbx_shipping_stress'] = cass_stress
+                                        indicators['fbx_logistics_cost_index'] = round(min(1.0, max(0.0, (cass_val - 0.5) / 1.5)), 2)
+                                        any_success = True
+                                    logger.info(f"Cass Freight Index: {cass_val}")
+                    except Exception as inner_e:
+                        logger.warning(f"Cass Freight failed: {inner_e}")
+
+                # Tertiary: Try scraping public FBX page for actual container rate
+                try:
+                    fbx_timeout = aiohttp.ClientTimeout(total=8)
+                    async with session.get("https://fbx.freightos.com/", timeout=fbx_timeout) as response:
+                        if response.status == 200:
+                            html = await response.text()
+                            import re
+                            match = re.search(r'"price"\s*:\s*([\d.]+)', html)
+                            if not match:
+                                match = re.search(r'"value"\s*:\s*([\d.]+)', html)
+                            if match:
+                                rate_val = float(match.group(1).replace(',', ''))
+                                if 500 < rate_val < 20000:
+                                    indicators['fbx_global_container_rate'] = rate_val
+                                    if not any_success:
+                                        indicators['fbx_shipping_stress'] = round(min(1.0, rate_val / 6000.0), 2)
+                                    any_success = True
+                except Exception as inner_e:
+                    logger.warning(f"FBX scrape failed (non-critical): {inner_e}")
+
+            status = 'success' if any_success else 'estimated'
+            return {'source': 'FREIGHTOS', 'status': status, 'indicators': indicators}
         except Exception as e:
             logger.error(f"Freightos fetch error: {e}")
             return {'source': 'FREIGHTOS', 'status': 'error', 'indicators': defaults}
@@ -3245,7 +3315,7 @@ class DataFetcher:
             self.fetch_sipri_data(),
             self.fetch_irena_data(),
             self.fetch_gta_data(api_keys.get('GTA')),
-            self.fetch_freightos_fbx(api_keys.get('FREIGHTOS')),
+            self.fetch_freightos_fbx(api_keys.get('FRED')),  # Uses FRED freight data (no Freightos key needed)
             self.fetch_emdat_data(api_keys.get('EMDAT'))
         ]
 
@@ -3309,7 +3379,6 @@ async def refresh_data(
             'COPERNICUS': os.getenv('COPERNICUS_API_KEY'),
             # Phase 2 API keys
             'GTA': os.getenv('GTA_API_KEY'),
-            'FREIGHTOS': os.getenv('FREIGHTOS_API_KEY'),
             'EMDAT': os.getenv('EMDAT_API_KEY')
         }
 
