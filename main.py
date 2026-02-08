@@ -3306,7 +3306,11 @@ async def refresh_data(
             'OTX': os.getenv('OTX_API_KEY'),
             'ACLED_EMAIL': os.getenv('ACLED_EMAIL'),
             'ACLED_PASSWORD': os.getenv('ACLED_PASSWORD'),
-            'COPERNICUS': os.getenv('COPERNICUS_API_KEY')
+            'COPERNICUS': os.getenv('COPERNICUS_API_KEY'),
+            # Phase 2 API keys
+            'GTA': os.getenv('GTA_API_KEY'),
+            'FREIGHTOS': os.getenv('FREIGHTOS_API_KEY'),
+            'EMDAT': os.getenv('EMDAT_API_KEY')
         }
 
         # Fetch data from all sources
