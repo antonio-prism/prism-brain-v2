@@ -34,12 +34,14 @@ from database.models import (
     RiskEvent, RiskProbability, IndicatorWeight,
     DataSourceHealth, CalculationLog, IndicatorValue,
     Client, ClientProcess, ClientRisk, ClientRiskAssessment
+    Client, ClientProcess, ClientRisk, ClientRiskAssessment
 )
 from config.category_indicators import (
     get_category_prefix, get_default_baseline, get_indicators_for_event,
     get_event_sensitivity, CATEGORY_INDICATOR_MAP
 )
 
+from client_routes import register_client_routes
 from client_routes import register_client_routes
 # Optional ML imports - degrade gracefully if not available
 try:
@@ -74,6 +76,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Phase 2: Register client CRUD endpoints
+register_client_routes(app, get_session_context)
 
 
 # Phase 2: Register client CRUD endpoints
