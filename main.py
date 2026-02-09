@@ -41,6 +41,7 @@ from config.category_indicators import (
 )
 
 from client_routes import register_client_routes
+from dashboard_routes import register_dashboard_routes
 # Optional ML imports - degrade gracefully if not available
 try:
     from sklearn.ensemble import GradientBoostingClassifier
@@ -77,6 +78,9 @@ app.add_middleware(
 
 # Phase 2: Register client CRUD endpoints
 register_client_routes(app, get_session_context)
+
+# Phase 3: Register enhanced dashboard endpoints
+register_dashboard_routes(app, get_session_context)
 
 
 # ============== Pydantic Models ==============
