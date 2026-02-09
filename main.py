@@ -126,13 +126,75 @@ class IndicatorValueCreate(BaseModel):
 
 # Beta parameters for different correlation types
 BETA_PARAMETERS = {
-    "HIGH": 2.0,
-    "MODERATE": 1.2,
-    "LOW": 0.6,
-    "direct_causal": 2.0,
-    "strong_correlation": 1.5,
-    "moderate_correlation": 1.0,
+    "HIGH": 3.0,
+    "MODERATE": 2.0,
+    "LOW": 1.0,
+    "direct_causal": 3.0,
+    "strong_correlation": 2.0,
+    "moderate_correlation": 1.2,
     "weak_correlation": 0.6
+}
+
+# Expected indicator ranges for proper z-score calculation
+# When insufficient historical data exists, use these domain-knowledge baselines
+# instead of generic mean=0.5/std=0.25 which produces meaningless z-scores.
+INDICATOR_RANGES = {
+    # USGS - Earthquake indicators
+    "usgs_earthquake_count": {"mean": 150, "std": 80},
+    "usgs_significant_count": {"mean": 5, "std": 3},
+    "usgs_max_magnitude": {"mean": 5.5, "std": 1.2},
+    "usgs_seismic_activity": {"mean": 0.5, "std": 0.2},
+    # CISA - Vulnerability indicators
+    "cisa_total_kev": {"mean": 1100, "std": 200},
+    "cisa_recent_kev": {"mean": 8, "std": 5},
+    "cisa_kev_rate": {"mean": 2.0, "std": 1.0},
+    "cisa_threat_level": {"mean": 0.5, "std": 0.2},
+    # NVD - CVE indicators
+    "nvd_total_cves": {"mean": 800, "std": 300},
+    "nvd_critical_count": {"mean": 50, "std": 30},
+    "nvd_high_count": {"mean": 200, "std": 100},
+    "nvd_severity_index": {"mean": 0.5, "std": 0.15},
+    # FRED - US Economic indicators
+    "fred_unemployment_rate": {"mean": 4.5, "std": 1.5},
+    "fred_inflation_rate": {"mean": 3.0, "std": 1.5},
+    "fred_fed_funds_rate": {"mean": 3.0, "std": 2.0},
+    "fred_vix_index": {"mean": 20, "std": 8},
+    "fred_treasury_spread": {"mean": 1.5, "std": 1.0},
+    # NOAA - Climate indicators
+    "noaa_temp_anomaly": {"mean": 1.0, "std": 0.3},
+    "noaa_precipitation_index": {"mean": 0.5, "std": 0.2},
+    "noaa_extreme_events": {"mean": 15, "std": 8},
+    "noaa_climate_risk": {"mean": 0.5, "std": 0.2},
+    # World Bank - Development indicators
+    "world_bank_gdp_growth": {"mean": 3.0, "std": 2.0},
+    "world_bank_gdp_avg": {"mean": 2.5, "std": 1.5},
+    "world_bank_economic_health": {"mean": 0.5, "std": 0.2},
+    # GDELT - Geopolitical indicators
+    "gdelt_event_volume": {"mean": 5000, "std": 2000},
+    "gdelt_peak_volume": {"mean": 8000, "std": 3000},
+    "gdelt_trend": {"mean": 0.0, "std": 0.3},
+    "gdelt_crisis_intensity": {"mean": 50, "std": 20},
+    # EIA - Energy indicators
+    "eia_crude_oil_price": {"mean": 75, "std": 15},
+    "eia_natural_gas_price": {"mean": 3.5, "std": 1.5},
+    "eia_energy_volatility": {"mean": 0.15, "std": 0.08},
+    "eia_strategic_reserve_level": {"mean": 400, "std": 50},
+    # IMF - International finance
+    "imf_world_gdp_growth": {"mean": 3.2, "std": 1.5},
+    "imf_gdp_forecast": {"mean": 3.0, "std": 1.0},
+    "imf_growth_momentum": {"mean": 0.0, "std": 0.5},
+    # FAO - Food/agriculture
+    "fao_food_price_index": {"mean": 130, "std": 25},
+    "fao_cereal_index": {"mean": 140, "std": 30},
+    "fao_food_security_risk": {"mean": 0.4, "std": 0.15},
+    # OTX - Cyber threat intel
+    "otx_threat_pulse_count": {"mean": 500, "std": 200},
+    "otx_malware_indicators": {"mean": 1000, "std": 400},
+    "otx_ransomware_activity": {"mean": 50, "std": 25},
+    # ACLED - Conflict data
+    "acled_conflict_events": {"mean": 2000, "std": 800},
+    "acled_fatalities": {"mean": 5000, "std": 3000},
+    "acled_instability_index": {"mean": 0.5, "std": 0.2},
 }
 
 class ProbabilityCalculator:
@@ -305,7 +367,8 @@ class SignalExtractor:
     @staticmethod
     def calculate_z_score_from_history(
         current_value: float,
-        historical_values: List[float]
+        historical_values: List[float],
+        indicator_name: Optional[str] = None
     ) -> Tuple[float, float, float]:
         """
         Calculate z-score from actual historical data.
@@ -317,9 +380,15 @@ class SignalExtractor:
             # Instead of returning z=0 (no signal), use default distribution
             # so that current data values produce meaningful signals.
             # Default: mean=0.5, std=0.25 assumes normalized 0-1 range.
-            default_mean = 0.5
-            default_std = 0.25
-            z_score = (current_value - default_mean) / default_std
+            # Use indicator-specific ranges from INDICATOR_RANGES
+            if indicator_name and indicator_name in INDICATOR_RANGES:
+                ref = INDICATOR_RANGES[indicator_name]
+                default_mean = ref["mean"]
+                default_std = ref["std"]
+            else:
+                default_mean = 0.5
+                default_std = 0.25
+            z_score = (current_value - default_mean) / max(default_std, 1e-10)
             return z_score, default_mean, default_std
 
         mean = statistics.mean(historical_values)
@@ -3373,7 +3442,7 @@ def _store_indicators_sync(indicators, sources, start_time):
                 historical_values = [h.value for h in historical if h.value is not None]
 
                 z_score, hist_mean, hist_std = SignalExtractor.calculate_z_score_from_history(
-                    float_value, historical_values
+                    float_value, historical_values, indicator_name
                 )
 
                 existing_this_refresh = session.query(IndicatorValue).filter(
