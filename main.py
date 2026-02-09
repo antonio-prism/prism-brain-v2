@@ -1641,26 +1641,8 @@ async def trigger_calculation(
 
 # ============== ENHANCED Calculation Trigger ==============
 
-@app.post("/api/v1/calculations/trigger-full")
-async def trigger_enhanced_calculation(
-    event_ids: Optional[List[str]] = None,
-    limit: int = Query(100, ge=1, le=1000, description="Max events to process")
-):
-    """
-    Enhanced probability calculation with signal extraction, explainability,
-    and dependency modeling.
-
-    Pipeline:
-    1. Load events and their indicator weights
-    2. Get latest indicator values
-    3. Extract signals (z-scores, momentum, trends) using historical data
-    4. Calculate Bayesian probability
-    5. Apply ML enhancement (when model is trained)
-    6. Adjust for risk interdependencies
-    7. Calculate enhanced confidence score
-    8. Generate attribution and explanation
-    9. Store everything in database
-    """
+def _run_enhanced_calculation_sync(limit=100, event_ids=None):
+    """Run enhanced calculation in a thread pool to avoid blocking the event loop."""
     calculation_id = str(uuid.uuid4())[:8] + "-" + datetime.utcnow().strftime("%Y%m%d-%H%M%S")
     start_time = datetime.utcnow()
 
@@ -1729,14 +1711,12 @@ async def trigger_enhanced_calculation(
                         baseline_scale = stored_baseline
                     else:
                         baseline_scale = get_default_baseline(event.event_id)
-                    # Get event-specific sensitivity profile
                     sensitivity = get_event_sensitivity(event.event_id)
                     baseline_scale = baseline_scale + sensitivity["baseline_offset"]
                     baseline_scale = max(1.0, min(5.0, baseline_scale))
                     baseline_prob = probability_calculator.scale_to_probability(baseline_scale)
                     all_baselines[event.event_id] = baseline_prob
 
-                    # Gather signals with enhanced extraction
                     indicator_signals = []
                     indicator_weights_list = []
                     indicator_betas = []
@@ -1749,7 +1729,6 @@ async def trigger_enhanced_calculation(
                         value_record = values_by_key.get(key)
 
                         if value_record:
-                            # Phase 4B: Extract signal using historical data
                             sig_detail = signal_extractor.extract_signal_for_indicator(
                                 event_id=event.event_id,
                                 indicator_name=w.indicator_name,
@@ -1767,12 +1746,10 @@ async def trigger_enhanced_calculation(
                             beta = BETA_PARAMETERS.get(w.beta_type, 0.7)
                             indicator_betas.append(beta)
 
-                            # Track data age for confidence
                             if value_record.timestamp:
                                 age_hours = (start_time - value_record.timestamp).total_seconds() / 3600
                                 data_ages.append(age_hours)
 
-                    # Calculate Bayesian probability
                     calc_result = probability_calculator.calculate_event_probability(
                         baseline_scale=baseline_scale,
                         indicator_signals=indicator_signals,
@@ -1783,13 +1760,11 @@ async def trigger_enhanced_calculation(
                     bayesian_prob = calc_result["probability"]
                     all_bayesian_probs[event.event_id] = bayesian_prob
 
-                    # Phase 4C: ML enhancement
                     final_prob, ensemble_method, ml_prob = ml_layer.get_ensemble_probability(
                         bayesian_prob=bayesian_prob,
                         features=indicator_signals if indicator_signals else None
                     )
 
-                    # Enhanced confidence scoring
                     confidence, confidence_band, confidence_factors = EnhancedConfidenceScorer.calculate(
                         n_indicators=len(indicator_signals),
                         expected_indicators=len(weights),
@@ -1798,7 +1773,6 @@ async def trigger_enhanced_calculation(
                         data_ages_hours=data_ages
                     )
 
-                    # Phase 4D: Generate attribution
                     attribution = ExplainabilityEngine.generate_attribution(
                         indicator_names=indicator_names,
                         indicator_signals=indicator_signals,
@@ -1808,7 +1782,6 @@ async def trigger_enhanced_calculation(
                         total_adjustment=calc_result["total_adjustment"]
                     )
 
-                    # Get previous probability for change tracking
                     prev_prob = session.query(RiskProbability).filter(
                         RiskProbability.event_id == event.event_id
                     ).order_by(RiskProbability.calculation_date.desc()).first()
@@ -1816,7 +1789,6 @@ async def trigger_enhanced_calculation(
                     prev_prob_pct = prev_prob.probability_pct if prev_prob else None
                     current_prob_pct = round(final_prob * 100, 2)
 
-                    # Change detection
                     if prev_prob_pct is not None:
                         change_pct = current_prob_pct - prev_prob_pct
                         if change_pct > 1:
@@ -1829,7 +1801,6 @@ async def trigger_enhanced_calculation(
                         change_pct = None
                         change_direction = "NEW"
 
-                    # Generate explanation
                     explanation = ExplainabilityEngine.generate_explanation(
                         event_name=event.event_name,
                         current_prob_pct=current_prob_pct,
@@ -1839,7 +1810,6 @@ async def trigger_enhanced_calculation(
                         flags=calc_result["flags"]
                     )
 
-                    # Generate recommendation
                     recommendation = ExplainabilityEngine.generate_recommendation(
                         probability_pct=current_prob_pct,
                         change_pct=change_pct,
@@ -1847,7 +1817,6 @@ async def trigger_enhanced_calculation(
                         flags=calc_result["flags"]
                     )
 
-                    # Store result
                     prob_record = RiskProbability(
                         event_id=event.event_id,
                         calculation_id=calculation_id,
@@ -1867,7 +1836,6 @@ async def trigger_enhanced_calculation(
                         flags=calc_result["flags"] if calc_result["flags"] else None
                     )
 
-                    # Set new columns safely
                     try:
                         prob_record.attribution = attribution
                         prob_record.explanation = explanation
@@ -1907,7 +1875,6 @@ async def trigger_enhanced_calculation(
                     logger.error(f"Error calculating {event.event_id}: {e}")
 
             # Second pass: apply dependency adjustments
-            # (requires all Bayesian probs to be calculated first)
             try:
                 for result_entry in results:
                     event_id = result_entry["event_id"]
@@ -1917,7 +1884,6 @@ async def trigger_enhanced_calculation(
                         all_baselines=all_baselines
                     )
                     if abs(adjustment) > 0.001:
-                        # Update the stored probability
                         prob_record = session.query(RiskProbability).filter(
                             RiskProbability.event_id == event_id,
                             RiskProbability.calculation_id == calculation_id
@@ -1936,10 +1902,8 @@ async def trigger_enhanced_calculation(
             except Exception as dep_err:
                 logger.warning(f"Dependency adjustment error: {dep_err}")
 
-            # Check if ML training is possible
             ml_layer.check_and_train(session)
 
-            # Create calculation log
             end_time = datetime.utcnow()
             duration_secs = int((end_time - start_time).total_seconds())
             calc_log = CalculationLog(
@@ -1985,6 +1949,32 @@ async def trigger_enhanced_calculation(
     except Exception as e:
         logger.error(f"Enhanced calculation batch failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/v1/calculations/trigger-full")
+async def trigger_enhanced_calculation(
+    event_ids: Optional[List[str]] = None,
+    limit: int = Query(100, ge=1, le=1000, description="Max events to process")
+):
+    """
+    Enhanced probability calculation with signal extraction, explainability,
+    and dependency modeling.
+
+    Pipeline:
+    1. Load events and their indicator weights
+    2. Get latest indicator values
+    3. Extract signals (z-scores, momentum, trends) using historical data
+    4. Calculate Bayesian probability
+    5. Apply ML enhancement (when model is trained)
+    6. Adjust for risk interdependencies
+    7. Calculate enhanced confidence score
+    8. Generate attribution and explanation
+    9. Store everything in database
+
+    DB operations run in thread pool to avoid blocking the event loop.
+    """
+    return await asyncio.to_thread(_run_enhanced_calculation_sync, limit, event_ids)
+
 
 
 # ============== Data Sources Endpoints ==============
@@ -3347,6 +3337,79 @@ data_fetcher = DataFetcher()
 
 # ============== Data Refresh Endpoint (BUGFIXED) ==============
 
+def _store_indicators_sync(indicators, sources, start_time):
+    """Store indicator values in DB. Runs in thread pool to avoid blocking the event loop."""
+    values_created = 0
+    values_updated = 0
+
+    with get_session_context() as session:
+        for indicator_name, value in indicators.items():
+            source = indicator_to_source(indicator_name)
+
+            matching_weights = session.query(IndicatorWeight).filter(
+                IndicatorWeight.data_source == source,
+                IndicatorWeight.indicator_name == indicator_name
+            ).all()
+
+            for weight in matching_weights:
+                float_value = float(value) if isinstance(value, (int, float)) else 0.5
+
+                cutoff = start_time - timedelta(days=365)
+                historical = session.query(IndicatorValue).filter(
+                    IndicatorValue.event_id == weight.event_id,
+                    IndicatorValue.indicator_name == weight.indicator_name,
+                    IndicatorValue.timestamp >= cutoff
+                ).order_by(IndicatorValue.timestamp.asc()).all()
+
+                historical_values = [h.value for h in historical if h.value is not None]
+
+                z_score, hist_mean, hist_std = SignalExtractor.calculate_z_score_from_history(
+                    float_value, historical_values
+                )
+
+                existing_this_refresh = session.query(IndicatorValue).filter(
+                    IndicatorValue.event_id == weight.event_id,
+                    IndicatorValue.indicator_name == weight.indicator_name,
+                    IndicatorValue.timestamp == start_time
+                ).first()
+
+                if existing_this_refresh:
+                    existing_this_refresh.value = float_value
+                    existing_this_refresh.z_score = z_score
+                    existing_this_refresh.quality_score = 0.9
+                    values_updated += 1
+                else:
+                    new_value = IndicatorValue(
+                        event_id=weight.event_id,
+                        indicator_name=weight.indicator_name,
+                        data_source=source,
+                        timestamp=start_time,
+                        value=float_value,
+                        raw_value=float_value,
+                        historical_mean=hist_mean,
+                        historical_std=hist_std,
+                        z_score=z_score,
+                        quality_score=0.9
+                    )
+                    session.add(new_value)
+                    values_created += 1
+
+        session.commit()
+
+        for source_name, status in sources.items():
+            health_record = DataSourceHealth(
+                source_name=source_name,
+                check_time=start_time,
+                status='OPERATIONAL' if status == 'success' else 'DEGRADED',
+                success_rate_24h=1.0 if status == 'success' else 0.5
+            )
+            session.add(health_record)
+
+        session.commit()
+
+    return values_created, values_updated
+
+
 @app.post("/api/v1/data/refresh")
 async def refresh_data(
     recalculate: bool = Query(True, description="Trigger probability recalculation after refresh"),
@@ -3359,6 +3422,7 @@ async def refresh_data(
     - Fixed: All 12 sources now mapped correctly (was missing GDELT, EIA, IMF, FAO, OTX, ACLED)
     - Fixed: New values are APPENDED as time series (were being overwritten, destroying history)
     - Fixed: Z-scores calculated from actual historical data (was using meaningless formula)
+    - Fixed: DB operations now run in thread pool to prevent event loop blocking
     """
     refresh_id = str(uuid.uuid4())[:8]
     start_time = datetime.utcnow()
@@ -3381,89 +3445,17 @@ async def refresh_data(
             'EMDAT': os.getenv('EMDAT_API_KEY')
         }
 
-        # Fetch data from all sources
+        # Fetch data from all sources (async — does not block event loop)
         fetch_result = await data_fetcher.fetch_all(api_keys)
         indicators = fetch_result.get('indicators', {})
         sources = fetch_result.get('sources', {})
 
         logger.info(f"Fetched {len(indicators)} indicators from {len(sources)} sources")
 
-        values_created = 0
-        values_updated = 0
-
-        with get_session_context() as session:
-            for indicator_name, value in indicators.items():
-                # BUGFIX #1: Use complete source mapping
-                source = indicator_to_source(indicator_name)
-
-                # ACCURACY FIX: Match on BOTH source AND indicator_name
-                # Previously matched only on data_source, which meant ALL events
-                # with any indicator from this source got the SAME values.
-                # Now each event only gets values for indicators it actually uses.
-                matching_weights = session.query(IndicatorWeight).filter(
-                    IndicatorWeight.data_source == source,
-                    IndicatorWeight.indicator_name == indicator_name
-                ).all()
-
-                for weight in matching_weights:
-                    float_value = float(value) if isinstance(value, (int, float)) else 0.5
-
-                    # BUGFIX #2: Calculate z-score from actual historical data
-                    cutoff = start_time - timedelta(days=365)
-                    historical = session.query(IndicatorValue).filter(
-                        IndicatorValue.event_id == weight.event_id,
-                        IndicatorValue.indicator_name == weight.indicator_name,
-                        IndicatorValue.timestamp >= cutoff
-                    ).order_by(IndicatorValue.timestamp.asc()).all()
-
-                    historical_values = [h.value for h in historical if h.value is not None]
-
-                    z_score, hist_mean, hist_std = SignalExtractor.calculate_z_score_from_history(
-                        float_value, historical_values
-                    )
-
-                    # BUGFIX #3: APPEND new record instead of overwriting
-                    # Check if we already have a value for this exact timestamp (same refresh)
-                    existing_this_refresh = session.query(IndicatorValue).filter(
-                        IndicatorValue.event_id == weight.event_id,
-                        IndicatorValue.indicator_name == weight.indicator_name,
-                        IndicatorValue.timestamp == start_time
-                    ).first()
-
-                    if existing_this_refresh:
-                        existing_this_refresh.value = float_value
-                        existing_this_refresh.z_score = z_score
-                        existing_this_refresh.quality_score = 0.9
-                        values_updated += 1
-                    else:
-                        new_value = IndicatorValue(
-                            event_id=weight.event_id,
-                            indicator_name=weight.indicator_name,
-                            data_source=source,
-                            timestamp=start_time,
-                            value=float_value,
-                            raw_value=float_value,
-                            historical_mean=hist_mean,
-                            historical_std=hist_std,
-                            z_score=z_score,
-                            quality_score=0.9
-                        )
-                        session.add(new_value)
-                        values_created += 1
-
-            session.commit()
-
-            # Record data source health
-            for source_name, status in sources.items():
-                health_record = DataSourceHealth(
-                    source_name=source_name,
-                    check_time=start_time,
-                    status='OPERATIONAL' if status == 'success' else 'DEGRADED',
-                    success_rate_24h=1.0 if status == 'success' else 0.5
-                )
-                session.add(health_record)
-
-            session.commit()
+        # Store in DB via thread pool so event loop stays free for health checks
+        values_created, values_updated = await asyncio.to_thread(
+            _store_indicators_sync, indicators, sources, start_time
+        )
 
         duration = (datetime.utcnow() - start_time).total_seconds()
 
@@ -3483,10 +3475,10 @@ async def refresh_data(
             ]
         }
 
-        # Optionally trigger enhanced recalculation
+        # Optionally trigger enhanced recalculation (also via thread pool)
         if recalculate:
             logger.info("Triggering enhanced probability recalculation...")
-            calc_result = await trigger_enhanced_calculation(limit=limit)
+            calc_result = await asyncio.to_thread(_run_enhanced_calculation_sync, limit)
             result["recalculation"] = {
                 "calculation_id": calc_result.get("calculation_id"),
                 "events_processed": calc_result.get("events_processed"),
