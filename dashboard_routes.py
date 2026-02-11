@@ -173,6 +173,129 @@ def register_dashboard_routes(app, get_session_context):
     # PROBABILITY TRENDS (5 endpoints)
     # ========================================================================
     
+    @router.get("/trends/movers", response_model=Dict[str, Any])
+    def get_probability_movers(
+        days: int = Query(7, ge=1, le=365),
+        limit: int = Query(20, ge=1, le=100)
+    ):
+        """Find events with the biggest probability changes over a period."""
+        with get_session_context() as session:
+            cutoff_date = datetime.utcnow() - timedelta(days=days)
+            
+            # Get all snapshots within the period
+            snapshots = session.query(ProbabilitySnapshot).filter(
+                ProbabilitySnapshot.snapshot_date >= cutoff_date
+            ).order_by(ProbabilitySnapshot.event_id, desc(ProbabilitySnapshot.snapshot_date)).all()
+            
+            # Group by event_id and calculate changes
+            movers = {}
+            for snapshot in snapshots:
+                event_id = snapshot.event_id
+                if event_id not in movers:
+                    movers[event_id] = {'newest': snapshot, 'oldest': snapshot}
+                else:
+                    movers[event_id]['oldest'] = snapshot
+            
+            # Calculate changes and prepare response
+            mover_list = []
+            for event_id, data in movers.items():
+                newest = data['newest']
+                oldest = data['oldest']
+                current_pct = newest.probability_pct
+                previous_pct = oldest.probability_pct
+                change_pct = current_pct - previous_pct
+                direction = 'UP' if change_pct > 0 else 'DOWN' if change_pct < 0 else 'FLAT'
+                
+                event = session.query(RiskEvent).filter(RiskEvent.event_id == event_id).first()
+                event_name = event.event_name if event else f"Event {event_id}"
+                
+                mover_list.append(MoverResponse(
+                    event_id=event_id,
+                    event_name=event_name,
+                    current_pct=current_pct,
+                    previous_pct=previous_pct,
+                    change_pct=change_pct,
+                    direction=direction
+                ))
+            
+            # Sort by absolute change and limit
+            mover_list.sort(key=lambda x: abs(x.change_pct), reverse=True)
+            mover_list = mover_list[:limit]
+            
+            return {
+                'total': len(mover_list),
+                'movers': mover_list
+            }
+    
+
+    @router.post("/trends/snapshot", response_model=Dict[str, Any])
+    def create_probability_snapshot():
+        """Create a snapshot of all current probabilities."""
+        with get_session_context() as session:
+            probabilities = session.query(RiskProbability).all()
+            snapshots_created = 0
+            
+            for prob in probabilities:
+                snapshot = ProbabilitySnapshot(
+                    event_id=prob.event_id,
+                    probability_pct=prob.probability_pct,
+                    confidence_score=prob.confidence_score or 0.5,
+                    signal=None,
+                    momentum=None,
+                    trend=None,
+                    snapshot_date=datetime.utcnow()
+                )
+                session.add(snapshot)
+                snapshots_created += 1
+            
+            session.commit()
+            
+            return {
+                'snapshots_created': snapshots_created,
+                'timestamp': datetime.utcnow().isoformat()
+            }
+    
+
+    @router.get("/trends/summary", response_model=TrendSummaryResponse)
+    def get_trend_summary():
+        """Get overall trend summary across all events."""
+        with get_session_context() as session:
+            # Get latest snapshots for each event
+            latest_snapshots = session.query(ProbabilitySnapshot).distinct(
+                ProbabilitySnapshot.event_id
+            ).order_by(
+                ProbabilitySnapshot.event_id,
+                desc(ProbabilitySnapshot.snapshot_date)
+            ).all()
+            
+            if not latest_snapshots:
+                return TrendSummaryResponse(
+                    total_events_tracked=0,
+                    latest_snapshot_date=None,
+                    events_rising=0,
+                    events_falling=0,
+                    events_stable=0,
+                    avg_probability_all=0.0
+                )
+            
+            total_events = len(latest_snapshots)
+            latest_date = max(s.snapshot_date for s in latest_snapshots) if latest_snapshots else None
+            
+            events_rising = sum(1 for s in latest_snapshots if s.trend == 'RISING')
+            events_falling = sum(1 for s in latest_snapshots if s.trend == 'FALLING')
+            events_stable = sum(1 for s in latest_snapshots if s.trend == 'STABLE')
+            avg_probability = sum(s.probability_pct for s in latest_snapshots) / len(latest_snapshots) if latest_snapshots else 0
+            
+            return TrendSummaryResponse(
+                total_events_tracked=total_events,
+                latest_snapshot_date=latest_date,
+                events_rising=events_rising,
+                events_falling=events_falling,
+                events_stable=events_stable,
+                avg_probability_all=avg_probability
+            )
+    
+
     @router.get("/trends/{event_id}", response_model=List[SnapshotResponse])
     def get_probability_trends(
         event_id: int,
@@ -201,6 +324,7 @@ def register_dashboard_routes(app, get_session_context):
                 for s in snapshots
             ]
     
+
     @router.get("/trends/{event_id}/stats", response_model=TrendStatsResponse)
     def get_trend_statistics(event_id: int):
         """Calculate trend statistics for an event."""
@@ -267,126 +391,6 @@ def register_dashboard_routes(app, get_session_context):
                 change_7d=change_7d,
                 change_30d=change_30d,
                 trend_direction=trend_direction
-            )
-    
-    @router.get("/trends/movers", response_model=Dict[str, Any])
-    def get_probability_movers(
-        days: int = Query(7, ge=1, le=365),
-        limit: int = Query(20, ge=1, le=100)
-    ):
-        """Find events with the biggest probability changes over a period."""
-        with get_session_context() as session:
-            cutoff_date = datetime.utcnow() - timedelta(days=days)
-            
-            # Get all snapshots within the period
-            snapshots = session.query(ProbabilitySnapshot).filter(
-                ProbabilitySnapshot.snapshot_date >= cutoff_date
-            ).order_by(ProbabilitySnapshot.event_id, desc(ProbabilitySnapshot.snapshot_date)).all()
-            
-            # Group by event_id and calculate changes
-            movers = {}
-            for snapshot in snapshots:
-                event_id = snapshot.event_id
-                if event_id not in movers:
-                    movers[event_id] = {'newest': snapshot, 'oldest': snapshot}
-                else:
-                    movers[event_id]['oldest'] = snapshot
-            
-            # Calculate changes and prepare response
-            mover_list = []
-            for event_id, data in movers.items():
-                newest = data['newest']
-                oldest = data['oldest']
-                current_pct = newest.probability_pct
-                previous_pct = oldest.probability_pct
-                change_pct = current_pct - previous_pct
-                direction = 'UP' if change_pct > 0 else 'DOWN' if change_pct < 0 else 'FLAT'
-                
-                event = session.query(RiskEvent).filter(RiskEvent.event_id == event_id).first()
-                event_name = event.event_name if event else f"Event {event_id}"
-                
-                mover_list.append(MoverResponse(
-                    event_id=event_id,
-                    event_name=event_name,
-                    current_pct=current_pct,
-                    previous_pct=previous_pct,
-                    change_pct=change_pct,
-                    direction=direction
-                ))
-            
-            # Sort by absolute change and limit
-            mover_list.sort(key=lambda x: abs(x.change_pct), reverse=True)
-            mover_list = mover_list[:limit]
-            
-            return {
-                'total': len(mover_list),
-                'movers': mover_list
-            }
-    
-    @router.post("/trends/snapshot", response_model=Dict[str, Any])
-    def create_probability_snapshot():
-        """Create a snapshot of all current probabilities."""
-        with get_session_context() as session:
-            probabilities = session.query(RiskProbability).all()
-            snapshots_created = 0
-            
-            for prob in probabilities:
-                snapshot = ProbabilitySnapshot(
-                    event_id=prob.event_id,
-                    probability_pct=prob.probability_pct,
-                    confidence_score=prob.confidence_score or 0.5,
-                    signal=None,
-                    momentum=None,
-                    trend=None,
-                    snapshot_date=datetime.utcnow()
-                )
-                session.add(snapshot)
-                snapshots_created += 1
-            
-            session.commit()
-            
-            return {
-                'snapshots_created': snapshots_created,
-                'timestamp': datetime.utcnow().isoformat()
-            }
-    
-    @router.get("/trends/summary", response_model=TrendSummaryResponse)
-    def get_trend_summary():
-        """Get overall trend summary across all events."""
-        with get_session_context() as session:
-            # Get latest snapshots for each event
-            latest_snapshots = session.query(ProbabilitySnapshot).distinct(
-                ProbabilitySnapshot.event_id
-            ).order_by(
-                ProbabilitySnapshot.event_id,
-                desc(ProbabilitySnapshot.snapshot_date)
-            ).all()
-            
-            if not latest_snapshots:
-                return TrendSummaryResponse(
-                    total_events_tracked=0,
-                    latest_snapshot_date=None,
-                    events_rising=0,
-                    events_falling=0,
-                    events_stable=0,
-                    avg_probability_all=0.0
-                )
-            
-            total_events = len(latest_snapshots)
-            latest_date = max(s.snapshot_date for s in latest_snapshots) if latest_snapshots else None
-            
-            events_rising = sum(1 for s in latest_snapshots if s.trend == 'RISING')
-            events_falling = sum(1 for s in latest_snapshots if s.trend == 'FALLING')
-            events_stable = sum(1 for s in latest_snapshots if s.trend == 'STABLE')
-            avg_probability = sum(s.probability_pct for s in latest_snapshots) / len(latest_snapshots) if latest_snapshots else 0
-            
-            return TrendSummaryResponse(
-                total_events_tracked=total_events,
-                latest_snapshot_date=latest_date,
-                events_rising=events_rising,
-                events_falling=events_falling,
-                events_stable=events_stable,
-                avg_probability_all=avg_probability
             )
     
     # ========================================================================
