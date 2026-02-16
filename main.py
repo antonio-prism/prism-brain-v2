@@ -1163,6 +1163,33 @@ async def get_event(event_id: str):
         }
 
 
+
+@app.delete("/api/v1/events/{event_id}")
+async def delete_event(event_id: str):
+    """Delete a risk event and all its related data (probabilities, weights, values)."""
+    with get_session_context() as session:
+        event = session.query(RiskEvent).filter(
+            RiskEvent.event_id == event_id
+        ).first()
+        if not event:
+            raise HTTPException(status_code=404, detail="Event not found")
+
+        # Delete related data first
+        session.query(RiskProbability).filter(
+            RiskProbability.event_id == event_id
+        ).delete()
+        session.query(IndicatorWeight).filter(
+            IndicatorWeight.event_id == event_id
+        ).delete()
+        session.query(IndicatorValue).filter(
+            IndicatorValue.event_id == event_id
+        ).delete()
+
+        # Delete the event itself
+        session.delete(event)
+
+        return {"message": f"Event {event_id} and all related data deleted successfully"}
+
 @app.post("/api/v1/events/bulk")
 async def bulk_import_events(events: List[EventCreate]):
     """Bulk import risk events."""
