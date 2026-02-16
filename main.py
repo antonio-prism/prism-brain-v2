@@ -1189,12 +1189,14 @@ async def delete_event(event_id: str):
             ]
             for table, col in related_tables:
                 try:
+                    nested = session.begin_nested()
                     session.execute(
                         sql_text(f"DELETE FROM {table} WHERE {col} = :eid"),
                         {"eid": event_id}
                     )
+                    nested.commit()
                 except Exception:
-                    pass
+                    nested.rollback()
 
             session.delete(event)
             session.commit()
