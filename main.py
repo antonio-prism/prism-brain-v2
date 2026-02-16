@@ -1169,34 +1169,33 @@ async def delete_event(event_id: str):
     """Delete a risk event and all its related data."""
     try:
         with get_session_context() as session:
-            # Check event exists
             event = session.query(RiskEvent).filter(
                 RiskEvent.event_id == event_id
             ).first()
             if not event:
                 raise HTTPException(status_code=404, detail=f"Event {event_id} not found")
 
-            # Delete from related tables using raw SQL for safety
             from sqlalchemy import text as sql_text
             related_tables = [
-                "risk_probabilities",
-                "indicator_weights",
-                "indicator_values",
-                "probability_snapshots",
-                "probability_alerts",
-                "alert_events",
-                "profile_risk_events"
+                ("risk_probabilities", "event_id"),
+                ("indicator_weights", "event_id"),
+                ("indicator_values", "event_id"),
+                ("probability_snapshots", "event_id"),
+                ("probability_alerts", "event_id"),
+                ("alert_events", "event_id"),
+                ("profile_risk_events", "event_id"),
+                ("causal_dependencies", "driver_event_id"),
+                ("causal_dependencies", "affected_event_id"),
             ]
-            for table in related_tables:
+            for table, col in related_tables:
                 try:
                     session.execute(
-                        sql_text(f"DELETE FROM {table} WHERE event_id = :eid"),
+                        sql_text(f"DELETE FROM {table} WHERE {col} = :eid"),
                         {"eid": event_id}
                     )
                 except Exception:
-                    pass  # Table may not exist or have no matching rows
+                    pass
 
-            # Delete the event itself
             session.delete(event)
             session.commit()
 
@@ -1205,6 +1204,8 @@ async def delete_event(event_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 @app.post("/api/v1/events/bulk")
 async def bulk_import_events(events: List[EventCreate]):
