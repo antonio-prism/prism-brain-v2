@@ -1166,29 +1166,45 @@ async def get_event(event_id: str):
 
 @app.delete("/api/v1/events/{event_id}")
 async def delete_event(event_id: str):
-    """Delete a risk event and all its related data (probabilities, weights, values)."""
-    with get_session_context() as session:
-        event = session.query(RiskEvent).filter(
-            RiskEvent.event_id == event_id
-        ).first()
-        if not event:
-            raise HTTPException(status_code=404, detail="Event not found")
+    """Delete a risk event and all its related data."""
+    try:
+        with get_session_context() as session:
+            # Check event exists
+            event = session.query(RiskEvent).filter(
+                RiskEvent.event_id == event_id
+            ).first()
+            if not event:
+                raise HTTPException(status_code=404, detail=f"Event {event_id} not found")
 
-        # Delete related data first
-        session.query(RiskProbability).filter(
-            RiskProbability.event_id == event_id
-        ).delete()
-        session.query(IndicatorWeight).filter(
-            IndicatorWeight.event_id == event_id
-        ).delete()
-        session.query(IndicatorValue).filter(
-            IndicatorValue.event_id == event_id
-        ).delete()
+            # Delete from related tables using raw SQL for safety
+            from sqlalchemy import text as sql_text
+            related_tables = [
+                "risk_probabilities",
+                "indicator_weights",
+                "indicator_values",
+                "probability_snapshots",
+                "probability_alerts",
+                "alert_events",
+                "profile_risk_events"
+            ]
+            for table in related_tables:
+                try:
+                    session.execute(
+                        sql_text(f"DELETE FROM {table} WHERE event_id = :eid"),
+                        {"eid": event_id}
+                    )
+                except Exception:
+                    pass  # Table may not exist or have no matching rows
 
-        # Delete the event itself
-        session.delete(event)
+            # Delete the event itself
+            session.delete(event)
+            session.commit()
 
-        return {"message": f"Event {event_id} and all related data deleted successfully"}
+            return {"message": f"Event {event_id} deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/events/bulk")
 async def bulk_import_events(events: List[EventCreate]):
