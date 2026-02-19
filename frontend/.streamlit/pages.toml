@@ -1,0 +1,39 @@
+[[pages]]
+path = "Welcome.py"
+name = "Welcome"
+icon = ":material/home:"
+
+[[pages]]
+path = "pages/1_Client_Setup.py"
+name = "Client Setup"
+icon = ":material/business:"
+
+[[pages]]
+path = "pages/2_Process_Criticality.py"
+name = "Process Criticality"
+icon = ":material/settings:"
+
+[[pages]]
+path = "pages/3_Risk_Selection.py"
+name = "Risk Selection"
+icon = ":material/bolt:"
+
+[[pages]]
+path = "pages/4_Risk_Assessment.py"
+name = "Risk Assessment"
+icon = ":material/edit_note:"
+
+[[pages]]
+path = "pages/5_Results_Dashboard.py"
+name = "Results Dashboard"
+icon = ":material/bar_chart:"
+
+[[pages]]
+path = "pages/6_V2_Event_Explorer.py"
+name = "Event Explorer"
+icon = ":material/search:"
+
+[[pages]]
+path = "pages/7_Data_Sources.py"
+name = "Data Sources"
+icon = ":material/library_books:"

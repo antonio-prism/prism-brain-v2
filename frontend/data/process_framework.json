@@ -1,0 +1,2000 @@
+[
+  {
+    "process_id": "1",
+    "name": "Integrity of buildings and constructions",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "1.1",
+    "name": "Integrity of service buildings",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "1.2",
+    "name": "Warehouse Integrity",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "1.3",
+    "name": "Integrity of industrial buildings",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "1.4",
+    "name": "Practicality of internal roads",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "1.5",
+    "name": "Integrity of outdoor areas",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "1.6",
+    "name": "Integrity of other buildings and structures",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "1",
+    "has_children": false
+  },
+  {
+    "process_id": "2",
+    "name": "Maintenance of storage conditions for raw materials, products and waste",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "2.1",
+    "name": "Dry stock integrity",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.2",
+    "name": "Fresh produce inventory integrity",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.3",
+    "name": "Frozen food inventory integrity",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.4",
+    "name": "Inventory integrity of hazardous products",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.5",
+    "name": "Maintenance of storage conditions for hazardous waste (toxic, chemical)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.6",
+    "name": "Maintenance of storage conditions for inert non-hazardous industrial waste (e.g. construction)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "2.7",
+    "name": "Maintenance of storage conditions for non-hazardous non-inert industrial waste",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "2",
+    "has_children": false
+  },
+  {
+    "process_id": "3",
+    "name": "Maintenance of working and production conditions",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "3.1",
+    "name": "Maintaining indoor production conditions",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "3",
+    "has_children": false
+  },
+  {
+    "process_id": "3.2",
+    "name": "Maintaining outdoor production conditions",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "3",
+    "has_children": false
+  },
+  {
+    "process_id": "3.3",
+    "name": "Maintenance of indoor working conditions (employees and contractors on site)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "3",
+    "has_children": false
+  },
+  {
+    "process_id": "3.4",
+    "name": "Maintaining outdoor working conditions (employees and contractors on site)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "3",
+    "has_children": false
+  },
+  {
+    "process_id": "4",
+    "name": "Equipment Integrity and Operation",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "4.1",
+    "name": "On-site network and data centers, other information capture/transmission equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.2",
+    "name": "Power Supply Equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.3",
+    "name": "Mechanical Production Equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.4",
+    "name": "Electronic Production Equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.5",
+    "name": "Refrigeration equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.6",
+    "name": "Water Supply Equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.7",
+    "name": "Water Treatment Equipment",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "4.8",
+    "name": "Other equipment to be specified",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "4",
+    "has_children": false
+  },
+  {
+    "process_id": "5",
+    "name": "Services provided by the natural assets exploited by the company",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "5.1",
+    "name": "Agricultural resource development - agriculture",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "5.2",
+    "name": "Agricultural resource development - livestock",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "5.3",
+    "name": "Exploitation of aquatic resources - fishery resources, etc.",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "5.4",
+    "name": "Exploitation of mineral resources",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "5.5",
+    "name": "Tourism operations (landscape, etc.)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "5.6",
+    "name": "Other uses of ecosystems (biomass energy, non-cultivable natural materials, hunting resources, etc.)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "5",
+    "has_children": false
+  },
+  {
+    "process_id": "6",
+    "name": "Other physical assets operated by the business necessary for its operation",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "6.1",
+    "name": "Fleet of conventional road vehicles",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "6",
+    "has_children": false
+  },
+  {
+    "process_id": "6.2",
+    "name": "Fleet of other vehicles (specific road vehicles e.g. refrigerated vehicles, construction machinery, boats, etc.)",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "6",
+    "has_children": false
+  },
+  {
+    "process_id": "6.3",
+    "name": "Other physical assets operated by the business necessary for its operation",
+    "scope": "A",
+    "scope_name": "Physical Assets & Infrastructure",
+    "depth": 2,
+    "parent_id": "6",
+    "has_children": false
+  },
+  {
+    "process_id": "7",
+    "name": "Supply Availability and Quality - Direct Scope of Tier 1 Suppliers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "7.1",
+    "name": "Suppliers of agricultural, forestry or livestock products",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.2",
+    "name": "Chemical or pharmaceutical suppliers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.3",
+    "name": "Suppliers of metal or metallurgical or mineral products",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.4",
+    "name": "Suppliers of rubber and plastic products (e.g. packaging)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.5",
+    "name": "Suppliers of electronic, computer or optical products",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.6",
+    "name": "Various equipment and machine suppliers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.7",
+    "name": "Intellectual service providers (excluding on-site service providers)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.8",
+    "name": "Equipment and machinery repair and installation suppliers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.9",
+    "name": "Suppliers of other manufactured goods",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "7.10",
+    "name": "Other suppliers to be specified",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "7",
+    "has_children": false
+  },
+  {
+    "process_id": "8",
+    "name": "Product and service opportunities - Direct scope of Tier 1 customers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "8.1",
+    "name": "Customers in the agricultural, forestry or livestock products sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.2",
+    "name": "Customers in the chemical or pharmaceutical sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.3",
+    "name": "Customers in the metallurgical or mineral products sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.4",
+    "name": "Customers in the Rubber and Plastics Products Sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.5",
+    "name": "Customers in the electronics, computer or optical products sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.6",
+    "name": "Customers in the field of various equipment and machines",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.7",
+    "name": "Clients in the intellectual services and services sector",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.8",
+    "name": "Customers in the repair and installation of equipment and machinery",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.9",
+    "name": "Other Manufactured Products Customers",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "8.10",
+    "name": "Other clients to be specified",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "8",
+    "has_children": false
+  },
+  {
+    "process_id": "9",
+    "name": "Freight supply and distribution - Availability and quality of transport networks",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "9.1",
+    "name": "Upstream transport to the company - road",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.2",
+    "name": "Upstream transport to the company - air",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.3",
+    "name": "Upstream transport to the company - inland waterway",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.4",
+    "name": "Forward-Shipment to Business - Marine",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.5",
+    "name": "Upstream transport to the company - rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.6",
+    "name": "Downstream transport - road",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.7",
+    "name": "Forward-to-business transport - air",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.8",
+    "name": "Downstream transport - inland waterway transport",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.9",
+    "name": "Downstream transport - marine",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.10",
+    "name": "Downstream transport - rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.11",
+    "name": "Transport between company sites - road",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.12",
+    "name": "Transportation between company sites - air",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.13",
+    "name": "Transport between company sites - inland waterway",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.14",
+    "name": "Transportation between company sites - maritime",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.15",
+    "name": "Transport between company sites - rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "9.16",
+    "name": "Merchandise Supply and Distribution - Other Modes",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "9",
+    "has_children": false
+  },
+  {
+    "process_id": "10",
+    "name": "Mobility of people (employees and service providers) - Availability and quality of transport networks",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "10.1",
+    "name": "Commuting: Employees - Truck",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.2",
+    "name": "Home-work travel: on-site service providers - road",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.3",
+    "name": "Commuting: Employees - Rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.4",
+    "name": "Commuting: on-site service providers - rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.5",
+    "name": "Business - road travel",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.6",
+    "name": "Business travel - rail",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "10.7",
+    "name": "Business travel - air",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "10",
+    "has_children": false
+  },
+  {
+    "process_id": "11",
+    "name": "Availability and quality of power supply to sites",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "11.1",
+    "name": "Electricity - Grid Electricity",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "11",
+    "has_children": false
+  },
+  {
+    "process_id": "11.2",
+    "name": "Electricity - Solar self-consumption",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "11",
+    "has_children": false
+  },
+  {
+    "process_id": "11.3",
+    "name": "Electricity - Wind self-consumption",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "11",
+    "has_children": false
+  },
+  {
+    "process_id": "11.4",
+    "name": "Electricity - Other self-consumption (geothermal, on-site generator, etc.)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "11",
+    "has_children": false
+  },
+  {
+    "process_id": "12",
+    "name": "Availability and quality of gas, steam, heat or cold supply",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "12.1",
+    "name": "Gas",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "12",
+    "has_children": false
+  },
+  {
+    "process_id": "12.2",
+    "name": "Heat - Produced Off-Site",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "12",
+    "has_children": false
+  },
+  {
+    "process_id": "12.3",
+    "name": "Industrial refrigeration produced off-site",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "12",
+    "has_children": false
+  },
+  {
+    "process_id": "13",
+    "name": "Availability and quality of water supply at sites",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "13.1",
+    "name": "Water network - water quality",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.2",
+    "name": "Water network - quantity available",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.3",
+    "name": "Groundwater - water quality",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.4",
+    "name": "Groundwater - quantity available",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.5",
+    "name": "Surface water - water quality",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.6",
+    "name": "Surface water - quantity available",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.7",
+    "name": "Other water used (rain, sea, recycled water, etc.) - water quality",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "13.8",
+    "name": "Other water used (rain, sea, recycled water, etc.)  - quantity available",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "13",
+    "has_children": false
+  },
+  {
+    "process_id": "14",
+    "name": "Availability and quality of telecom and internet networks",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "14.1",
+    "name": "Availability and quality of telecom and internet networks",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "14",
+    "has_children": false
+  },
+  {
+    "process_id": "15",
+    "name": "Disposal of waste and effluents",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "15.1",
+    "name": "Industrial wastewater disposal",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "15",
+    "has_children": false
+  },
+  {
+    "process_id": "15.2",
+    "name": "Disposal of hazardous industrial waste (toxic, chemical)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "15",
+    "has_children": false
+  },
+  {
+    "process_id": "15.3",
+    "name": "Disposal of inert non-hazardous industrial waste (e.g. construction)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "15",
+    "has_children": false
+  },
+  {
+    "process_id": "15.4",
+    "name": "Disposal of non-hazardous non-inert industrial waste",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "15",
+    "has_children": false
+  },
+  {
+    "process_id": "15.5",
+    "name": "Disposal of other assimilated waste",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "15",
+    "has_children": false
+  },
+  {
+    "process_id": "16",
+    "name": "Financial Operations & Treasury Management",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "16.1",
+    "name": "Cash management and liquidity planning",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "16.2",
+    "name": "FX hedging and currency risk management",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "16.3",
+    "name": "Credit and receivables management",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "16.4",
+    "name": "Payment processing and payables",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "16.5",
+    "name": "Financial reporting and consolidation",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "16.6",
+    "name": "Access to capital markets and banking relationships",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "16",
+    "has_children": false
+  },
+  {
+    "process_id": "17",
+    "name": "Insurance & Risk Transfer Programs",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "17.1",
+    "name": "Property and casualty insurance",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "17.2",
+    "name": "Business interruption insurance",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "17.3",
+    "name": "Cyber insurance and breach coverage",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "17.4",
+    "name": "Directors & officers (D&O) liability",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "17.5",
+    "name": "Trade credit insurance",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "17.6",
+    "name": "Claims management and recovery",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "17",
+    "has_children": false
+  },
+  {
+    "process_id": "18",
+    "name": "Stability of the political, regulatory and socio-economic environment",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "18.1",
+    "name": "Employment Pool - Availability of Workers (Health, Conflict, etc.)",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "18",
+    "has_children": false
+  },
+  {
+    "process_id": "18.2",
+    "name": "Political, regulatory, socio-economic stability",
+    "scope": "B",
+    "scope_name": "Business Operations",
+    "depth": 2,
+    "parent_id": "18",
+    "has_children": false
+  },
+  {
+    "process_id": "19",
+    "name": "Market relevance of the offer",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "19.1",
+    "name": "Level of demand in the market",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "19",
+    "has_children": false
+  },
+  {
+    "process_id": "19.2",
+    "name": "Positioning in relation to the competition",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "19",
+    "has_children": false
+  },
+  {
+    "process_id": "19.3",
+    "name": "Quality of products sold over their lifetime",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "19",
+    "has_children": false
+  },
+  {
+    "process_id": "20",
+    "name": "Tier 1 Supplier Value Chain",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "20.1",
+    "name": "Stability of the political, regulatory and socio-economic environment in the countries/regions where Tier 1 suppliers are active",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "20",
+    "has_children": false
+  },
+  {
+    "process_id": "20.2",
+    "name": "Infrastructure and networks supplying Tier 1 suppliers (transport, energy, water, etc.)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "20",
+    "has_children": false
+  },
+  {
+    "process_id": "20.3",
+    "name": "Natural assets upstream in the value chain",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "20",
+    "has_children": false
+  },
+  {
+    "process_id": "20.4",
+    "name": "Direct scope (scope A) of the main n-tier suppliers (excluding natural assets)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "20",
+    "has_children": false
+  },
+  {
+    "process_id": "20.5",
+    "name": "Extended value chain - scope B and C of n-tier suppliers",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "20",
+    "has_children": false
+  },
+  {
+    "process_id": "21",
+    "name": "Tier 1 Customer Value Chain",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "21.1",
+    "name": "Stability of the political, regulatory and socio-economic environment in the countries/regions where Tier 1 clients are active",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "21",
+    "has_children": false
+  },
+  {
+    "process_id": "21.2",
+    "name": "Infrastructure and networks supplying Tier 1 customers (transport, energy, water, etc.)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "21",
+    "has_children": false
+  },
+  {
+    "process_id": "21.3",
+    "name": "Natural assets downstream in the value chain",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "21",
+    "has_children": false
+  },
+  {
+    "process_id": "21.4",
+    "name": "Direct scope (scope A) of the main n-tier customers (excluding natural assets)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "21",
+    "has_children": false
+  },
+  {
+    "process_id": "21.5",
+    "name": "Extended value chain - scope B and C of n-tier customers",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "21",
+    "has_children": false
+  },
+  {
+    "process_id": "22",
+    "name": "Value chain of infrastructures and networks powering the company",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "22.1",
+    "name": "Value chain (scopes B and C) of the infrastructures and networks supplying the company (transport, energy, water, etc.)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "22",
+    "has_children": false
+  },
+  {
+    "process_id": "23",
+    "name": "Sales & Commercial Operations",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "23.1",
+    "name": "Sales pipeline management and forecasting",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "23.2",
+    "name": "Customer relationship management (CRM)",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "23.3",
+    "name": "Pricing and revenue management",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "23.4",
+    "name": "Contract management and negotiations",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "23.5",
+    "name": "After-sales service and warranty management",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "23.6",
+    "name": "Order management and fulfillment",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "23",
+    "has_children": false
+  },
+  {
+    "process_id": "24",
+    "name": "Strategic Management & Governance",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "24.1",
+    "name": "Corporate strategy development and review",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "24.2",
+    "name": "Mergers, acquisitions, and divestments",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "24.3",
+    "name": "Board governance and oversight",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "24.4",
+    "name": "Enterprise risk management framework",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "24.5",
+    "name": "Stakeholder engagement and communication",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "24.6",
+    "name": "Crisis management and business continuity planning",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "24",
+    "has_children": false
+  },
+  {
+    "process_id": "25",
+    "name": "Marketing & Brand Management",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "25.1",
+    "name": "Brand strategy and positioning",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "25.2",
+    "name": "Marketing campaigns and management",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "25.3",
+    "name": "Digital marketing and online presence",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "25.4",
+    "name": "Public relations and corporate communication",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "25.5",
+    "name": "Reputation management and social media monitoring",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "25.6",
+    "name": "Market research and customer insights",
+    "scope": "C",
+    "scope_name": "Technology & Information",
+    "depth": 2,
+    "parent_id": "25",
+    "has_children": false
+  },
+  {
+    "process_id": "26",
+    "name": "IT Infrastructure & Enterprise Applications",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "26.1",
+    "name": "ERP Systems (SAP, Oracle, etc.)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.2",
+    "name": "Manufacturing Execution Systems (MES)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.3",
+    "name": "Product Lifecycle Management (PLM)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.4",
+    "name": "Cloud infrastructure and SaaS applications",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.5",
+    "name": "On-premises data centers and servers",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.6",
+    "name": "Network infrastructure (LAN/WAN/SD-WAN)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "26.7",
+    "name": "End-user devices and endpoint management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "26",
+    "has_children": false
+  },
+  {
+    "process_id": "27",
+    "name": "Cybersecurity & Information Security Operations",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "27.1",
+    "name": "Security Operations Center (SOC) and threat monitoring",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.2",
+    "name": "Identity and Access Management (IAM)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.3",
+    "name": "Firewall and perimeter security",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.4",
+    "name": "Endpoint protection and anti-malware",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.5",
+    "name": "Backup and disaster recovery systems",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.6",
+    "name": "Security awareness and training programs",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "27.7",
+    "name": "Incident response and forensics capabilities",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "27",
+    "has_children": false
+  },
+  {
+    "process_id": "28",
+    "name": "Production Operations & Manufacturing Execution",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "28.1",
+    "name": "Production planning and master scheduling",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "28.2",
+    "name": "Shop floor execution and process control",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "28.3",
+    "name": "Work-in-progress (WIP) management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "28.4",
+    "name": "Production changeover and setup operations",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "28.5",
+    "name": "Process monitoring and real-time adjustments",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "28.6",
+    "name": "Yield optimization and waste reduction",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "28",
+    "has_children": false
+  },
+  {
+    "process_id": "29",
+    "name": "Quality Management & Product Integrity",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "29.1",
+    "name": "Incoming material inspection",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "29.2",
+    "name": "In-process quality control and testing",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "29.3",
+    "name": "Final product inspection and certification",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "29.4",
+    "name": "Non-conformance management and CAPA",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "29.5",
+    "name": "Regulatory compliance and audit readiness",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "29.6",
+    "name": "Product recall and traceability systems",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "29",
+    "has_children": false
+  },
+  {
+    "process_id": "30",
+    "name": "Human Resource Management & Workforce Operations",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "30.1",
+    "name": "Talent acquisition and recruitment",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.2",
+    "name": "Workforce planning and capacity management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.3",
+    "name": "Employee training and development",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.4",
+    "name": "Payroll and benefits administration",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.5",
+    "name": "Occupational health and safety programs",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.6",
+    "name": "Labor relations and union negotiations",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.7",
+    "name": "Employee engagement and retention",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "30.8",
+    "name": "Remote work infrastructure and policies",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "30",
+    "has_children": false
+  },
+  {
+    "process_id": "31",
+    "name": "Product Development & Engineering",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "31.1",
+    "name": "Research and development (R&D)",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "31.2",
+    "name": "Product design and prototyping",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "31.3",
+    "name": "Engineering testing and validation",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "31.4",
+    "name": "Intellectual property and patent management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "31.5",
+    "name": "Process engineering and industrialization",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "31.6",
+    "name": "Product lifecycle management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "31",
+    "has_children": false
+  },
+  {
+    "process_id": "32",
+    "name": "Maintenance & Asset Management Operations",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 1,
+    "parent_id": null,
+    "has_children": true
+  },
+  {
+    "process_id": "32.1",
+    "name": "Preventive maintenance scheduling",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  },
+  {
+    "process_id": "32.2",
+    "name": "Predictive maintenance and condition monitoring",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  },
+  {
+    "process_id": "32.3",
+    "name": "Breakdown repair and emergency response",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  },
+  {
+    "process_id": "32.4",
+    "name": "Spare parts inventory management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  },
+  {
+    "process_id": "32.5",
+    "name": "Maintenance contractor management",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  },
+  {
+    "process_id": "32.6",
+    "name": "Asset performance tracking and optimization",
+    "scope": "D",
+    "scope_name": "People & Organization",
+    "depth": 2,
+    "parent_id": "32",
+    "has_children": false
+  }
+]

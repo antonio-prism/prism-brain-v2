@@ -1,0 +1,3339 @@
+[
+  {
+    "event_id": "DIG-CIC-001",
+    "event_name": "Ransomware attack on hospital/healthcare system",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Ransomware attack encrypting healthcare IT systems (EHR, patient records, scheduling) causing patient care disruption \u226524 hours",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Ransomware attack on hospital/healthcare system",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Ransomware attack on hospital/healthcare system"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CIC-002",
+    "event_name": "SCADA/ICS system compromise (manufacturing)",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Unauthorized access to industrial control systems (SCADA, DCS, PLC) in manufacturing, causing production disruption, safety incident, or data theft",
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.5,
+      "range_max": 15.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "SCADA/ICS system compromise (manufacturing)",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.05,
+            "description": "5.0% universal probability"
+          }
+        },
+        "result_pct": 5.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for SCADA/ICS system compromise (manufacturing)"
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 15.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CIC-003",
+    "event_name": "Energy grid/utility cyberattack",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Cyber-attack on electrical grid infrastructure, causing power outages, grid instability, or control system compromise affecting \u226510,000 customers",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.3,
+      "range_max": 9.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Energy grid/utility cyberattack",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.03,
+            "description": "3.0% universal probability"
+          }
+        },
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Energy grid/utility cyberattack"
+      },
+      "bounds": {
+        "min_pct": 0.3,
+        "max_pct": 9.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CIC-004",
+    "event_name": "Water/wastewater system hack",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Cyber compromise of water treatment, distribution, or wastewater control systems causing service disruption, contamination risk, or environmental incident",
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.4,
+      "range_max": 12.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Water/wastewater system hack",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.04,
+            "description": "4.0% universal probability"
+          }
+        },
+        "result_pct": 4.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Water/wastewater system hack"
+      },
+      "bounds": {
+        "min_pct": 0.4,
+        "max_pct": 12.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CIC-005",
+    "event_name": "Transportation system cyberattack",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Cyber incident affecting rail signaling, traffic management, airport operations, or mass transit control systems, causing safety incidents or >4-hour service disruption",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.3,
+      "range_max": 9.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Transportation system cyberattack",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.03,
+            "description": "3.0% universal probability"
+          }
+        },
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Transportation system cyberattack"
+      },
+      "bounds": {
+        "min_pct": 0.3,
+        "max_pct": 9.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CIC-006",
+    "event_name": "Nuclear/chemical facility cyber intrusion",
+    "domain": "DIGITAL",
+    "family_code": "3.1",
+    "family_name": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
+    "description": "Unauthorized cyber access to nuclear power plant, chemical manufacturing, or other high-hazard facility control systems, even if no physical impact occurred",
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.2,
+      "range_max": 6.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Nuclear/chemical facility cyber intrusion",
+      "family": "FAMILY_3_1_CRITICAL_INFRASTRUCTURE_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.02,
+            "description": "2.0% universal probability"
+          }
+        },
+        "result_pct": 2.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Nuclear/chemical facility cyber intrusion"
+      },
+      "bounds": {
+        "min_pct": 0.2,
+        "max_pct": 6.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-001",
+    "event_name": "ERP/business system ransomware",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Ransomware attack encrypting core business systems (ERP, CRM, financial systems) causing operational disruption \u226524 hours",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.2,
+      "range_max": 36.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "ERP/business system ransomware",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.12,
+            "description": "12.0% universal probability"
+          }
+        },
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for ERP/business system ransomware"
+      },
+      "bounds": {
+        "min_pct": 1.2,
+        "max_pct": 36.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-002",
+    "event_name": "Database encryption or destruction",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Direct attack on databases (SQL, NoSQL, backups) causing data loss, corruption, or encryption requiring restoration from backups",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Database encryption or destruction",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Database encryption or destruction"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-003",
+    "event_name": "Double extortion (encryption + data leak threat)",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Ransomware attack combining encryption with data exfiltration and threat to publicly leak sensitive data unless ransom paid",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.0,
+      "range_max": 30.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Double extortion (encryption + data leak threat)",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.1,
+            "description": "10.0% universal probability"
+          }
+        },
+        "result_pct": 10.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Double extortion (encryption + data leak threat)"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-004",
+    "event_name": "Customer personal data breach (GDPR event)",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Unauthorized access or theft of customer personal data (names, emails, addresses, payment info) triggering GDPR Article 33/34 notification requirements",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.5,
+      "range_max": 45.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Customer personal data breach (GDPR event)",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.15,
+            "description": "15.0% universal probability"
+          }
+        },
+        "result_pct": 15.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Customer personal data breach (GDPR event)"
+      },
+      "bounds": {
+        "min_pct": 1.5,
+        "max_pct": 45.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-005",
+    "event_name": "Intellectual property theft (trade secrets, R&D)",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Cyber espionage targeting proprietary information: product designs, formulas, source code, R&D data, manufacturing processes",
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.7,
+      "range_max": 21.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Intellectual property theft (trade secrets, R&D)",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.07,
+            "description": "7.0% universal probability"
+          }
+        },
+        "result_pct": 7.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Intellectual property theft (trade secrets, R&D)"
+      },
+      "bounds": {
+        "min_pct": 0.7,
+        "max_pct": 21.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-006",
+    "event_name": "Financial data breach (payment card, banking)",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Theft of payment card data, bank account information, or financial credentials through cyber-attack on payment systems or databases",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.6,
+      "range_max": 18.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Financial data breach (payment card, banking)",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.06,
+            "description": "6.0% universal probability"
+          }
+        },
+        "result_pct": 6.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Financial data breach (payment card, banking)"
+      },
+      "bounds": {
+        "min_pct": 0.6,
+        "max_pct": 18.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-007",
+    "event_name": "Employee credential theft (Active Directory compromise)",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Theft of employee login credentials, Active Directory compromise, or domain admin account takeover enabling lateral movement",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.8,
+      "range_max": 54.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Employee credential theft (Active Directory compromise)",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.18,
+            "description": "18.0% universal probability"
+          }
+        },
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Employee credential theft (Active Directory compromise)"
+      },
+      "bounds": {
+        "min_pct": 1.8,
+        "max_pct": 54.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-RDE-008",
+    "event_name": "Supply chain partner data exposure",
+    "domain": "DIGITAL",
+    "family_code": "3.2",
+    "family_name": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
+    "description": "Data breach or security incident at third-party vendor/partner exposing company data stored in partner systems",
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.9,
+      "range_max": 27.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Supply chain partner data exposure",
+      "family": "FAMILY_3_2_RANSOMWARE,_DATA_BREACHES_and_EXFILTRATION",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.09,
+            "description": "9.0% universal probability"
+          }
+        },
+        "result_pct": 9.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Supply chain partner data exposure"
+      },
+      "bounds": {
+        "min_pct": 0.9,
+        "max_pct": 27.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SCC-001",
+    "event_name": "Third-party software supply chain attack (e.g., SolarWinds)",
+    "domain": "DIGITAL",
+    "family_code": "3.3",
+    "family_name": "SUPPLY CHAIN CYBERATTACKS",
+    "description": "Malicious code inserted into legitimate software updates or packages, distributed to customers through trusted software supply chain",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.3,
+      "range_max": 9.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Third-party software supply chain attack (e.g., SolarWinds)",
+      "family": "FAMILY_3_3_SUPPLY_CHAIN_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.03,
+            "description": "3.0% universal probability"
+          }
+        },
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Third-party software supply chain attack (e.g., SolarWinds)"
+      },
+      "bounds": {
+        "min_pct": 0.3,
+        "max_pct": 9.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SCC-002",
+    "event_name": "Managed service provider (MSP) compromise",
+    "domain": "DIGITAL",
+    "family_code": "3.3",
+    "family_name": "SUPPLY CHAIN CYBERATTACKS",
+    "description": "Cyber-attack on managed IT service provider, using their privileged access to customer systems to deploy malware or ransomware",
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.5,
+      "range_max": 15.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Managed service provider (MSP) compromise",
+      "family": "FAMILY_3_3_SUPPLY_CHAIN_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.05,
+            "description": "5.0% universal probability"
+          }
+        },
+        "result_pct": 5.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Managed service provider (MSP) compromise"
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 15.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SCC-003",
+    "event_name": "Open-source library/dependency compromise (e.g., Log4j)",
+    "domain": "DIGITAL",
+    "family_code": "3.3",
+    "family_name": "SUPPLY CHAIN CYBERATTACKS",
+    "description": "Critical vulnerability or malicious code in open-source software library used by company applications (direct or transitive dependency)",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Open-source library/dependency compromise (e.g., Log4j)",
+      "family": "FAMILY_3_3_SUPPLY_CHAIN_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Open-source library/dependency compromise (e.g., Log4j)"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SCC-004",
+    "event_name": "Cloud service provider breach (affecting customers)",
+    "domain": "DIGITAL",
+    "family_code": "3.3",
+    "family_name": "SUPPLY CHAIN CYBERATTACKS",
+    "description": "Security breach at cloud/SaaS provider exposing customer data or enabling unauthorized access to customer environments",
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.4,
+      "range_max": 12.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Cloud service provider breach (affecting customers)",
+      "family": "FAMILY_3_3_SUPPLY_CHAIN_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.04,
+            "description": "4.0% universal probability"
+          }
+        },
+        "result_pct": 4.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Cloud service provider breach (affecting customers)"
+      },
+      "bounds": {
+        "min_pct": 0.4,
+        "max_pct": 12.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SCC-005",
+    "event_name": "SaaS application compromise (e.g., Okta, MOVEit)",
+    "domain": "DIGITAL",
+    "family_code": "3.3",
+    "family_name": "SUPPLY CHAIN CYBERATTACKS",
+    "description": "Critical SaaS application vulnerability or breach enabling unauthorized access to customer data or enabling downstream attacks",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.6,
+      "range_max": 18.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "SaaS application compromise (e.g., Okta, MOVEit)",
+      "family": "FAMILY_3_3_SUPPLY_CHAIN_CYBERATTACKS",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.06,
+            "description": "6.0% universal probability"
+          }
+        },
+        "result_pct": 6.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for SaaS application compromise (e.g., Okta, MOVEit)"
+      },
+      "bounds": {
+        "min_pct": 0.6,
+        "max_pct": 18.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-001",
+    "event_name": "Business email compromise (BEC/CEO fraud)",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Social engineering attack impersonating executives or vendors to authorize fraudulent wire transfers or sensitive data disclosure",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.8,
+      "range_max": 54.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Business email compromise (BEC/CEO fraud)",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.18,
+            "description": "18.0% universal probability"
+          }
+        },
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Business email compromise (BEC/CEO fraud)"
+      },
+      "bounds": {
+        "min_pct": 1.8,
+        "max_pct": 54.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-002",
+    "event_name": "Wire transfer fraud / Invoice/vendor fraud",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Fraudulent modification of vendor payment instructions or fake invoices leading to misdirected payments",
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.4,
+      "range_max": 42.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Wire transfer fraud / Invoice/vendor fraud",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.14,
+            "description": "14.0% universal probability"
+          }
+        },
+        "result_pct": 14.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Wire transfer fraud / Invoice/vendor fraud"
+      },
+      "bounds": {
+        "min_pct": 1.4,
+        "max_pct": 42.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-003",
+    "event_name": "Credential phishing (multi-factor authentication bypass)",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Sophisticated phishing attack defeating MFA through adversary-in-the-middle (AitM), push notification fatigue, or MFA interception",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.2,
+      "range_max": 66.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Credential phishing (multi-factor authentication bypass)",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.22,
+            "description": "22.0% universal probability"
+          }
+        },
+        "result_pct": 22.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Credential phishing (multi-factor authentication bypass)"
+      },
+      "bounds": {
+        "min_pct": 2.2,
+        "max_pct": 66.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-004",
+    "event_name": "Deep fake voice/video fraud",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Use of AI-generated voice or video (deep fake) to impersonate executives or trusted individuals to authorize transactions or disclose information",
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.4,
+      "range_max": 12.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Deep fake voice/video fraud",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.04,
+            "description": "4.0% universal probability"
+          }
+        },
+        "result_pct": 4.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Deep fake voice/video fraud"
+      },
+      "bounds": {
+        "min_pct": 0.4,
+        "max_pct": 12.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-005",
+    "event_name": "Volumetric DDoS attack (>100 Gbps causing material disruption)",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Large-scale distributed denial-of-service attack exceeding 100 Gbps or 1M packets/second, causing website/service unavailability >4 hours",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.2,
+      "range_max": 36.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Volumetric DDoS attack (>100 Gbps causing material disruption)",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.12,
+            "description": "12.0% universal probability"
+          }
+        },
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Volumetric DDoS attack (>100 Gbps causing material disruption)"
+      },
+      "bounds": {
+        "min_pct": 1.2,
+        "max_pct": 36.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-006",
+    "event_name": "Application-layer / Ransom DDoS (extortion-driven)",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "DDoS attack combined with extortion demand (typically 1-5 Bitcoin ransom); often application-layer attacks targeting specific services",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Application-layer / Ransom DDoS (extortion-driven)",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Application-layer / Ransom DDoS (extortion-driven)"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-FSD-007",
+    "event_name": "DNS infrastructure / BGP hijacking attack",
+    "domain": "DIGITAL",
+    "family_code": "3.4",
+    "family_name": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
+    "description": "Attack on DNS infrastructure or BGP route hijacking redirecting traffic to attacker-controlled servers or causing service unavailability",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.3,
+      "range_max": 9.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "DNS infrastructure / BGP hijacking attack",
+      "family": "FAMILY_3_4_FRAUD,_SOCIAL_ENGINEERING_and_DENIAL-OF-SERVICE",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.03,
+            "description": "3.0% universal probability"
+          }
+        },
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for DNS infrastructure / BGP hijacking attack"
+      },
+      "bounds": {
+        "min_pct": 0.3,
+        "max_pct": 9.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-001",
+    "event_name": "Hyperscaler vendor lock-in / Migration barriers (proprietary services, egress costs)",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Technical or economic inability to migrate workloads from current cloud provider due to proprietary services, egress costs, or architectural dependencies",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.5,
+      "range_max": 75.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Hyperscaler vendor lock-in / Migration barriers (proprietary services, egress costs)",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.25,
+            "description": "25.0% universal probability"
+          }
+        },
+        "result_pct": 25.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Hyperscaler vendor lock-in / Migration barriers (proprietary services, egress costs)"
+      },
+      "bounds": {
+        "min_pct": 2.5,
+        "max_pct": 75.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-002",
+    "event_name": "Cloud service provider outage / Service degradation (\u22654hr, multi-region)",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Major cloud platform outage affecting multiple regions or availability zones, causing service unavailability \u22654 hours",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Cloud service provider outage / Service degradation (\u22654hr, multi-region)",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Cloud service provider outage / Service degradation (\u22654hr, multi-region)"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-003",
+    "event_name": "Cloud pricing shock / Cost escalation (>30% YoY increase)",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Unexpected cloud cost increases >30% year-over-year due to pricing changes, usage growth, or cloud \"bill shock\" from uncontrolled consumption",
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.0,
+      "range_max": 60.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Cloud pricing shock / Cost escalation (>30% YoY increase)",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.2,
+            "description": "20.0% universal probability"
+          }
+        },
+        "result_pct": 20.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Cloud pricing shock / Cost escalation (>30% YoY increase)"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-004",
+    "event_name": "Data residency / Sovereignty compliance failure (GDPR, Schrems)",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Discovery that customer personal data is stored or processed in jurisdictions violating GDPR, Schrems II rulings, or other data sovereignty requirements",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.2,
+      "range_max": 36.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Data residency / Sovereignty compliance failure (GDPR, Schrems)",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.12,
+            "description": "12.0% universal probability"
+          }
+        },
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Data residency / Sovereignty compliance failure (GDPR, Schrems)"
+      },
+      "bounds": {
+        "min_pct": 1.2,
+        "max_pct": 36.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-005",
+    "event_name": "Platform dependency / API deprecation (Maps, payment, critical APIs)",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Critical third-party platform APIs deprecated, pricing changed dramatically, or access restricted, requiring application rearchitecture",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.5,
+      "range_max": 45.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Platform dependency / API deprecation (Maps, payment, critical APIs)",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.15,
+            "description": "15.0% universal probability"
+          }
+        },
+        "result_pct": 15.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Platform dependency / API deprecation (Maps, payment, critical APIs)"
+      },
+      "bounds": {
+        "min_pct": 1.5,
+        "max_pct": 45.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-CLS-006",
+    "event_name": "National cloud / Data center capacity shortage",
+    "domain": "DIGITAL",
+    "family_code": "3.5",
+    "family_name": "CLOUD & PLATFORM SOVEREIGNTY",
+    "description": "Insufficient cloud or data center capacity in preferred jurisdiction (e.g., EU, specific country) forcing suboptimal deployment choices",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.0,
+      "range_max": 30.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "National cloud / Data center capacity shortage",
+      "family": "FAMILY_3_5_CLOUD_and_PLATFORM_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.1,
+            "description": "10.0% universal probability"
+          }
+        },
+        "result_pct": 10.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for National cloud / Data center capacity shortage"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-001",
+    "event_name": "Advanced semiconductor access restriction (<7nm chips, AI accelerators)",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Export controls, allocation constraints, or geopolitical restrictions limiting access to advanced semiconductors (<7nm process nodes, AI GPUs, HBM memory)",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.5,
+      "range_max": 45.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Advanced semiconductor access restriction (<7nm chips, AI accelerators)",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.15,
+            "description": "15.0% universal probability"
+          }
+        },
+        "result_pct": 15.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Advanced semiconductor access restriction (<7nm chips, AI accelerators)"
+      },
+      "bounds": {
+        "min_pct": 1.5,
+        "max_pct": 45.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-002",
+    "event_name": "Semiconductor supply chain disruption (fab fire, earthquake, geopolitics)",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Major disruption to semiconductor manufacturing from fab accidents, natural disasters, or geopolitical events affecting multiple industries",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.2,
+      "range_max": 36.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Semiconductor supply chain disruption (fab fire, earthquake, geopolitics)",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.12,
+            "description": "12.0% universal probability"
+          }
+        },
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Semiconductor supply chain disruption (fab fire, earthquake, geopolitics)"
+      },
+      "bounds": {
+        "min_pct": 1.2,
+        "max_pct": 36.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-003",
+    "event_name": "Legacy chip / Mature node shortage (automotive MCUs, industrial)",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Shortage of mature-node semiconductors (>28nm) used in automotive, industrial, and IoT applications, despite ample advanced-chip capacity",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.8,
+      "range_max": 54.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Legacy chip / Mature node shortage (automotive MCUs, industrial)",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.18,
+            "description": "18.0% universal probability"
+          }
+        },
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Legacy chip / Mature node shortage (automotive MCUs, industrial)"
+      },
+      "bounds": {
+        "min_pct": 1.8,
+        "max_pct": 54.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-004",
+    "event_name": "Hardware supply chain attack / Compromised components",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Discovery of malicious hardware (chips, firmware, components) in supply chain, requiring product recalls and supply chain forensics",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.3,
+      "range_max": 9.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Hardware supply chain attack / Compromised components",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.03,
+            "description": "3.0% universal probability"
+          }
+        },
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Hardware supply chain attack / Compromised components"
+      },
+      "bounds": {
+        "min_pct": 0.3,
+        "max_pct": 9.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-005",
+    "event_name": "Critical equipment / Manufacturing tools shortage (SME, machine tools, robots, test equipment)",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Shortage or extended lead times (>12 months) for critical manufacturing equipment: semiconductor manufacturing equipment (SME), CNC machine tools, industrial robots, test equipment",
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.0,
+      "range_max": 60.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Critical equipment / Manufacturing tools shortage (SME, machine tools, robots, test equipment)",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.2,
+            "description": "20.0% universal probability"
+          }
+        },
+        "result_pct": 20.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Critical equipment / Manufacturing tools shortage (SME, machine tools, robots, test equipment)"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-006",
+    "event_name": "Industrial automation hardware dependency / Vendor lock-in (PLCs, SCADA, DCS, HMI, MES)",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Proprietary industrial control system hardware creating migration barriers, limiting vendor competition, and imposing long-term costs/constraints",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.5,
+      "range_max": 75.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Industrial automation hardware dependency / Vendor lock-in (PLCs, SCADA, DCS, HMI, MES)",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.25,
+            "description": "25.0% universal probability"
+          }
+        },
+        "result_pct": 25.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Industrial automation hardware dependency / Vendor lock-in (PLCs, SCADA, DCS, HMI, MES)"
+      },
+      "bounds": {
+        "min_pct": 2.5,
+        "max_pct": 75.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-HWS-007",
+    "event_name": "Machine tool / Critical manufacturing equipment access restriction",
+    "domain": "DIGITAL",
+    "family_code": "3.6",
+    "family_name": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
+    "description": "Export controls, geopolitical restrictions, or supply allocation limiting access to advanced machine tools (5-axis CNC, EDM, precision grinding, additive manufacturing)",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.0,
+      "range_max": 30.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Machine tool / Critical manufacturing equipment access restriction",
+      "family": "FAMILY_3_6_HARDWARE,_INDUSTRIAL_EQUIPMENT_and_SEMICONDUCTOR_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.1,
+            "description": "10.0% universal probability"
+          }
+        },
+        "result_pct": 10.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Machine tool / Critical manufacturing equipment access restriction"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-001",
+    "event_name": "Critical software license termination / Access restriction (ERP, CAD/EDA, OS)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Loss of access to critical business software due to license termination, sanctions, vendor bankruptcy, or pricing prohibiting continued use",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.8,
+      "range_max": 24.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Critical software license termination / Access restriction (ERP, CAD/EDA, OS)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.08,
+            "description": "8.0% universal probability"
+          }
+        },
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Critical software license termination / Access restriction (ERP, CAD/EDA, OS)"
+      },
+      "bounds": {
+        "min_pct": 0.8,
+        "max_pct": 24.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-002",
+    "event_name": "Open-source software maintainer risk / Supply chain failure (Log4j scenario)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Critical open-source software project with single/few maintainers faces abandonment, burnout, compromise, or inability to address critical vulnerabilities",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.2,
+      "range_max": 36.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Open-source software maintainer risk / Supply chain failure (Log4j scenario)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.12,
+            "description": "12.0% universal probability"
+          }
+        },
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Open-source software maintainer risk / Supply chain failure (Log4j scenario)"
+      },
+      "bounds": {
+        "min_pct": 1.2,
+        "max_pct": 36.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-003",
+    "event_name": "AI/ML platform dependency / Model access restriction (OpenAI, NVIDIA CUDA)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Dependency on proprietary AI/ML platforms (OpenAI API, Google Vertex AI, NVIDIA CUDA) facing pricing changes, access restrictions, or service disruptions",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.8,
+      "range_max": 54.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "AI/ML platform dependency / Model access restriction (OpenAI, NVIDIA CUDA)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.18,
+            "description": "18.0% universal probability"
+          }
+        },
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for AI/ML platform dependency / Model access restriction (OpenAI, NVIDIA CUDA)"
+      },
+      "bounds": {
+        "min_pct": 1.8,
+        "max_pct": 54.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-004",
+    "event_name": "AI model poisoning / Adversarial attack",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Compromised training data or adversarial inputs causing AI/ML model to produce incorrect, biased, or malicious outputs",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.6,
+      "range_max": 18.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "AI model poisoning / Adversarial attack",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.06,
+            "description": "6.0% universal probability"
+          }
+        },
+        "result_pct": 6.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for AI model poisoning / Adversarial attack"
+      },
+      "bounds": {
+        "min_pct": 0.6,
+        "max_pct": 18.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-005",
+    "event_name": "Critical software supply chain vulnerability (zero-day, widespread impact)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Zero-day vulnerability in widely-used software framework or library affecting thousands of applications (analogous to Log4j but proprietary software)",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 1.0,
+      "range_max": 30.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Critical software supply chain vulnerability (zero-day, widespread impact)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.1,
+            "description": "10.0% universal probability"
+          }
+        },
+        "result_pct": 10.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Critical software supply chain vulnerability (zero-day, widespread impact)"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-006",
+    "event_name": "Emerging technology access restriction (quantum, 5G, advanced robotics)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Export controls or strategic technology restrictions limiting access to emerging technologies critical for future competitiveness",
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.7,
+      "range_max": 21.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Emerging technology access restriction (quantum, 5G, advanced robotics)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.07,
+            "description": "7.0% universal probability"
+          }
+        },
+        "result_pct": 7.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for Emerging technology access restriction (quantum, 5G, advanced robotics)"
+      },
+      "bounds": {
+        "min_pct": 0.7,
+        "max_pct": 21.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-007",
+    "event_name": "CAD/CAM/PLM software dependency / Vendor lock-in (industrial design software)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Proprietary industrial design software (CAD/CAM/PLM) creating migration barriers due to file format lock-in, training costs, and ecosystem dependencies",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.2,
+      "range_max": 66.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "CAD/CAM/PLM software dependency / Vendor lock-in (industrial design software)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.22,
+            "description": "22.0% universal probability"
+          }
+        },
+        "result_pct": 22.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for CAD/CAM/PLM software dependency / Vendor lock-in (industrial design software)"
+      },
+      "bounds": {
+        "min_pct": 2.2,
+        "max_pct": 66.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "DIG-SWS-008",
+    "event_name": "MES/SCADA/DCS software dependency (industrial control software lock-in)",
+    "domain": "DIGITAL",
+    "family_code": "3.7",
+    "family_name": "SOFTWARE & AI SOVEREIGNTY",
+    "description": "Manufacturing Execution System (MES) and SCADA/DCS control software lock-in limiting factory digitalization and imposing long-term costs",
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 2.0,
+      "range_max": 60.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "MES/SCADA/DCS software dependency (industrial control software lock-in)",
+      "family": "FAMILY_3_7_SOFTWARE_and_AI_SOVEREIGNTY",
+      "phase1": {
+        "method": "BASE_RATE",
+        "expression": "Universal base rate",
+        "variables": {
+          "base_rate": {
+            "name": "Universal Base Rate",
+            "value": 0.2,
+            "description": "20.0% universal probability"
+          }
+        },
+        "result_pct": 20.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "default": 1.0
+        },
+        "geography": {
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific adjustments for MES/SCADA/DCS software dependency (industrial control software lock-in)"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  }
+]

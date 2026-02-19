@@ -1,0 +1,3757 @@
+[
+  {
+    "event_id": "PHY-CLI-001",
+    "event_name": "River flooding disrupting facility operations",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "River flooding disrupting facility operations affecting EU operations and supply chains.",
+    "base_rate_pct": 0.12,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Flood Alert System",
+        "url": "https://www.efas.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Meteorological Institutes",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 5.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "River flooding disrupting facility operations",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "FIF * AFP * DTA",
+        "variables": {
+          "FIF": {
+            "name": "Facilities in Floodplains",
+            "value": 0.15,
+            "description": "Fraction of facilities located in floodplain zones"
+          },
+          "AFP": {
+            "name": "Annual Flood Probability",
+            "value": 0.01,
+            "description": "Historical annual flood probability"
+          },
+          "DTA": {
+            "name": "Disruption Threshold Adjustment",
+            "value": 0.8,
+            "type": "FIXED",
+            "description": "Fixed adjustment for operational disruption"
+          }
+        },
+        "calculation": "0.15 * 0.01 * 0.80 = 0.0012",
+        "result_pct": 0.12
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "manufacturing": 2.0,
+          "logistics": 1.8,
+          "food_beverage": 1.5,
+          "energy": 1.3,
+          "default": 1.0
+        },
+        "geography": {
+          "central_europe": 2.0,
+          "mediterranean": 1.5,
+          "eastern_europe": 1.3,
+          "northern_europe": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.01,
+        "max_pct": 5.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-CLI-002",
+    "event_name": "Coastal flooding from storm surge",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "Coastal flooding from storm surge affecting EU operations and supply chains.",
+    "base_rate_pct": 0.35,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU coastal",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Climate Data Store",
+        "url": "https://climate.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Environment Agency",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Port Authority Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 3.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Coastal flooding from storm surge",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "CFF * SSAP",
+        "variables": {
+          "CFF": {
+            "name": "Coastal Facilities Fraction",
+            "value": 0.05,
+            "description": "Fraction of coastal facilities"
+          },
+          "SSAP": {
+            "name": "Storm Surge Annual Probability",
+            "value": 0.07,
+            "description": "Annual probability of significant storm surge"
+          }
+        },
+        "calculation": "0.05 * 0.07 = 0.0035",
+        "result_pct": 0.35
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "maritime_logistics": 2.5,
+          "oil_gas": 2.0,
+          "chemicals": 1.8,
+          "energy": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "north_sea": 2.5,
+          "baltic": 2.0,
+          "atlantic": 1.5,
+          "mediterranean": 1.0,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.01,
+        "max_pct": 2.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-CLI-003",
+    "event_name": "Extreme heat wave affecting production/logistics",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "Extreme heat wave affecting production/logistics affecting EU operations and supply chains.",
+    "base_rate_pct": 6.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NOAA Global Temperature Database",
+        "url": "https://www.ncei.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Copernicus Climate Data Store",
+        "url": "https://climate.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Operations Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 15.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Extreme heat wave affecting production/logistics",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "WER * MDP",
+        "variables": {
+          "WER": {
+            "name": "Worker Exposure Rate",
+            "value": 0.23,
+            "description": "Fraction of workforce exposed to heat"
+          },
+          "MDP": {
+            "name": "Material Disruption Probability",
+            "value": 0.28,
+            "type": "FIXED",
+            "description": "Fixed probability of material/equipment disruption due to heat"
+          }
+        },
+        "calculation": "0.23 * 0.28 = 0.0644",
+        "result_pct": 6.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "manufacturing": 2.0,
+          "logistics": 1.8,
+          "agriculture": 1.5,
+          "construction": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.0,
+          "central_europe": 1.3,
+          "northern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 20.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-CLI-004",
+    "event_name": "Severe drought impacting water supply",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "Severe drought impacting water supply affecting EU operations and supply chains.",
+    "base_rate_pct": 2.8,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Drought Observatory",
+        "url": "https://edo.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "USGS Drought Monitor",
+        "url": "https://www.droughtmonitor.unl.edu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Water Authority Bulletins",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 8.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Severe drought impacting water supply",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "WSE * EF",
+        "variables": {
+          "WSE": {
+            "name": "Water Scarcity Extent",
+            "value": 0.28,
+            "description": "Extent of water scarcity in region"
+          },
+          "EF": {
+            "name": "Escalation Factor",
+            "value": 0.1,
+            "type": "FIXED",
+            "description": "Fixed escalation factor"
+          },
+          "SA": {
+            "name": "Severity Adjustment",
+            "value": 1.0,
+            "description": "Dynamic severity adjustment based on baseline comparison"
+          },
+          "WSE_baseline": {
+            "name": "Water Scarcity Extent Baseline",
+            "value": 0.2,
+            "type": "FIXED",
+            "description": "Historical baseline for water scarcity"
+          }
+        },
+        "calculation": "(0.28 * 0.10) * 1.0 = 0.0280",
+        "result_pct": 2.8
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "chemicals": 2.5,
+          "food_beverage": 2.0,
+          "energy": 1.8,
+          "paper_pulp": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.5,
+          "southeastern_europe": 2.0,
+          "central_europe": 1.3,
+          "northern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 15.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-CLI-005",
+    "event_name": "Major wildfire near critical facilities",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "Major wildfire near critical facilities affecting EU operations and supply chains.",
+    "base_rate_pct": 1.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "monthly",
+    "geographic_scope": "Southern/Central Europe",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Emergency Management Service",
+        "url": "https://emergency.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Forest Fire Information System",
+        "url": "https://effis.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Fire Service Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 5.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Major wildfire near critical facilities",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "FNFZ * AFP10",
+        "variables": {
+          "FNFZ": {
+            "name": "Facilities Near Fire Zones",
+            "value": 0.15,
+            "description": "Fraction of facilities near fire-prone zones"
+          },
+          "AFP10": {
+            "name": "Annual Fire Probability within 10km",
+            "value": 0.1,
+            "description": "Annual probability of fire within 10km radius"
+          }
+        },
+        "calculation": "0.15 * 0.10 = 0.0150",
+        "result_pct": 1.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "manufacturing": 2.0,
+          "logistics": 1.5,
+          "food_beverage": 1.5,
+          "pharma": 1.3,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 3.0,
+          "central_europe": 1.0,
+          "northern_europe": 0.3,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.1,
+        "max_pct": 10.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-CLI-006",
+    "event_name": "Extreme cold disrupting energy/transport",
+    "domain": "PHYSICAL",
+    "family_code": "1.1",
+    "family_name": "Climate Extremes & Weather Events",
+    "description": "Extreme cold disrupting energy/transport affecting EU operations and supply chains.",
+    "base_rate_pct": 3.2,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "Continental zones",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NOAA Winter Storm Database",
+        "url": "https://www.ncei.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENTSOE Grid Monitoring",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Transport Ministry Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 10.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Extreme cold disrupting energy/transport",
+      "family": "FAMILY_1_1_Climate_Extremes",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "FE * ECEP",
+        "variables": {
+          "FE": {
+            "name": "Facilities Exposed",
+            "value": 0.4,
+            "description": "40% of EU facilities in temperate/continental zones"
+          },
+          "ECEP": {
+            "name": "Extreme Cold Event Probability",
+            "value": 0.08,
+            "description": "8% annual probability"
+          }
+        },
+        "calculation": "0.40 * 0.08 = 0.032",
+        "result_pct": 3.2
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "energy": 2.0,
+          "manufacturing": 1.8,
+          "logistics": 1.5,
+          "food_beverage": 1.3,
+          "default": 1.0
+        },
+        "geography": {
+          "northern_europe": 2.0,
+          "central_europe": 1.5,
+          "eastern_europe": 1.5,
+          "southern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 15.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-001",
+    "event_name": "Regional power grid blackout (>12 hours)",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Regional power grid blackout (>12 hours) affecting EU operations and supply chains.",
+    "base_rate_pct": 1.2,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "daily",
+    "geographic_scope": "Regional/National",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Grid Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Transmission System Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Power Exchange Spot Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 8.0,
+      "staleness_days": 3
+    },
+    "formula": {
+      "name": "Regional power grid blackout (>12 hours)",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(MGI / TOY) * IIF * CA",
+        "variables": {
+          "MGI": {
+            "name": "Major Grid Incidents",
+            "value": 2,
+            "description": "Count of major grid incidents in observation period"
+          },
+          "TOY": {
+            "name": "Total Operating Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "IIF": {
+            "name": "Industrial Impact Factor",
+            "value": 0.35,
+            "type": "FIXED",
+            "description": "Fixed factor for industrial blackout impact"
+          },
+          "conservative_adjustment": {
+            "description": "Conservative adjustment factor for industrial impact threshold",
+            "symbol": "CA",
+            "current_value": 0.0857,
+            "type": "FIXED_PARAMETER"
+          }
+        },
+        "calculation": "(2 / 5) * 0.35 = 0.012",
+        "result_pct": 1.2
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "manufacturing": 2.5,
+          "data_centers": 2.0,
+          "food_beverage": 1.8,
+          "chemicals": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.0,
+          "central_europe": 1.5,
+          "northern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 0.1,
+        "max_pct": 10.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-002",
+    "event_name": "Natural gas supply interruption",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Natural gas supply interruption affecting EU operations and supply chains.",
+    "base_rate_pct": 8.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "weekly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gas Infrastructure Europe",
+        "url": "https://www.gie.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENTSOG Pipeline Maps",
+        "url": "https://www.entsog.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Energy Exchange Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 20.0,
+      "staleness_days": 14
+    },
+    "formula": {
+      "name": "Natural gas supply interruption",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(MDM / TOM) * IE",
+        "variables": {
+          "MDM": {
+            "name": "Major Disruption Months",
+            "value": 18,
+            "description": "Months with major supply disruptions"
+          },
+          "TOM": {
+            "name": "Total Observation Months",
+            "value": 60,
+            "description": "Total months in observation period (5 years)"
+          },
+          "IE": {
+            "name": "Industrial Exposure",
+            "value": 0.28,
+            "type": "FIXED",
+            "description": "Fixed industrial exposure factor"
+          }
+        },
+        "calculation": "(18 / 60) * 0.28 = 0.085",
+        "result_pct": 8.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "chemicals": 2.5,
+          "metals": 2.0,
+          "ceramics_glass": 2.0,
+          "food_beverage": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "central_eastern_europe": 2.5,
+          "southern_europe": 1.5,
+          "western_europe": 0.8,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 40.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-003",
+    "event_name": "Electricity price spike (>200% increase)",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Electricity price spike (>200% increase) affecting EU operations and supply chains.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "daily",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Energy Exchange",
+        "url": "https://www.eex.com",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ICE Futures Europe",
+        "url": "https://www.theice.com",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Bloomberg Energy",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 50.0,
+      "staleness_days": 3
+    },
+    "formula": {
+      "name": "Electricity price spike (>200% increase)",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(PSM / TOM) * SW",
+        "variables": {
+          "PSM": {
+            "name": "Price Spike Months",
+            "value": 14,
+            "description": "Months with significant price spikes"
+          },
+          "TOM": {
+            "name": "Total Observation Months",
+            "value": 60,
+            "description": "Total months in observation period (5 years)"
+          },
+          "SW": {
+            "name": "Severity Weight",
+            "value": 0.75,
+            "type": "FIXED",
+            "description": "Fixed weight for price spike severity"
+          }
+        },
+        "calculation": "(14 / 60) * 0.75 = 0.175",
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "metals": 2.5,
+          "chemicals": 2.0,
+          "paper": 1.8,
+          "data_centers": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "central_eastern_europe": 2.0,
+          "southern_europe": 1.5,
+          "northern_europe": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 50.0
+      },
+      "update_frequency": "monthly"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-004",
+    "event_name": "Renewable energy output volatility",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Renewable energy output volatility affecting EU operations and supply chains.",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "daily",
+    "geographic_scope": "Northern/Southern Europe",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Renewable Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Grid Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Weather Forecasting Models",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 30.0,
+      "staleness_days": 3
+    },
+    "formula": {
+      "name": "Renewable energy output volatility",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(VE / TY) * IIF",
+        "variables": {
+          "VE": {
+            "name": "Variability Events",
+            "value": 4,
+            "description": "Count of significant renewable variability events"
+          },
+          "TY": {
+            "name": "Total Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "IIF": {
+            "name": "Industrial Impact Factor",
+            "value": 0.15,
+            "type": "FIXED",
+            "description": "Fixed industrial impact factor for variability"
+          }
+        },
+        "calculation": "(4 / 5) * 0.15 = 0.12",
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "semiconductors": 2.5,
+          "chemicals": 2.0,
+          "data_centers": 1.8,
+          "metals": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "northern_europe": 2.0,
+          "southern_europe": 1.5,
+          "central_europe": 1.0,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-005",
+    "event_name": "Nuclear plant unplanned shutdown",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Nuclear plant unplanned shutdown affecting EU operations and supply chains.",
+    "base_rate_pct": 6.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "France/Belgium/Spain",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IAEA Event Reporting System",
+        "url": "https://www.iaea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Nuclear Regulators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Grid Operator Announcements",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 15.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Nuclear plant unplanned shutdown",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(UOD / (TR * DPY)) * RI + MA",
+        "variables": {
+          "UOD": {
+            "name": "Unplanned Outage Days",
+            "value": 399,
+            "description": "Total unplanned outage days in observation period"
+          },
+          "TR": {
+            "name": "Total Reactors",
+            "value": 56,
+            "description": "Total number of reactors in region"
+          },
+          "DPY": {
+            "name": "Days Per Year",
+            "value": 365,
+            "type": "FIXED",
+            "description": "Fixed days per year constant"
+          },
+          "RI": {
+            "name": "Regional Impact",
+            "value": 1.2,
+            "description": "Regional dependency multiplier"
+          },
+          "MA": {
+            "name": "Multi-reactor Adjustment",
+            "value": 0.042,
+            "type": "FIXED",
+            "description": "Additional adjustment from multi-reactor/multi-country events"
+          }
+        },
+        "calculation": "Base (399/(56*365))*1.2 = 0.023, then + 0.042 = 0.065",
+        "result_pct": 6.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "metals": 2.0,
+          "chemicals": 1.8,
+          "data_centers": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "france_dependent": 3.0,
+          "nuclear_countries": 1.5,
+          "non_nuclear": 0.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 20.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-006",
+    "event_name": "Grid frequency instability",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Grid frequency instability affecting EU operations and supply chains.",
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "daily",
+    "geographic_scope": "Ireland/Netherlands/Southern EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Load Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Regional Grid Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Consumption Forecasts",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 25.0,
+      "staleness_days": 3
+    },
+    "formula": {
+      "name": "Grid frequency instability",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(DSE / TY) * LSP",
+        "variables": {
+          "DSE": {
+            "name": "Demand Surge Events",
+            "value": 6,
+            "description": "Count of significant demand surge events"
+          },
+          "TY": {
+            "name": "Total Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "LSP": {
+            "name": "Load Shed Probability",
+            "value": 0.075,
+            "type": "FIXED",
+            "description": "Load shed probability for material industrial impact (7.5% of surge events trigger material load-shed)"
+          }
+        },
+        "calculation": "(6 / 5) * 0.075 = 1.2 * 0.075 = 0.09 = 9%",
+        "result_pct": 9.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "data_centers": 2.5,
+          "manufacturing": 2.0,
+          "food_beverage": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.0,
+          "ireland_netherlands": 1.8,
+          "northern_europe": 0.8,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 25.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-ENE-007",
+    "event_name": "Transformer/substation failure",
+    "domain": "PHYSICAL",
+    "family_code": "1.2",
+    "family_name": "Energy Supply & Grid Stability",
+    "description": "Transformer/substation failure affecting EU operations and supply chains.",
+    "base_rate_pct": 3.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "monthly",
+    "geographic_scope": "Regional",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Grid Operator Maintenance Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Equipment Manufacturer Bulletins",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Claims Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 10.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Transformer/substation failure",
+      "family": "FAMILY_1_2_Energy_Supply",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "1 - (1 - PSR) ** CN",
+        "variables": {
+          "PSR": {
+            "name": "Per Substation Rate",
+            "value": 0.0035,
+            "description": "Per-substation failure rate"
+          },
+          "CN": {
+            "name": "Critical Nodes",
+            "value": 10,
+            "type": "FIXED",
+            "description": "Number of critical nodes for regional probability calculation"
+          }
+        },
+        "result_pct": 3.5,
+        "calculation": "1 - (1 - 0.0035) ** 10 = 0.0345"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "logistics": 2.5,
+          "construction": 2.0,
+          "agriculture": 1.8,
+          "default": 1.0
+        },
+        "geography": {
+          "landlocked_countries": 2.0,
+          "port_access": 1.0,
+          "pipeline_connected": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-001",
+    "event_name": "Rare earth element supply disruption",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Rare earth element supply disruption affecting EU operations and supply chains.",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "Global (EU import-dependent)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Critical Minerals Database",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Commission Raw Materials Intelligence",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Mining Industry Reports",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 40.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Rare earth element supply disruption",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(SDY / TY) * SA * threshold_adj",
+        "variables": {
+          "SDY": {
+            "name": "Supply Disruption Years",
+            "value": 4,
+            "description": "Years with supply disruptions in observation period"
+          },
+          "TY": {
+            "name": "Total Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "SA": {
+            "name": "Severity Adjustment",
+            "value": 0.75,
+            "description": "Adjustment for severity of disruptions"
+          },
+          "threshold_adj": {
+            "name": "Threshold Adjustment",
+            "value": 0.25,
+            "type": "FIXED",
+            "description": "Fixed threshold adjustment factor"
+          }
+        },
+        "calculation": "(4 / 5) * 0.75 * 0.25 = 0.15",
+        "result_pct": 15.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "electronics": 2.5,
+          "renewable_energy": 2.0,
+          "automotive_ev": 2.0,
+          "default": 1.0
+        },
+        "geography": {
+          "china_dependent": 1.5,
+          "diversified_sources": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-002",
+    "event_name": "Lithium/battery materials shortage",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Lithium/battery materials shortage affecting EU operations and supply chains.",
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IVL Swedish Environmental Institute",
+        "url": "https://www.ivl.se",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "International Energy Agency",
+        "url": "https://www.iea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Trading Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 50.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Lithium/battery materials shortage",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "((PSM + SCM) / TM) * TA",
+        "variables": {
+          "PSM": {
+            "name": "Price Spike Months",
+            "value": 18,
+            "description": "Months with price spikes"
+          },
+          "SCM": {
+            "name": "Supply Constraint Months",
+            "value": 12,
+            "description": "Months with supply constraints"
+          },
+          "TM": {
+            "name": "Total Months",
+            "value": 60,
+            "description": "Total months in observation period"
+          },
+          "TA": {
+            "name": "Threshold Adjustment",
+            "value": 0.4,
+            "type": "FIXED",
+            "description": "Fixed threshold adjustment factor"
+          }
+        },
+        "result_pct": 20.0,
+        "calculation": "((18 + 12) / 60) * 0.40 = 0.20"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "ev_manufacturers": 2.5,
+          "electronics": 2.0,
+          "energy_storage": 1.8,
+          "default": 1.0
+        },
+        "geography": {
+          "china_dependent": 2.0,
+          "diversified": 0.8,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-003",
+    "event_name": "Industrial metals price spike (copper, aluminum, steel)",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Industrial metals price spike (copper, aluminum, steel) affecting EU operations and supply chains.",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "daily",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "London Metal Exchange",
+        "url": "https://www.lme.com",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Bloomberg Commodities",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Reuters Commodities",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 60.0,
+      "staleness_days": 3
+    },
+    "formula": {
+      "name": "Industrial metals price spike (copper, aluminum, steel)",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "MMF * SA",
+        "variables": {
+          "MMF": {
+            "name": "Multi Metal Factor",
+            "value": 0.42,
+            "description": "At least 1 of 3 metals spiked in ~42% of months"
+          },
+          "SA": {
+            "name": "Severity Adjustment",
+            "value": 0.6,
+            "description": "Adjustment for severity of disruptions"
+          }
+        },
+        "result_pct": 25.0,
+        "calculation": "0.42 * 0.60 = 0.252"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "manufacturing_heavy": 2.0,
+          "construction": 1.8,
+          "services": 0.5,
+          "default": 1.0
+        },
+        "geography": {
+          "import_dependent": 1.5,
+          "domestic_production": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 70.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-004",
+    "event_name": "Semiconductor-grade silicon scarcity",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Semiconductor-grade silicon scarcity affecting EU operations and supply chains.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association",
+        "url": "https://www.semiconductors.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Market Research Reports",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Supplier Announcements",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 45.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Semiconductor-grade silicon scarcity",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(SM / TM) * SF",
+        "variables": {
+          "SM": {
+            "name": "Shortage Months",
+            "value": 24,
+            "description": "Months with shortages"
+          },
+          "TM": {
+            "name": "Total Months",
+            "value": 60,
+            "description": "Total months in observation period"
+          },
+          "SF": {
+            "name": "Severity Factor",
+            "value": 0.45,
+            "type": "FIXED",
+            "description": "Fixed severity factor"
+          }
+        },
+        "result_pct": 18.0,
+        "calculation": "(24 / 60) * 0.45 = 0.18"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "electronics": 3.0,
+          "automotive": 2.5,
+          "industrial": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "asia_dependent": 2.0,
+          "diversified": 0.8,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 50.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-005",
+    "event_name": "Agricultural commodity shortage (grains, oilseeds)",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Agricultural commodity shortage (grains, oilseeds) affecting EU operations and supply chains.",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "weekly",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FAO Food Price Index",
+        "url": "https://www.fao.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "USDA Global Agricultural Monitoring",
+        "url": "https://www.usda.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Futures Markets",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 55.0,
+      "staleness_days": 14
+    },
+    "formula": {
+      "name": "Agricultural commodity shortage (grains, oilseeds)",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(HVM / TM) * SDF",
+        "variables": {
+          "HVM": {
+            "name": "High Volatility Months",
+            "value": 28,
+            "description": "Months with high volatility"
+          },
+          "TM": {
+            "name": "Total Months",
+            "value": 60,
+            "description": "Total months in observation period"
+          },
+          "SDF": {
+            "name": "Supply Disruption Factor",
+            "value": 0.48,
+            "type": "FIXED",
+            "description": "Fixed supply disruption factor"
+          }
+        },
+        "result_pct": 22.0,
+        "calculation": "(28 / 60) * 0.48 = 0.224"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "food_processing": 2.5,
+          "restaurants": 2.0,
+          "agriculture_inputs": 1.8,
+          "default": 1.0
+        },
+        "geography": {
+          "import_dependent": 1.5,
+          "self_sufficient": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-006",
+    "event_name": "Timber/wood products supply disruption",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Timber/wood products supply disruption affecting EU operations and supply chains.",
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "EU/Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FAO Forestry Division",
+        "url": "https://www.fao.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Timber Trade Association",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Lumber Futures Prices",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 40.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Timber/wood products supply disruption",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(DE / TY) * IF * SA",
+        "variables": {
+          "DE": {
+            "name": "Disruption Events",
+            "value": 4,
+            "description": "Count of disruption events"
+          },
+          "TY": {
+            "name": "Total Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "IF": {
+            "name": "Impact Factor",
+            "value": 0.7,
+            "description": "Adjustment for impact severity"
+          },
+          "SA": {
+            "name": "Severity Adjustment",
+            "value": 0.25,
+            "type": "FIXED",
+            "description": "Fixed severity adjustment"
+          }
+        },
+        "result_pct": 14.0,
+        "calculation": "(4 / 5) * 0.70 * 0.25 = 0.14"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "construction": 2.0,
+          "furniture": 1.8,
+          "paper_pulp": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "fire_prone": 1.8,
+          "temperate_forest": 1.0,
+          "import_dependent": 1.5,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 40.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-007",
+    "event_name": "Natural fiber shortage (cotton, wool, rubber)",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Natural fiber shortage (cotton, wool, rubber) affecting EU operations and supply chains.",
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "International Cotton Advisory Committee",
+        "url": "https://www.icac.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Textiles Exchange",
+        "url": "https://www.textileexchange.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Price Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 45.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Natural fiber shortage (cotton, wool, rubber)",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(PSE / TY) * MFF * SFil",
+        "variables": {
+          "PSE": {
+            "name": "Price Spike Events",
+            "value": 4.5,
+            "description": "Count of price spike events"
+          },
+          "TY": {
+            "name": "Total Years",
+            "value": 5,
+            "description": "Total years of observation"
+          },
+          "MFF": {
+            "name": "Multi Fiber Factor",
+            "value": 0.89,
+            "description": "Multi-fiber adjustment factor"
+          },
+          "SFil": {
+            "name": "Severity Filter",
+            "value": 0.2,
+            "type": "FIXED",
+            "description": "Fixed severity filter"
+          }
+        },
+        "result_pct": 16.0,
+        "calculation": "(4.5 / 5) * 0.89 * 0.20 = 0.1602"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "apparel": 2.2,
+          "automotive_tires": 1.8,
+          "home_textiles": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "import_dependent": 1.5,
+          "domestic": 0.8,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 45.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-MAT-008",
+    "event_name": "Plant-derived chemical feedstock shortage (palm oil, cellulose)",
+    "domain": "PHYSICAL",
+    "family_code": "1.3",
+    "family_name": "Natural Resources & Raw Materials",
+    "description": "Plant-derived chemical feedstock shortage (palm oil, cellulose) affecting EU operations and supply chains.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "monthly",
+    "geographic_scope": "Global",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Chemical Industry Association",
+        "url": "https://www.cefic.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Pharmaceutical Supply Chain Reports",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Agricultural Commodity Tracking",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 45.0,
+      "staleness_days": 45
+    },
+    "formula": {
+      "name": "Plant-derived chemical feedstock shortage (palm oil, cellulose)",
+      "family": "FAMILY_1_3_Natural_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "(DM / TM) * RIF",
+        "variables": {
+          "DM": {
+            "name": "Disruption Months",
+            "value": 24,
+            "description": "Months with disruptions"
+          },
+          "TM": {
+            "name": "Total Months",
+            "value": 60,
+            "description": "Total months in observation period"
+          },
+          "RIF": {
+            "name": "Regulatory Impact Factor",
+            "value": 0.45,
+            "type": "FIXED",
+            "description": "Fixed regulatory impact factor"
+          }
+        },
+        "result_pct": 18.0,
+        "calculation": "(24 / 60) * 0.45 = 0.18"
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "cosmetics": 2.0,
+          "food_processing": 1.8,
+          "biofuels": 1.6,
+          "default": 1.0
+        },
+        "geography": {
+          "tropical_dependent": 1.5,
+          "diversified": 0.7,
+          "default": 1.0
+        }
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 50.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-001",
+    "event_name": "Major water scarcity/drought (WEI+ >20%)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Major water scarcity/drought (WEI+ >20%) affecting EU operations and supply chains.",
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU (Southern/Mediterranean)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Drought Observatory",
+        "url": "https://edo.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Hydrological Services",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Water Authority Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 60.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Major water scarcity/drought (WEI+ >20%)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "WTA * ISF",
+        "variables": {
+          "WTA": {
+            "name": "Water-Stressed Territory Area",
+            "value": 0.4,
+            "description": "Fraction of EU territory experiencing seasonal water stress (WEI+ >20%)"
+          },
+          "ISF": {
+            "name": "Industrial Severity Factor",
+            "value": 0.7,
+            "type": "FIXED",
+            "description": "Fixed factor for industrial disruption severity from water scarcity"
+          }
+        },
+        "calculation": "0.40 * 0.70 = 0.28",
+        "result_pct": 28.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "water_intensive_mfg": 2.5,
+          "agriculture": 2.2,
+          "power_generation": 2.0,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.5,
+          "southeastern_europe": 2.0,
+          "central_europe": 1.0,
+          "northern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific water usage efficiency and alternative source capacity"
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 70.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-002",
+    "event_name": "Municipal/industrial water supply failure (>7 days)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Municipal/industrial water supply failure (>7 days) affecting EU operations and supply chains.",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Water Operator Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU Water Framework Directive Data",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Claims Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 30.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Municipal/industrial water supply failure (>7 days)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "IFE * SDF",
+        "variables": {
+          "IFE": {
+            "name": "Industrial Floodplain Exposure",
+            "value": 0.15,
+            "description": "Fraction of industrial facilities located in floodplains"
+          },
+          "SDF": {
+            "name": "Supply Disruption Factor",
+            "value": 0.8,
+            "type": "FIXED",
+            "description": "Fixed factor for probability of supply failure given floodplain exposure"
+          }
+        },
+        "calculation": "0.15 * 0.80 = 0.12",
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "food_beverage": 2.0,
+          "chemicals": 1.8,
+          "energy": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "flood_prone": 2.0,
+          "aging_infrastructure": 1.8,
+          "modern_infrastructure": 0.7,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific water infrastructure redundancy and backup systems"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 40.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-003",
+    "event_name": "Wastewater treatment plant failure (>48hr)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Wastewater treatment plant failure (>48hr) affecting EU operations and supply chains.",
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "annual",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Water Authority Incident Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Environmental Agency Notifications",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Manufacturer Bulletins",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 25.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Wastewater treatment plant failure (>48hr)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "FPE * FFR",
+        "variables": {
+          "FPE": {
+            "name": "Floodplain Exposure",
+            "value": 0.36,
+            "description": "Fraction of EU wastewater treatment plants in floodplains"
+          },
+          "FFR": {
+            "name": "Functional Failure Rate",
+            "value": 0.25,
+            "type": "FIXED",
+            "description": "Fixed annual functional failure rate for floodplain-exposed plants"
+          }
+        },
+        "calculation": "0.36 * 0.25 = 0.09",
+        "result_pct": 9.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "pharma": 2.0,
+          "food_beverage": 1.8,
+          "chemicals": 1.6,
+          "default": 1.0
+        },
+        "geography": {
+          "aging_infrastructure": 2.0,
+          "modern": 0.7,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific wastewater treatment capacity and regulatory compliance"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-004",
+    "event_name": "Industrial water contamination incident (>72hr remediation)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Industrial water contamination incident (>72hr remediation) affecting EU operations and supply chains.",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Environment Reporting System",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Agencies",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Operations Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 40.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Industrial water contamination incident (>72hr remediation)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "PFR * MSF",
+        "variables": {
+          "PFR": {
+            "name": "PFAS-Affected Fraction",
+            "value": 0.3,
+            "description": "Fraction of industrial sites near PFAS-contaminated zones (~23,000 sites in EU)"
+          },
+          "MSF": {
+            "name": "Material Severity Factor",
+            "value": 0.5,
+            "type": "FIXED",
+            "description": "Fixed factor for material impact likelihood given contamination exposure"
+          }
+        },
+        "calculation": "0.30 * 0.50 = 0.15",
+        "result_pct": 15.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "chemicals": 2.5,
+          "manufacturing": 1.8,
+          "logistics": 1.2,
+          "default": 1.0
+        },
+        "geography": {
+          "brownfield": 2.5,
+          "industrial_legacy": 2.0,
+          "greenfield": 0.8,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific water quality monitoring and contamination response"
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 45.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-005",
+    "event_name": "Freshwater shortage for manufacturing (<80% normal supply >=30 days)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Freshwater shortage for manufacturing (<80% normal supply >=30 days) affecting EU operations and supply chains.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU (Southern highest)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Eurostat Water Statistics",
+        "url": "https://ec.europa.eu/eurostat",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Water Resource Management Plans",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Water Demand Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 45.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Freshwater shortage for manufacturing (<80% normal supply >=30 days)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "WSR * IMF",
+        "variables": {
+          "WSR": {
+            "name": "Water-Stressed Regions",
+            "value": 0.3,
+            "description": "Fraction of EU manufacturing regions under permanent water stress"
+          },
+          "IMF": {
+            "name": "Industrial Manufacturing Factor",
+            "value": 0.6,
+            "type": "FIXED",
+            "description": "Fixed factor for manufacturing disruption from water shortage"
+          }
+        },
+        "calculation": "0.30 * 0.60 = 0.18",
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "beverages_chemicals": 3.0,
+          "medium_water_use": 1.5,
+          "low_water_use": 0.5,
+          "default": 1.0
+        },
+        "geography": {
+          "southern_europe": 2.5,
+          "central_europe": 1.0,
+          "northern_europe": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific freshwater dependencies and conservation practices"
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 50.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-WAT-006",
+    "event_name": "Flood damage to water infrastructure (>30 day repairs)",
+    "domain": "PHYSICAL",
+    "family_code": "1.4",
+    "family_name": "Water Resources & Quality",
+    "description": "Flood damage to water infrastructure (>30 day repairs) affecting EU operations and supply chains.",
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU (Central/Eastern/Alpine)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Flood Alert System",
+        "url": "https://www.efas.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Water Authority Damage Reports",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 40.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Flood damage to water infrastructure (>30 day repairs)",
+      "family": "FAMILY_1_4_Water_Resources",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "FPF * DIL",
+        "variables": {
+          "FPF": {
+            "name": "Flood-Prone Facilities",
+            "value": 0.2,
+            "description": "Fraction of water infrastructure facilities in flood-prone areas"
+          },
+          "DIL": {
+            "name": "Damage Impact Likelihood",
+            "value": 0.8,
+            "type": "FIXED",
+            "description": "Fixed probability of material damage given flood exposure (47% of climate losses are hydrological)"
+          }
+        },
+        "calculation": "0.20 * 0.80 = 0.16",
+        "result_pct": 16.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "water_dependent": 2.0,
+          "standard": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "coastal": 2.5,
+          "river_valleys": 2.0,
+          "elevated": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific water infrastructure flood resilience and protection"
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 45.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-GEO-001",
+    "event_name": "Major earthquake (>=M6.0) damaging facilities",
+    "domain": "PHYSICAL",
+    "family_code": "1.5",
+    "family_name": "Geophysical Disasters",
+    "description": "Major earthquake (>=M6.0) damaging facilities affecting EU operations and supply chains.",
+    "base_rate_pct": 3.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "continuous",
+    "geographic_scope": "Southern Europe",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Earthquake Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European-Mediterranean Seismological Centre",
+        "url": "https://www.emsc-csem.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Geological Surveys",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 15.0,
+      "staleness_days": 7
+    },
+    "formula": {
+      "name": "Major earthquake (>=M6.0) damaging facilities",
+      "family": "FAMILY_1_5_Geophysical_Disasters",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "SZE * MEF * DTA",
+        "variables": {
+          "SZE": {
+            "name": "Seismic Zone Exposure",
+            "value": 0.1,
+            "description": "Fraction of EU industrial facilities in high/medium seismic zones"
+          },
+          "MEF": {
+            "name": "Major Event Frequency",
+            "value": 0.7,
+            "description": "Annual frequency of M>=6.0 events in EU seismic zones"
+          },
+          "DTA": {
+            "name": "Disruption Threshold Adjustment",
+            "value": 0.5,
+            "type": "FIXED",
+            "description": "Fixed adjustment for material disruption threshold (>€10M)"
+          }
+        },
+        "calculation": "0.10 * 0.70 * 0.50 = 0.035",
+        "result_pct": 3.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "all_equal": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "high_seismic": 10.0,
+          "medium_seismic": 3.0,
+          "low_seismic": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific seismic resilience and earthquake preparedness"
+      },
+      "bounds": {
+        "min_pct": 0.1,
+        "max_pct": 30.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-GEO-002",
+    "event_name": "Volcanic eruption/ash cloud (VEI>=3)",
+    "domain": "PHYSICAL",
+    "family_code": "1.5",
+    "family_name": "Geophysical Disasters",
+    "description": "Volcanic eruption/ash cloud (VEI>=3) affecting EU operations and supply chains.",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "continuous",
+    "geographic_scope": "Iceland/Mediterranean",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Smithsonian Global Volcanism Program",
+        "url": "https://www.si.edu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Volcano Monitoring Services",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Air Quality Monitoring Networks",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 20.0,
+      "staleness_days": 7
+    },
+    "formula": {
+      "name": "Volcanic eruption/ash cloud (VEI>=3)",
+      "family": "FAMILY_1_5_Geophysical_Disasters",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "VEF * AAE * DSF",
+        "variables": {
+          "VEF": {
+            "name": "Volcanic Event Frequency",
+            "value": 0.1,
+            "description": "Annual probability of VEI>=3 eruption affecting EU (Iceland/Mediterranean)"
+          },
+          "AAE": {
+            "name": "Airspace/Ash Exposure",
+            "value": 0.8,
+            "description": "Fraction of EU logistics affected by ash cloud dispersion"
+          },
+          "DSF": {
+            "name": "Disruption Severity Factor",
+            "value": 0.75,
+            "type": "FIXED",
+            "description": "Fixed severity factor for material disruption (>48h airspace closure)"
+          }
+        },
+        "calculation": "0.10 * 0.80 * 0.75 = 0.06",
+        "result_pct": 6.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "air_dependent_logistics": 3.0,
+          "manufacturing": 1.5,
+          "services": 0.8,
+          "default": 1.0
+        },
+        "geography": {
+          "iceland_dependent": 3.0,
+          "mediterranean": 2.0,
+          "other": 0.8,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific volcanic ash impact and supply chain alternatives"
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 20.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-GEO-003",
+    "event_name": "Major landslide or subsidence (>=10,000m3)",
+    "domain": "PHYSICAL",
+    "family_code": "1.5",
+    "family_name": "Geophysical Disasters",
+    "description": "Major landslide or subsidence (>=10,000m3) affecting EU operations and supply chains.",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU (hilly regions)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Landslide Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Copernicus Land Monitoring Service",
+        "url": "https://land.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Geological Surveys",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 25.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Major landslide or subsidence (>=10,000m3)",
+      "family": "FAMILY_1_5_Geophysical_Disasters",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "ULA * ECF * SIF",
+        "variables": {
+          "ULA": {
+            "name": "Urban Landslide Area",
+            "value": 0.2,
+            "description": "Fraction of EU urban areas on landslide-prone terrain (karst/slope)"
+          },
+          "ECF": {
+            "name": "Extreme Climate Frequency",
+            "value": 0.5,
+            "description": "Annual frequency of extreme rainfall events triggering landslides"
+          },
+          "SIF": {
+            "name": "Severity Impact Factor",
+            "value": 0.8,
+            "type": "FIXED",
+            "description": "Fixed factor for material impact severity (>€10M threshold)"
+          }
+        },
+        "calculation": "0.20 * 0.50 * 0.80 = 0.08",
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "infrastructure": 2.0,
+          "mining": 1.8,
+          "standard": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "mountainous": 3.0,
+          "karst": 2.5,
+          "flat": 0.3,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific landslide risk assessment and mitigation measures"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 25.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-GEO-004",
+    "event_name": "Tsunami (coastal, wave >=2m)",
+    "domain": "PHYSICAL",
+    "family_code": "1.5",
+    "family_name": "Geophysical Disasters",
+    "description": "Tsunami (coastal, wave >=2m) affecting EU operations and supply chains.",
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "continuous",
+    "geographic_scope": "Mediterranean coastal",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "International Tsunami Information Center",
+        "url": "https://www.itic.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European-Mediterranean Seismological Centre",
+        "url": "https://www.emsc-csem.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Coastal Authority Monitoring",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 10.0,
+      "staleness_days": 7
+    },
+    "formula": {
+      "name": "Tsunami (coastal, wave >=2m)",
+      "family": "FAMILY_1_5_Geophysical_Disasters",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "CFE * TPR",
+        "variables": {
+          "CFE": {
+            "name": "Coastal Facility Exposure",
+            "value": 0.1,
+            "description": "Fraction of EU facilities in coastal tsunami-vulnerable zones"
+          },
+          "TPR": {
+            "name": "Tsunami Probability Risk",
+            "value": 0.2,
+            "description": "Annual probability of material tsunami impact in Mediterranean/Atlantic"
+          }
+        },
+        "calculation": "0.10 * 0.20 = 0.02",
+        "result_pct": 2.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "coastal_operations": 3.0,
+          "port_dependent": 2.5,
+          "inland": 0.3,
+          "default": 1.0
+        },
+        "geography": {
+          "low_elevation_coast": 10.0,
+          "mid_elevation": 3.0,
+          "high_elevation": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific coastal elevation and tsunami warning systems"
+      },
+      "bounds": {
+        "min_pct": 0.05,
+        "max_pct": 15.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-GEO-005",
+    "event_name": "Sinkhole or ground collapse (>=5m diameter, >=3m depth)",
+    "domain": "PHYSICAL",
+    "family_code": "1.5",
+    "family_name": "Geophysical Disasters",
+    "description": "Sinkhole or ground collapse (>=5m diameter, >=3m depth) affecting EU operations and supply chains.",
+    "base_rate_pct": 4.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "Karst regions",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Geological Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Geological Surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Transportation Authority Records",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 15.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Sinkhole or ground collapse (>=5m diameter, >=3m depth)",
+      "family": "FAMILY_1_5_Geophysical_Disasters",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "KTE * CRF * IIF",
+        "variables": {
+          "KTE": {
+            "name": "Karst Terrain Exposure",
+            "value": 0.2,
+            "description": "Fraction of EU covered by karst terrain (~20% of Europe)"
+          },
+          "CRF": {
+            "name": "Collapse Risk Frequency",
+            "value": 0.3,
+            "description": "Annual frequency of collapse events in karst/mining areas"
+          },
+          "IIF": {
+            "name": "Industrial Impact Factor",
+            "value": 0.75,
+            "type": "FIXED",
+            "description": "Fixed factor for material industrial impact"
+          }
+        },
+        "calculation": "0.20 * 0.30 * 0.75 = 0.045",
+        "result_pct": 4.5
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "infrastructure": 2.0,
+          "standard": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "karst_terrain": 5.0,
+          "mining_legacy": 4.0,
+          "stable_geology": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific geological stability and ground monitoring"
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 20.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-POL-001",
+    "event_name": "Major chemical/hazmat spill (>=1,000kg, Seveso III event)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Major chemical/hazmat spill (>=1,000kg, Seveso III event) affecting EU operations and supply chains.",
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU (Seveso sites)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Seveso III Directive Register",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Environmental Agency Incident Reports",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 20.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Major chemical/hazmat spill (>=1,000kg, Seveso III event)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "SFA * AIR",
+        "variables": {
+          "SFA": {
+            "name": "Seveso-Adjacent Facility Fraction",
+            "value": 0.25,
+            "description": "Fraction of large industrial facilities adjacent to or under Seveso III (>11,000 sites)"
+          },
+          "AIR": {
+            "name": "Accident Impact Rate",
+            "value": 0.2,
+            "type": "FIXED",
+            "description": "Fixed annual rate of material-impact chemical accidents (<22/year avg)"
+          }
+        },
+        "calculation": "0.25 * 0.20 = 0.05",
+        "result_pct": 5.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "chemical_petrochemical": 3.0,
+          "refineries": 2.5,
+          "manufacturing": 1.2,
+          "default": 1.0
+        },
+        "geography": {
+          "industrial_zones": 2.0,
+          "mixed_use": 1.0,
+          "rural": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific chemical handling safety and containment systems"
+      },
+      "bounds": {
+        "min_pct": 0.5,
+        "max_pct": 20.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-POL-002",
+    "event_name": "Air quality crisis (PM2.5 >50ug/m3 or NOx >200ug/m3 for >=3 days)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Air quality crisis (PM2.5 >50ug/m3 or NOx >200ug/m3 for >=3 days) affecting EU operations and supply chains.",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU urban-industrial",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Air Quality Service",
+        "url": "https://atmosphere.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EEA Air Quality Portal",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Local Environmental Monitoring",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 50.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Air quality crisis (PM2.5 >50ug/m3 or NOx >200ug/m3 for >=3 days)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "APC * EDI",
+        "variables": {
+          "APC": {
+            "name": "Air Pollution Crisis Frequency",
+            "value": 0.4,
+            "description": "Annual frequency of severe pollution episodes in urban-industrial zones"
+          },
+          "EDI": {
+            "name": "Economic Disruption Index",
+            "value": 0.55,
+            "type": "FIXED",
+            "description": "Fixed economic disruption factor (EU air pollution costs €600B/year, 4% GDP)"
+          }
+        },
+        "calculation": "0.40 * 0.55 = 0.22",
+        "result_pct": 22.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "heavy_industry": 2.5,
+          "energy": 2.0,
+          "manufacturing": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "urban_industrial": 2.5,
+          "coal_regions": 2.0,
+          "clean_air_zones": 0.7,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific air emissions and air quality monitoring"
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-POL-003",
+    "event_name": "Soil contamination discovery (heavy metals, PAHs, PCBs, PFAS)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Soil contamination discovery (heavy metals, PAHs, PCBs, PFAS) affecting EU operations and supply chains.",
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU (brownfields)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Soil Database",
+        "url": "https://esdac.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Registries",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Contaminated Site Assessments",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 35.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Soil contamination discovery (heavy metals, PAHs, PCBs, PFAS)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "BSF * CLR",
+        "variables": {
+          "BSF": {
+            "name": "Brownfield Site Fraction",
+            "value": 0.35,
+            "description": "Fraction of industrial sites on or near brownfield/legacy contamination"
+          },
+          "CLR": {
+            "name": "Contamination Likelihood Ratio",
+            "value": 0.4,
+            "type": "FIXED",
+            "description": "Fixed annual discovery probability for PFAS/legacy contamination"
+          }
+        },
+        "calculation": "0.35 * 0.40 = 0.14",
+        "result_pct": 14.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "chemicals": 2.5,
+          "manufacturing": 1.8,
+          "real_estate": 1.5,
+          "default": 1.0
+        },
+        "geography": {
+          "industrial_legacy": 3.0,
+          "brownfield": 2.5,
+          "greenfield": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific soil remediation and environmental compliance"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 40.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-POL-004",
+    "event_name": "Marine/coastal oil spill (>=7 tonnes)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Marine/coastal oil spill (>=7 tonnes) affecting EU operations and supply chains.",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU coastal/offshore",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EMSA EU Oil Spill Monitoring",
+        "url": "https://www.emsa.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "International Maritime Organization",
+        "url": "https://www.imo.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Satellite Monitoring Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 25.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Marine/coastal oil spill (>=7 tonnes)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "SDF * MIR",
+        "variables": {
+          "SDF": {
+            "name": "Shipping Detection Frequency",
+            "value": 0.2,
+            "description": "Fraction of EU shipping routes with annual material spill detections (7,513 spills detected 2023)"
+          },
+          "MIR": {
+            "name": "Material Impact Rate",
+            "value": 0.4,
+            "type": "FIXED",
+            "description": "Fixed rate of material-impact per detected spill (>7 tonnes)"
+          }
+        },
+        "calculation": "0.20 * 0.40 = 0.08",
+        "result_pct": 8.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "oil_handling": 3.0,
+          "port_dependent": 2.5,
+          "inland": 0.5,
+          "default": 1.0
+        },
+        "geography": {
+          "major_shipping_routes": 2.5,
+          "coastal": 1.5,
+          "inland": 0.3,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific oil transportation safety and spill response"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 25.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-POL-005",
+    "event_name": "Radiation/nuclear contamination (>regulatory limits)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Radiation/nuclear contamination (>regulatory limits) affecting EU operations and supply chains.",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU (nuclear vicinities)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IAEA Radiation Emergency Response",
+        "url": "https://www.iaea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Nuclear Regulators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Environmental Monitoring Networks",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 12.0,
+      "staleness_days": 120
+    },
+    "formula": {
+      "name": "Radiation/nuclear contamination (>regulatory limits)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "NFP * IRF * AIR",
+        "variables": {
+          "NFP": {
+            "name": "Nuclear Facility Proximity",
+            "value": 0.25,
+            "description": "Fraction of EU industrial sites within 200km of nuclear facilities"
+          },
+          "IRF": {
+            "name": "Incident Report Frequency",
+            "value": 0.2,
+            "description": "Annual frequency of reportable nuclear/radiation incidents"
+          },
+          "AIR": {
+            "name": "Adjusted Impact Rate",
+            "value": 0.6,
+            "type": "FIXED",
+            "description": "Fixed adjustment for material impact threshold"
+          }
+        },
+        "calculation": "0.25 * 0.20 * 0.60 = 0.03",
+        "result_pct": 3.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "food_pharma": 2.5,
+          "industrial": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "nuclear_proximity_50km": 5.0,
+          "regional_200km": 2.0,
+          "distant": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific radiation exposure risk and monitoring"
+      },
+      "bounds": {
+        "min_pct": 0.1,
+        "max_pct": 15.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-POL-006",
+    "event_name": "Electromagnetic/RF interference (>24hr, affecting critical systems)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Electromagnetic/RF interference (>24hr, affecting critical systems) affecting EU operations and supply chains.",
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "continuous",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ETSI Radio Equipment Directive",
+        "url": "https://www.etsi.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Frequency Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Compliance Testing",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 18.0,
+      "staleness_days": 7
+    },
+    "formula": {
+      "name": "Electromagnetic/RF interference (>24hr, affecting critical systems)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "GAS * GVI * IIF",
+        "variables": {
+          "GAS": {
+            "name": "Geomagnetic Activity Share",
+            "value": 0.25,
+            "description": "Fraction of year with elevated geomagnetic/solar activity (Solar Cycle 25 max)"
+          },
+          "GVI": {
+            "name": "Grid Vulnerability Index",
+            "value": 0.4,
+            "description": "Fraction of EU grid/comms infrastructure vulnerable to EMI transients"
+          },
+          "IIF": {
+            "name": "Industrial Impact Factor",
+            "value": 0.7,
+            "type": "FIXED",
+            "description": "Fixed factor for material industrial impact from EMI disruption"
+          }
+        },
+        "calculation": "0.25 * 0.40 * 0.70 = 0.07",
+        "result_pct": 7.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "critical_infrastructure": 3.0,
+          "manufacturing": 1.5,
+          "services": 0.8,
+          "default": 1.0
+        },
+        "geography": {
+          "high_latitude": 2.0,
+          "standard": 1.0,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific electromagnetic shielding and device resilience"
+      },
+      "bounds": {
+        "min_pct": 1.0,
+        "max_pct": 20.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-POL-007",
+    "event_name": "Noise pollution regulatory action (>10dB over limits >3 months)",
+    "domain": "PHYSICAL",
+    "family_code": "1.6",
+    "family_name": "Contamination & Pollution",
+    "description": "Noise pollution regulatory action (>10dB over limits >3 months) affecting EU operations and supply chains.",
+    "base_rate_pct": 11.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU urban-industrial",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EEA Noise Directive Implementation",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Local Municipality Records",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 28.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Noise pollution regulatory action (>10dB over limits >3 months)",
+      "family": "FAMILY_1_6_Contamination_Pollution",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "PEF * ECR",
+        "variables": {
+          "PEF": {
+            "name": "Population Exposure Fraction",
+            "value": 0.2,
+            "description": "Fraction of EU population exposed to harmful noise levels (>55 dB Lden)"
+          },
+          "ECR": {
+            "name": "Enforcement Compliance Rate",
+            "value": 0.55,
+            "type": "FIXED",
+            "description": "Fixed annual rate of noise enforcement actions in urban-industrial interfaces"
+          }
+        },
+        "calculation": "0.20 * 0.55 = 0.11",
+        "result_pct": 11.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "heavy_industry": 2.5,
+          "airports_ports": 2.0,
+          "standard": 1.0,
+          "default": 1.0
+        },
+        "geography": {
+          "urban_industrial": 2.5,
+          "suburban": 1.5,
+          "rural": 0.5,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific noise level monitoring and mitigation"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-BIO-001",
+    "event_name": "Zoonotic disease outbreak (H5N1 avian flu, novel pathogens)",
+    "domain": "PHYSICAL",
+    "family_code": "1.7",
+    "family_name": "Biological & Pandemic Risks",
+    "description": "Zoonotic disease outbreak (H5N1 avian flu, novel pathogens) affecting EU operations and supply chains.",
+    "base_rate_pct": 35.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "continuous",
+    "geographic_scope": "EU (poultry/livestock)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OIE World Animal Health Information",
+        "url": "https://www.woah.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ECDC Surveillance Database",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Veterinary Services",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 70.0,
+      "staleness_days": 7
+    },
+    "formula": {
+      "name": "Zoonotic disease outbreak (H5N1 avian flu, novel pathogens)",
+      "family": "FAMILY_1_7_Biological_Pandemic",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "OPF * OBR",
+        "variables": {
+          "OPF": {
+            "name": "Outbreak-Proximate Facilities",
+            "value": 0.5,
+            "description": "Fraction of EU food/agriculture facilities proximate to H5N1/zoonotic outbreak zones (>700 outbreaks in 2025)"
+          },
+          "OBR": {
+            "name": "Outbreak Reach Factor",
+            "value": 0.7,
+            "type": "FIXED",
+            "description": "Fixed factor for material supply chain impact from outbreak (biosecurity, culling)"
+          }
+        },
+        "calculation": "0.50 * 0.70 = 0.35",
+        "result_pct": 35.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "food_agriculture": 3.0,
+          "healthcare": 2.5,
+          "cold_chain_logistics": 2.0,
+          "default": 1.0
+        },
+        "geography": {
+          "poultry_intensive": 2.5,
+          "livestock_regions": 2.0,
+          "urban": 0.8,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific biosecurity and disease monitoring capacity"
+      },
+      "bounds": {
+        "min_pct": 10.0,
+        "max_pct": 80.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-BIO-002",
+    "event_name": "Infectious disease outbreak (non-zoonotic, >=10% workforce affected)",
+    "domain": "PHYSICAL",
+    "family_code": "1.7",
+    "family_name": "Biological & Pandemic Risks",
+    "description": "Infectious disease outbreak (non-zoonotic, >=10% workforce affected) affecting EU operations and supply chains.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "weekly",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECDC Disease Surveillance System",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "WHO Disease Outbreak News",
+        "url": "https://www.who.int",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Health Authorities",
+        "url": "",
+        "cost": "free"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 45.0,
+      "staleness_days": 14
+    },
+    "formula": {
+      "name": "Infectious disease outbreak (non-zoonotic, >=10% workforce affected)",
+      "family": "FAMILY_1_7_Biological_Pandemic",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "IDF * WIF",
+        "variables": {
+          "IDF": {
+            "name": "Infectious Disease Frequency",
+            "value": 0.3,
+            "description": "Annual frequency of significant infectious disease outbreaks in EU (ECDC >50 tracked diseases)"
+          },
+          "WIF": {
+            "name": "Workforce Impact Factor",
+            "value": 0.6,
+            "type": "FIXED",
+            "description": "Fixed factor for workforce disruption given outbreak (absenteeism, closures)"
+          }
+        },
+        "calculation": "0.30 * 0.60 = 0.18",
+        "result_pct": 18.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "healthcare": 3.0,
+          "education": 2.5,
+          "hospitality": 2.0,
+          "remote_capable": 0.8,
+          "default": 1.0
+        },
+        "geography": {
+          "urban_dense": 2.0,
+          "suburban": 1.0,
+          "rural": 0.7,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific disease transmission risk and remote work capacity"
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 50.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-BIO-003",
+    "event_name": "Antimicrobial resistance (AMR) health crisis",
+    "domain": "PHYSICAL",
+    "family_code": "1.7",
+    "family_name": "Biological & Pandemic Risks",
+    "description": "Antimicrobial resistance (AMR) health crisis affecting EU operations and supply chains.",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECDC Antimicrobial Resistance Surveillance",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "WHO Antibiotic Resistance Report",
+        "url": "https://www.who.int",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Clinical Microbiology Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 30.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Antimicrobial resistance (AMR) health crisis",
+      "family": "FAMILY_1_7_Biological_Pandemic",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "ARP * HIF",
+        "variables": {
+          "ARP": {
+            "name": "AMR Prevalence Rate",
+            "value": 0.2,
+            "description": "Fraction of EU healthcare/food facilities with material AMR exposure (>35,000 deaths/year)"
+          },
+          "HIF": {
+            "name": "Healthcare Impact Factor",
+            "value": 0.6,
+            "type": "FIXED",
+            "description": "Fixed factor for material economic impact from AMR (treatment, recalls, penalties)"
+          }
+        },
+        "calculation": "0.20 * 0.60 = 0.12",
+        "result_pct": 12.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "healthcare": 3.0,
+          "pharmaceuticals": 2.5,
+          "food_production": 2.0,
+          "default": 1.0
+        },
+        "geography": {
+          "high_antibiotic_use": 2.0,
+          "moderate": 1.0,
+          "low": 0.7,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific antibiotic stewardship and infection control"
+      },
+      "bounds": {
+        "min_pct": 3.0,
+        "max_pct": 35.0
+      },
+      "update_frequency": "annual"
+    }
+  },
+  {
+    "event_id": "PHY-BIO-004",
+    "event_name": "Food contamination/recall (RASFF alert level)",
+    "domain": "PHYSICAL",
+    "family_code": "1.7",
+    "family_name": "Biological & Pandemic Risks",
+    "description": "Food contamination/recall (RASFF alert level) affecting EU operations and supply chains.",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "weekly",
+    "geographic_scope": "EU (food production)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "RASFF Rapid Alert System",
+        "url": "https://ec.europa.eu/food",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EFSA Food Safety Database",
+        "url": "https://www.efsa.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Food Company Compliance Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 55.0,
+      "staleness_days": 14
+    },
+    "formula": {
+      "name": "Food contamination/recall (RASFF alert level)",
+      "family": "FAMILY_1_7_Biological_Pandemic",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "RNF * MSF",
+        "variables": {
+          "RNF": {
+            "name": "Recall Notification Frequency",
+            "value": 0.5,
+            "description": "Fraction of large food producers receiving RASFF notifications annually (~4,000+ alerts/year)"
+          },
+          "MSF": {
+            "name": "Material Severity Factor",
+            "value": 0.5,
+            "type": "FIXED",
+            "description": "Fixed factor for material impact severity (>€10M recalls, brand damage)"
+          }
+        },
+        "calculation": "0.50 * 0.50 = 0.25",
+        "result_pct": 25.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "food_production": 3.0,
+          "food_retail": 2.5,
+          "restaurants": 2.0,
+          "default": 1.0
+        },
+        "geography": {
+          "high_import_food": 1.5,
+          "domestic": 1.0,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific food safety protocols and traceability systems"
+      },
+      "bounds": {
+        "min_pct": 5.0,
+        "max_pct": 60.0
+      },
+      "update_frequency": "quarterly"
+    }
+  },
+  {
+    "event_id": "PHY-BIO-005",
+    "event_name": "Occupational biological hazard (workplace exposure event)",
+    "domain": "PHYSICAL",
+    "family_code": "1.7",
+    "family_name": "Biological & Pandemic Risks",
+    "description": "Occupational biological hazard (workplace exposure event) affecting EU operations and supply chains.",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "annual",
+    "geographic_scope": "EU (healthcare/labs/food)",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OSHA Occupational Safety Database",
+        "url": "https://www.osha.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Health and Safety Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Occupational Health Services Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ],
+    "validation_rules": {
+      "range_min": 0.0,
+      "range_max": 25.0,
+      "staleness_days": 400
+    },
+    "formula": {
+      "name": "Occupational biological hazard (workplace exposure event)",
+      "family": "FAMILY_1_7_Biological_Pandemic",
+      "phase1": {
+        "method": "FORMULA",
+        "expression": "BEF * OHR",
+        "variables": {
+          "BEF": {
+            "name": "Biological Exposure Frequency",
+            "value": 0.25,
+            "description": "Fraction of healthcare/lab/food facilities with annual biological exposure events"
+          },
+          "OHR": {
+            "name": "Occupational Hazard Rate",
+            "value": 0.4,
+            "type": "FIXED",
+            "description": "Fixed rate of material impact from biological exposure (550,000 deaths from bio risk factors 2022)"
+          }
+        },
+        "calculation": "0.25 * 0.40 = 0.10",
+        "result_pct": 10.0
+      },
+      "phase2_multipliers": {
+        "industry": {
+          "healthcare": 4.0,
+          "labs_research": 3.0,
+          "waste_management": 2.5,
+          "default": 1.0
+        },
+        "geography": {
+          "urban_dense": 1.5,
+          "standard": 1.0,
+          "default": 1.0
+        }
+      },
+      "phase3_structure": {
+        "entity_ml_adjustments": "future",
+        "placeholder": "Entity-specific occupational safety and biosafety protocols"
+      },
+      "bounds": {
+        "min_pct": 2.0,
+        "max_pct": 30.0
+      },
+      "update_frequency": "quarterly"
+    }
+  }
+]

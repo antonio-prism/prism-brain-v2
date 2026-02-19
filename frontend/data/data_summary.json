@@ -1,0 +1,19 @@
+{
+  "risks": {
+    "total": 174,
+    "by_domain": {
+      "DIGITAL": 47,
+      "OPERATIONAL": 41,
+      "PHYSICAL": 44,
+      "STRUCTURAL": 42
+    },
+    "families": 28
+  },
+  "processes": {
+    "total": 222,
+    "by_depth": {
+      "1": 32,
+      "2": 190
+    }
+  }
+}

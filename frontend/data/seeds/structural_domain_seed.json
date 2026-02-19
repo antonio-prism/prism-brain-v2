@@ -1,0 +1,2795 @@
+[
+  {
+    "event_id": "STR-GEO-001",
+    "event_name": "Armed Conflict in Supplier Country",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Outbreak or escalation of armed conflict in a country hosting critical suppliers, manufacturing facilities, or sourcing operations, causing supply disruption, facility damage, or inability to operate.",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "GPR Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "SIPRI",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M - \u20ac200M per incident",
+      "sectors": [
+        "logistics",
+        "manufacturing",
+        "automotive",
+        "retail"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-002",
+    "event_name": "Trade Embargo or International Sanctions",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Imposition of comprehensive or targeted international sanctions, trade embargoes, or economic restrictions affecting ability to conduct business with sanctioned entities, countries, or sectors.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Sanctions Map",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "OFAC Sanctions Lists",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M - \u20ac500M per major event",
+      "sectors": [
+        "media"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-003",
+    "event_name": "Nationalization or Asset Expropriation",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Government seizure or forced nationalization of foreign-owned assets, facilities, or operations, either through outright expropriation or de facto control measures.",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ICSID",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac50M - \u20ac1B per major event",
+      "sectors": [
+        "mining",
+        "media"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-004",
+    "event_name": "Civil Unrest Disrupting Operations",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Strikes, protests, riots, or civil unrest disrupting facilities, supply chains, or workforce availability for >48 hours, causing material operational impact.",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Verisk Maplecroft",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M - \u20ac50M per incident",
+      "sectors": [
+        "logistics",
+        "energy",
+        "retail",
+        "transport",
+        "mining"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-005",
+    "event_name": "State Collapse or Regime Change",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Collapse of state institutions, regime change, or extreme political instability causing breakdown of rule of law, contract enforceability, or operational environment.",
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Fund for Peace Fragile States Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Governance Indicators",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Crisis Group CrisisWatch",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac50M - \u20ac500M+ (total loss scenarios)",
+      "sectors": [
+        "media"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-006",
+    "event_name": "Territorial Dispute (Sea Lanes, Borders)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Armed territorial disputes, contested borders, or sea lane control issues disrupting trade routes, energy corridors, or supply chain access.",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UNCLOS",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M - \u20ac200M per incident",
+      "sectors": [
+        "energy",
+        "transport"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-GEO-007",
+    "event_name": "Military Mobilization Affecting Workforce",
+    "domain": "STRUCTURAL",
+    "family_code": "2.1",
+    "family_name": "Geopolitical Conflict & Instability",
+    "description": "Large-scale military mobilization, conscription, or reserve call-ups removing significant workforce from operations in conflict or near-conflict zones.",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IISS",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M - \u20ac100M per event",
+      "sectors": [
+        "manufacturing",
+        "defense"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-001",
+    "event_name": "Major Tariff Increases (>25%)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "Imposition of tariffs exceeding 25% on significant trade volumes, affecting cost structure, competitiveness, or market access for EU businesses.",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO Tariff Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Global Trade Alert",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "PIIE Trade Policy Tracker",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Census Bureau Trade Data",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M - \u20ac500M per major tariff action",
+      "sectors": [],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-002",
+    "event_name": "Export Controls on Critical Goods",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "Government-imposed restrictions on exporting critical technologies, dual-use goods, or strategic materials, limiting market access or requiring costly compliance.",
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "US BIS (Bureau of Industry and Security)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Dual-Use Regulation Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Wassenaar Arrangement",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CSIS Technology Policy Tracker",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M - \u20ac200M per control regime",
+      "sectors": [
+        "manufacturing",
+        "aerospace",
+        "technology"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-003",
+    "event_name": "Currency Controls or Capital Restrictions",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "Government-imposed restrictions on currency convertibility, capital repatriation, foreign exchange access, or cross-border payments, impeding financial operations.",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF AREAER",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M - \u20ac200M per restriction",
+      "sectors": [
+        "media"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-004",
+    "event_name": "Trade Agreement Termination",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "Termination, suspension, or non-renewal of bilateral/multilateral trade agreements, resulting in loss of preferential market access, tariff increases, or regulatory barriers.",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO RTA Database",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M - \u20ac500M per termination",
+      "sectors": [
+        "automotive"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-005",
+    "event_name": "Import Quota or Licensing Requirements",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "New or tightened import quotas, licensing requirements, or quantitative restrictions limiting ability to import goods or requiring costly compliance processes.",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO Trade Monitoring Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Global Trade Alert",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Customs Authorities",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M - \u20ac100M per restriction",
+      "sectors": [
+        "pharmaceutical"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TRD-006",
+    "event_name": "Economic Sanctions on Business Partners",
+    "domain": "STRUCTURAL",
+    "family_code": "2.2",
+    "family_name": "Trade & Economic Policy Shifts",
+    "description": "Sanctions imposed on key business partners (customers, suppliers, partners) requiring immediate relationship termination and causing supply/revenue disruption.",
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OFAC SDN List",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World-Check",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M - \u20ac200M per sanctioned partner",
+      "sectors": [
+        "chemical",
+        "energy",
+        "media"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-001",
+    "event_name": "Environmental Regulation (Emissions, Waste)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "New or significantly tightened environmental regulations on emissions (GHG, air quality), waste management, circular economy, or pollution control, requiring operational changes or investments.",
+    "base_rate_pct": 32.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU-Lex",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M - \u20ac100M per regulation",
+      "sectors": [
+        "chemical",
+        "manufacturing",
+        "energy",
+        "transport"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-002",
+    "event_name": "Data Protection/Privacy Law Changes (GDPR-style)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "New or expanded data protection/privacy regulations similar to GDPR, requiring significant compliance investments, operational changes, or restricting data use/transfers.",
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EDPB",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "National DPAs",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IAPP",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M - \u20ac100M+ for large organizations",
+      "sectors": [],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-003",
+    "event_name": "Product Safety Standards Changes",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "Changes to product safety standards, certification requirements, or testing protocols requiring product redesign, re-certification, or market withdrawals.",
+    "base_rate_pct": 24.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "CEN/CENELEC",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac2M - \u20ac50M per standard change",
+      "sectors": [
+        "manufacturing",
+        "energy",
+        "automotive"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-004",
+    "event_name": "Labor Law Changes (Minimum Wage, Hours)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "Significant changes to labor laws affecting wages, working hours, benefits, or employment rights, increasing labor costs or constraining operational flexibility.",
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ETUC",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "ILO",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac2M - \u20ac50M per major change",
+      "sectors": [
+        "media"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-005",
+    "event_name": "Financial Reporting/Tax Law Changes",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "Major changes to financial reporting standards (e.g., IFRS), tax codes, transfer pricing rules, or anti-avoidance measures, requiring system changes and potentially increasing tax burdens.",
+    "base_rate_pct": 26.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Big 4 tax alerts",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac2M - \u20ac100M+ per major change",
+      "sectors": [
+        "finance",
+        "media"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-006",
+    "event_name": "Supply Chain Due Diligence Requirements",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "Mandatory supply chain due diligence requirements (human rights, environmental, conflict minerals) requiring transparency, audits, and potential supplier changes.",
+    "base_rate_pct": 30.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NGO reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac2M - \u20ac50M per regulation",
+      "sectors": [],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-REG-007",
+    "event_name": "Chemical/Materials Restrictions (REACH-style)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.3",
+    "family_name": "Regulatory & Compliance Changes",
+    "description": "New restrictions on chemicals, materials, or substances (similar to REACH, RoHS) requiring product reformulation, alternative sourcing, or market withdrawals.",
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECHA",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "REACH candidate list",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac2M - \u20ac100M per restriction",
+      "sectors": [
+        "chemical",
+        "energy"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-001",
+    "event_name": "Recession in major market (GDP contraction >2%)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Recession in major market (GDP contraction >2%)",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF World Economic Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Global Economic Prospects",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "OECD Economic Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Eurostat GDP Statistics",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M \u2013 \u20ac500M",
+      "sectors": [
+        "media"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-002",
+    "event_name": "Banking crisis or credit crunch",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Banking crisis or credit crunch",
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Bank for International Settlements (BIS) Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "European Banking Authority (EBA) Risk Dashboard",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Federal Reserve Financial Stability Report",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "finance"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-003",
+    "event_name": "Currency devaluation (>30% vs. USD/EUR)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Currency devaluation (>30% vs. USD/EUR)",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Currency Composition of Official Foreign Exchange Reserves",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Bank for International Settlements FX Market Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Central Bank Statistical Data Warehouse",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-004",
+    "event_name": "Sovereign debt crisis",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Sovereign debt crisis",
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Sovereign Debt Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "S&P Global Sovereign Ratings",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "World Bank International Debt Statistics",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "finance"
+      ],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-005",
+    "event_name": "Inflation surge (>10% annually)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Inflation surge (>10% annually)",
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Eurostat HICP (Harmonized Index of Consumer Prices)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "European Central Bank Inflation Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD Consumer Price Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "energy"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ECO-006",
+    "event_name": "Asset bubble burst (real estate, stocks)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.4",
+    "family_name": "Macroeconomic Shocks",
+    "description": "Asset bubble burst (real estate, stocks)",
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UBS Global Real Estate Bubble Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "S&P Global Equity Indices",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Federal Reserve Financial Accounts",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "energy",
+        "construction"
+      ],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-001",
+    "event_name": "Carbon pricing/tax implementation",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Carbon pricing/tax implementation",
+    "base_rate_pct": 40.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU ETS (Emissions Trading System) Data",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Carbon Pricing Dashboard",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ICAP (International Carbon Action Partnership)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "energy"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-002",
+    "event_name": "Fossil fuel subsidy removal",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Fossil fuel subsidy removal",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Fossil Fuel Subsidies Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Fossil Fuel Subsidies Data",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD Fossil Fuel Support",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "finance",
+        "energy",
+        "transport"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-003",
+    "event_name": "Renewable energy mandates",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Renewable energy mandates",
+    "base_rate_pct": 38.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Renewable Energy Directive (RED III)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Renewable Energy Policies Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "IRENA (International Renewable Energy Agency)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "energy",
+        "transport"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-004",
+    "event_name": "Internal combustion engine phase-out",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Internal combustion engine phase-out",
+    "base_rate_pct": 30.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Commission Automotive Policy",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Global EV Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU CO2 Standards for Cars and Vans",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M \u2013 \u20ac500M",
+      "sectors": [
+        "automotive"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-005",
+    "event_name": "Building energy efficiency requirements",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Building energy efficiency requirements",
+    "base_rate_pct": 35.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Energy Performance of Buildings Directive (EPBD)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Energy Performance Certificate (EPC) Databases",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "BPIE (Buildings Performance Institute Europe)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "energy"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-ENP-006",
+    "event_name": "Green hydrogen/ammonia transition",
+    "domain": "STRUCTURAL",
+    "family_code": "2.5",
+    "family_name": "Energy Transition & Climate Policy",
+    "description": "Green hydrogen/ammonia transition",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Hydrogen Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IRENA Green Hydrogen Policies",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU Hydrogen Strategy",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M \u2013 \u20ac500M",
+      "sectors": [
+        "energy",
+        "technology"
+      ],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TEC-001",
+    "event_name": "Semiconductor / Advanced Technology Export Control Expansion",
+    "domain": "STRUCTURAL",
+    "family_code": "2.6",
+    "family_name": "Technology Policy & Regulatory Restrictions",
+    "description": "Semiconductor / Advanced Technology Export Control Expansion",
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "US Bureau of Industry & Security (BIS) Export Administration Regulations",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Dual-Use Regulation Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Wassenaar Arrangement on Export Controls",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "technology"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TEC-002",
+    "event_name": "AI Regulation / Algorithmic Compliance Requirements (EU AI Act)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.6",
+    "family_name": "Technology Policy & Regulatory Restrictions",
+    "description": "AI Regulation / Algorithmic Compliance Requirements (EU AI Act)",
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU AI Act (Regulation 2024/1689)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU AI Office",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD AI Principles",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M \u2013 \u20ac100M",
+      "sectors": [],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TEC-003",
+    "event_name": "Data Protection & Localization Mandates (GDPR, Schrems)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.6",
+    "family_name": "Technology Policy & Regulatory Restrictions",
+    "description": "Data Protection & Localization Mandates (GDPR, Schrems)",
+    "base_rate_pct": 32.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UNCTAD Data Protection and Privacy Legislation Worldwide",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU GDPR Enforcement Tracker",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Global Data Alliance Data Localization Tracker",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M \u2013 \u20ac100M",
+      "sectors": [
+        "construction"
+      ],
+      "severity": "HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TEC-004",
+    "event_name": "Forced Technology Transfer / Local Partnering Requirements",
+    "domain": "STRUCTURAL",
+    "family_code": "2.6",
+    "family_name": "Technology Policy & Regulatory Restrictions",
+    "description": "Forced Technology Transfer / Local Partnering Requirements",
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USTR Section 301 Report on China",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Chamber of Commerce Business Confidence Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "World Bank Ease of Doing Business (IP Protection)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "automotive",
+        "technology"
+      ],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-TEC-005",
+    "event_name": "Critical Technology Investment Screening (FDI/CFIUS)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.6",
+    "family_name": "Technology Policy & Regulatory Restrictions",
+    "description": "Critical Technology Investment Screening (FDI/CFIUS)",
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU FDI Screening Mechanism Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "CFIUS (Committee on Foreign Investment in US) Annual Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD FDI Regulatory Restrictiveness Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac20M \u2013 \u20ac500M",
+      "sectors": [
+        "technology"
+      ],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-FIN-001",
+    "event_name": "SWIFT or payment system exclusion",
+    "domain": "STRUCTURAL",
+    "family_code": "2.7",
+    "family_name": "Financial Market Disruptions",
+    "description": "SWIFT or payment system exclusion",
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "SWIFT Annual Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Payment System Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Treasury OFAC Sanctions",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [
+        "finance"
+      ],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-FIN-002",
+    "event_name": "Foreign exchange market closure",
+    "domain": "STRUCTURAL",
+    "family_code": "2.7",
+    "family_name": "Financial Market Disruptions",
+    "description": "Foreign exchange market closure",
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Article IV Consultations",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Triennial FX Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Reuters FX Market Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [],
+      "severity": "MEDIUM"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-FIN-003",
+    "event_name": "Credit market freeze (no access to financing)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.7",
+    "family_name": "Financial Market Disruptions",
+    "description": "Credit market freeze (no access to financing)",
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECB Bank Lending Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Federal Reserve Senior Loan Officer Opinion Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "S&P LCD Leveraged Loan Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac100M",
+      "sectors": [],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-FIN-004",
+    "event_name": "Insurance market withdrawal (uninsurable risks)",
+    "domain": "STRUCTURAL",
+    "family_code": "2.7",
+    "family_name": "Financial Market Disruptions",
+    "description": "Insurance market withdrawal (uninsurable risks)",
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Lloyd's of London Market Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Munich Re NatCatSERVICE",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Swiss Re Sigma Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac5M \u2013 \u20ac50M",
+      "sectors": [],
+      "severity": "MEDIUM-HIGH"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  },
+  {
+    "event_id": "STR-FIN-005",
+    "event_name": "Securities market suspension",
+    "domain": "STRUCTURAL",
+    "family_code": "2.7",
+    "family_name": "Financial Market Disruptions",
+    "description": "Securities market suspension",
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "LOW",
+    "update_frequency": "quarterly",
+    "geographic_scope": "EU",
+    "is_active": true,
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "World Federation of Exchanges",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Securities Market Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "IOSCO Market Integrity Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ],
+    "formula": {
+      "method": "BASE_RATE",
+      "phase2_model": "4_FACTOR",
+      "parameters": {
+        "exposure_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "vulnerability_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "control_factor": {
+          "min": 0.3,
+          "max": 3.0
+        },
+        "trend_factor": {
+          "min": 0.5,
+          "max": 2.0
+        }
+      }
+    },
+    "impact_vector": {
+      "financial_impact": "\u20ac10M \u2013 \u20ac200M",
+      "sectors": [],
+      "severity": "LOW"
+    },
+    "validation_rules": {
+      "range_min": 0.1,
+      "range_max": 95.0,
+      "staleness_days": 90,
+      "anomaly_threshold": 3.0
+    }
+  }
+]
