@@ -9,12 +9,22 @@ import json
 import os
 from pathlib import Path
 from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load .env file for DATABASE_URL
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    print("  Note: python-dotenv not installed, reading DATABASE_URL from environment directly")
 
 LOCAL_URL = os.getenv("DATABASE_URL", "postgresql://prism_user:prism2026@127.0.0.1:5432/prism_brain_v2")
-JSON_PATH = Path(__file__).parent / "frontend" / "data" / "risk_events_v2.json"
+SEEDS_DIR = Path(__file__).parent / "frontend" / "data" / "seeds"
+SEED_FILES = [
+    "physical_domain_seed.json",
+    "structural_domain_seed.json",
+    "digital_domain_seed.json",
+    "operational_domain_seed.json",
+]
 
 
 def load_events():
@@ -22,29 +32,34 @@ def load_events():
     print("PRISM Brain: Load Risk Events into Local Database")
     print("=" * 60)
 
-    # Read JSON file
-    print(f"\n[1/3] Reading {JSON_PATH.name}...")
-    if not JSON_PATH.exists():
-        print(f"  ERROR: File not found: {JSON_PATH}")
+    # Read all seed JSON files
+    print(f"\n[1/3] Reading seed files from {SEEDS_DIR.name}/...")
+    events = []
+    for seed_file in SEED_FILES:
+        seed_path = SEEDS_DIR / seed_file
+        if not seed_path.exists():
+            print(f"  WARNING: Seed file not found: {seed_path}")
+            continue
+        with open(seed_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        # Handle both flat array and metadata-wrapped formats
+        file_events = data if isinstance(data, list) else data.get('events', [])
+        print(f"  {seed_file}: {len(file_events)} events")
+        events.extend(file_events)
+
+    if not events:
+        print("  ERROR: No events found in seed files!")
         return
 
-    with open(JSON_PATH, 'r') as f:
-        data = json.load(f)
+    print(f"  Total: {len(events)} risk events loaded from {len(SEED_FILES)} seed files")
 
-    # Handle both flat array and metadata-wrapped formats
-    if isinstance(data, list):
-        events = data
-    else:
-        events = data.get('events', [])
-
-    print(f"  Found {len(events)} risk events in JSON file")
-
-    # Show a sample of categories
-    categories = {}
+    # Show domains
+    domains = {}
     for e in events:
-        cat = e.get("Layer_2_Primary", "Unknown")
-        categories[cat] = categories.get(cat, 0) + 1
-    print(f"  Across {len(categories)} risk categories")
+        dom = e.get("domain", "Unknown")
+        domains[dom] = domains.get(dom, 0) + 1
+    for dom, count in sorted(domains.items()):
+        print(f"    {dom}: {count} events")
 
     # Connect to local database
     print(f"\n[2/3] Connecting to local database...")

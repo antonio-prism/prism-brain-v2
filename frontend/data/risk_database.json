@@ -8,14 +8,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.0012,
+    "base_rate_pct": 0.12,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.0012,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Flood Alert System",
+        "url": "https://www.efas.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Meteorological Institutes",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-CLI-002",
@@ -26,14 +45,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.0034999999999999996,
+    "base_rate_pct": 0.35,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU coastal",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.0035,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Climate Data Store",
+        "url": "https://climate.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Environment Agency",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Port Authority Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-CLI-003",
@@ -44,14 +82,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.065,
+    "base_rate_pct": 6.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.065,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NOAA Global Temperature Database",
+        "url": "https://www.ncei.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Copernicus Climate Data Store",
+        "url": "https://climate.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Operations Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-CLI-004",
@@ -62,14 +119,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.027999999999999997,
+    "base_rate_pct": 2.8,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.028,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Drought Observatory",
+        "url": "https://edo.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "USGS Drought Monitor",
+        "url": "https://www.droughtmonitor.unl.edu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Water Authority Bulletins",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-CLI-005",
@@ -80,14 +156,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.015,
+    "base_rate_pct": 1.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "Southern/Central Europe",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.015,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Emergency Management Service",
+        "url": "https://emergency.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Forest Fire Information System",
+        "url": "https://effis.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Fire Service Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-CLI-006",
@@ -98,14 +193,33 @@
     "Layer_2_Primary": "Climate Extremes & Weather Events",
     "Layer_2_Secondary": "1.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.032,
+    "base_rate_pct": 3.2,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "Continental zones",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.032,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NOAA Winter Storm Database",
+        "url": "https://www.ncei.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENTSOE Grid Monitoring",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Transport Ministry Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-001",
@@ -116,14 +230,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.012,
+    "base_rate_pct": 1.2,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Regional/National",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.012,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Grid Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Transmission System Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Power Exchange Spot Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-002",
@@ -134,14 +267,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.085,
+    "base_rate_pct": 8.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.085,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gas Infrastructure Europe",
+        "url": "https://www.gie.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENTSOG Pipeline Maps",
+        "url": "https://www.entsog.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Energy Exchange Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-003",
@@ -152,14 +304,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Energy Exchange",
+        "url": "https://www.eex.com",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ICE Futures Europe",
+        "url": "https://www.theice.com",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Bloomberg Energy",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-004",
@@ -170,14 +341,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Northern/Southern Europe",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Renewable Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Grid Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Weather Forecasting Models",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-005",
@@ -188,14 +378,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.065,
+    "base_rate_pct": 6.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "France/Belgium/Spain",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.065,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IAEA Event Reporting System",
+        "url": "https://www.iaea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Nuclear Regulators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Grid Operator Announcements",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-006",
@@ -206,14 +415,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.09,
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "Ireland/Netherlands/Southern EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.09,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENTSOE Load Data",
+        "url": "https://www.entsoe.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Regional Grid Operators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Consumption Forecasts",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-ENE-007",
@@ -224,14 +452,33 @@
     "Layer_2_Primary": "Energy Supply & Grid Stability",
     "Layer_2_Secondary": "1.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.035,
+    "base_rate_pct": 3.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "Regional",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.035,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Grid Operator Maintenance Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Equipment Manufacturer Bulletins",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Claims Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-001",
@@ -242,14 +489,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Global (EU import-dependent)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Critical Minerals Database",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Commission Raw Materials Intelligence",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Mining Industry Reports",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-002",
@@ -260,14 +526,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IVL Swedish Environmental Institute",
+        "url": "https://www.ivl.se",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "International Energy Agency",
+        "url": "https://www.iea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Trading Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-003",
@@ -278,14 +563,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "London Metal Exchange",
+        "url": "https://www.lme.com",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Bloomberg Commodities",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Reuters Commodities",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-004",
@@ -296,14 +600,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association",
+        "url": "https://www.semiconductors.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Market Research Reports",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Supplier Announcements",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-005",
@@ -314,14 +637,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FAO Food Price Index",
+        "url": "https://www.fao.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "USDA Global Agricultural Monitoring",
+        "url": "https://www.usda.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Futures Markets",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-006",
@@ -332,14 +674,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU/Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FAO Forestry Division",
+        "url": "https://www.fao.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Timber Trade Association",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Lumber Futures Prices",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-007",
@@ -350,14 +711,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "International Cotton Advisory Committee",
+        "url": "https://www.icac.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Textiles Exchange",
+        "url": "https://www.textileexchange.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Commodity Price Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-MAT-008",
@@ -368,14 +748,33 @@
     "Layer_2_Primary": "Natural Resources & Raw Materials",
     "Layer_2_Secondary": "1.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Global",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Chemical Industry Association",
+        "url": "https://www.cefic.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Pharmaceutical Supply Chain Reports",
+        "url": "",
+        "cost": "paid"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Agricultural Commodity Tracking",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-001",
@@ -386,14 +785,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.28,
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (Southern/Mediterranean)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.28,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Drought Observatory",
+        "url": "https://edo.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Hydrological Services",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Water Authority Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-002",
@@ -404,14 +822,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Water Operator Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU Water Framework Directive Data",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Claims Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-003",
@@ -422,14 +859,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.09,
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.09,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Water Authority Incident Records",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Environmental Agency Notifications",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Manufacturer Bulletins",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-004",
@@ -440,14 +896,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Environment Reporting System",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Agencies",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Operations Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-005",
@@ -458,14 +933,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (Southern highest)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Eurostat Water Statistics",
+        "url": "https://ec.europa.eu/eurostat",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Water Resource Management Plans",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Industrial Water Demand Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-WAT-006",
@@ -476,14 +970,33 @@
     "Layer_2_Primary": "Water Resources & Quality",
     "Layer_2_Secondary": "1.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (Central/Eastern/Alpine)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Flood Alert System",
+        "url": "https://www.efas.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Water Authority Damage Reports",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-GEO-001",
@@ -494,14 +1007,33 @@
     "Layer_2_Primary": "Geophysical Disasters",
     "Layer_2_Secondary": "1.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.035,
+    "base_rate_pct": 3.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "Southern Europe",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.035,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Earthquake Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European-Mediterranean Seismological Centre",
+        "url": "https://www.emsc-csem.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Geological Surveys",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-GEO-002",
@@ -512,14 +1044,33 @@
     "Layer_2_Primary": "Geophysical Disasters",
     "Layer_2_Secondary": "1.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Iceland/Mediterranean",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Smithsonian Global Volcanism Program",
+        "url": "https://www.si.edu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Volcano Monitoring Services",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Air Quality Monitoring Networks",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-GEO-003",
@@ -530,14 +1081,33 @@
     "Layer_2_Primary": "Geophysical Disasters",
     "Layer_2_Secondary": "1.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU (hilly regions)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Landslide Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Copernicus Land Monitoring Service",
+        "url": "https://land.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Geological Surveys",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-GEO-004",
@@ -548,14 +1118,33 @@
     "Layer_2_Primary": "Geophysical Disasters",
     "Layer_2_Secondary": "1.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.02,
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Mediterranean coastal",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.02,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "International Tsunami Information Center",
+        "url": "https://www.itic.noaa.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European-Mediterranean Seismological Centre",
+        "url": "https://www.emsc-csem.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Coastal Authority Monitoring",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-GEO-005",
@@ -566,14 +1155,33 @@
     "Layer_2_Primary": "Geophysical Disasters",
     "Layer_2_Secondary": "1.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.045,
+    "base_rate_pct": 4.5,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "Karst regions",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.045,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USGS Geological Hazards Program",
+        "url": "https://www.usgs.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Geological Surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Transportation Authority Records",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-001",
@@ -584,14 +1192,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.05,
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (Seveso sites)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.05,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Seveso III Directive Register",
+        "url": "https://ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Environmental Agency Incident Reports",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Insurance Loss Databases",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-002",
@@ -602,14 +1229,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU urban-industrial",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Copernicus Air Quality Service",
+        "url": "https://atmosphere.copernicus.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EEA Air Quality Portal",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Local Environmental Monitoring",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-003",
@@ -620,14 +1266,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (brownfields)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Soil Database",
+        "url": "https://esdac.jrc.ec.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Registries",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Contaminated Site Assessments",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-004",
@@ -638,14 +1303,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU coastal/offshore",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EMSA EU Oil Spill Monitoring",
+        "url": "https://www.emsa.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "International Maritime Organization",
+        "url": "https://www.imo.org",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Satellite Monitoring Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-005",
@@ -656,14 +1340,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU (nuclear vicinities)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IAEA Radiation Emergency Response",
+        "url": "https://www.iaea.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Nuclear Regulators",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Environmental Monitoring Networks",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-006",
@@ -674,14 +1377,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.07,
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.07,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ETSI Radio Equipment Directive",
+        "url": "https://www.etsi.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Frequency Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Equipment Compliance Testing",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-POL-007",
@@ -692,14 +1414,33 @@
     "Layer_2_Primary": "Contamination & Pollution",
     "Layer_2_Secondary": "1.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.11,
+    "base_rate_pct": 11.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU urban-industrial",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.11,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EEA Noise Directive Implementation",
+        "url": "https://www.eea.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Environmental Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Local Municipality Records",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-BIO-001",
@@ -710,14 +1451,33 @@
     "Layer_2_Primary": "Biological & Pandemic Risks",
     "Layer_2_Secondary": "1.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.35,
+    "base_rate_pct": 35.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (poultry/livestock)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.35,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OIE World Animal Health Information",
+        "url": "https://www.woah.org",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ECDC Surveillance Database",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Veterinary Services",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-BIO-002",
@@ -728,14 +1488,33 @@
     "Layer_2_Primary": "Biological & Pandemic Risks",
     "Layer_2_Secondary": "1.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECDC Disease Surveillance System",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "WHO Disease Outbreak News",
+        "url": "https://www.who.int",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "National Health Authorities",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-BIO-003",
@@ -746,14 +1525,33 @@
     "Layer_2_Primary": "Biological & Pandemic Risks",
     "Layer_2_Secondary": "1.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECDC Antimicrobial Resistance Surveillance",
+        "url": "https://www.ecdc.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "WHO Antibiotic Resistance Report",
+        "url": "https://www.who.int",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Clinical Microbiology Data",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-BIO-004",
@@ -764,14 +1562,33 @@
     "Layer_2_Primary": "Biological & Pandemic Risks",
     "Layer_2_Secondary": "1.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU (food production)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "RASFF Rapid Alert System",
+        "url": "https://ec.europa.eu/food",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EFSA Food Safety Database",
+        "url": "https://www.efsa.europa.eu",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Food Company Compliance Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "PHY-BIO-005",
@@ -782,14 +1599,33 @@
     "Layer_2_Primary": "Biological & Pandemic Risks",
     "Layer_2_Secondary": "1.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU (healthcare/labs/food)",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OSHA Occupational Safety Database",
+        "url": "https://www.osha.gov",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Health and Safety Authorities",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Occupational Health Services Records",
+        "url": "",
+        "cost": "paid"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-001",
@@ -800,14 +1636,33 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "GPR Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "SIPRI",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-002",
@@ -818,14 +1673,27 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Sanctions Map",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "OFAC Sanctions Lists",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-003",
@@ -836,14 +1704,21 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ICSID",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-004",
@@ -854,14 +1729,27 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Verisk Maplecroft",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-005",
@@ -872,14 +1760,33 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.04,
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.04,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Fund for Peace Fragile States Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Governance Indicators",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Crisis Group CrisisWatch",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-006",
@@ -890,14 +1797,27 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UNCLOS",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "ACLED",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-GEO-007",
@@ -908,14 +1828,21 @@
     "Layer_2_Primary": "Geopolitical Conflict & Instability",
     "Layer_2_Secondary": "2.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IISS",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-001",
@@ -926,14 +1853,39 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO Tariff Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Global Trade Alert",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "PIIE Trade Policy Tracker",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Census Bureau Trade Data",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-002",
@@ -944,14 +1896,39 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.28,
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.28,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "US BIS (Bureau of Industry and Security)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Dual-Use Regulation Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Wassenaar Arrangement",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CSIS Technology Policy Tracker",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-003",
@@ -962,14 +1939,21 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF AREAER",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-004",
@@ -980,14 +1964,21 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO RTA Database",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-005",
@@ -998,14 +1989,33 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "WTO Trade Monitoring Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Global Trade Alert",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "National Customs Authorities",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TRD-006",
@@ -1016,14 +2026,27 @@
     "Layer_2_Primary": "Trade & Economic Policy Shifts",
     "Layer_2_Secondary": "2.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "OFAC SDN List",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World-Check",
+        "type": "Database",
+        "cost": "Paid"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-001",
@@ -1034,14 +2057,21 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.32,
+    "base_rate_pct": 32.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.32,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU-Lex",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-002",
@@ -1052,14 +2082,33 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.28,
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.28,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EDPB",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "National DPAs",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IAPP",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-003",
@@ -1070,14 +2119,21 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.24,
+    "base_rate_pct": 24.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.24,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "CEN/CENELEC",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-004",
@@ -1088,14 +2144,27 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ETUC",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "ILO",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-005",
@@ -1106,14 +2175,21 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.26,
+    "base_rate_pct": 26.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.26,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Big 4 tax alerts",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-006",
@@ -1124,14 +2200,21 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.3,
+    "base_rate_pct": 30.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.3,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "NGO reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-REG-007",
@@ -1142,14 +2225,27 @@
     "Layer_2_Primary": "Regulatory & Compliance Changes",
     "Layer_2_Secondary": "2.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECHA",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "REACH candidate list",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-001",
@@ -1160,14 +2256,39 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF World Economic Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Global Economic Prospects",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "OECD Economic Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Eurostat GDP Statistics",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-002",
@@ -1178,14 +2299,33 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Bank for International Settlements (BIS) Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "European Banking Authority (EBA) Risk Dashboard",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Federal Reserve Financial Stability Report",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-003",
@@ -1196,14 +2336,33 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Currency Composition of Official Foreign Exchange Reserves",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Bank for International Settlements FX Market Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "European Central Bank Statistical Data Warehouse",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-004",
@@ -1214,14 +2373,33 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.05,
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.05,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Sovereign Debt Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "S&P Global Sovereign Ratings",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "World Bank International Debt Statistics",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-005",
@@ -1232,14 +2410,33 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Eurostat HICP (Harmonized Index of Consumer Prices)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "European Central Bank Inflation Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD Consumer Price Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ECO-006",
@@ -1250,14 +2447,33 @@
     "Layer_2_Primary": "Macroeconomic Shocks",
     "Layer_2_Secondary": "2.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.07,
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.07,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UBS Global Real Estate Bubble Index",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "S&P Global Equity Indices",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Federal Reserve Financial Accounts",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-001",
@@ -1268,14 +2484,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.4,
+    "base_rate_pct": 40.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.4,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU ETS (Emissions Trading System) Data",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "World Bank Carbon Pricing Dashboard",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ICAP (International Carbon Action Partnership)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-002",
@@ -1286,14 +2521,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Fossil Fuel Subsidies Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Fossil Fuel Subsidies Data",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD Fossil Fuel Support",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-003",
@@ -1304,14 +2558,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.38,
+    "base_rate_pct": 38.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.38,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Renewable Energy Directive (RED III)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Renewable Energy Policies Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "IRENA (International Renewable Energy Agency)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-004",
@@ -1322,14 +2595,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.3,
+    "base_rate_pct": 30.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.3,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "European Commission Automotive Policy",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Global EV Outlook",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU CO2 Standards for Cars and Vans",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-005",
@@ -1340,14 +2632,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.35,
+    "base_rate_pct": 35.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.35,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU Energy Performance of Buildings Directive (EPBD)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Energy Performance Certificate (EPC) Databases",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "BPIE (Buildings Performance Institute Europe)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-ENP-006",
@@ -1358,14 +2669,33 @@
     "Layer_2_Primary": "Energy Transition & Climate Policy",
     "Layer_2_Secondary": "2.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IEA Hydrogen Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "IRENA Green Hydrogen Policies",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "EU Hydrogen Strategy",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TEC-001",
@@ -1376,14 +2706,33 @@
     "Layer_2_Primary": "Technology Policy & Regulatory Restrictions",
     "Layer_2_Secondary": "2.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "US Bureau of Industry & Security (BIS) Export Administration Regulations",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Dual-Use Regulation Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Wassenaar Arrangement on Export Controls",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TEC-002",
@@ -1394,14 +2743,33 @@
     "Layer_2_Primary": "Technology Policy & Regulatory Restrictions",
     "Layer_2_Secondary": "2.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.28,
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.28,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU AI Act (Regulation 2024/1689)",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU AI Office",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD AI Principles",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TEC-003",
@@ -1412,14 +2780,33 @@
     "Layer_2_Primary": "Technology Policy & Regulatory Restrictions",
     "Layer_2_Secondary": "2.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.32,
+    "base_rate_pct": 32.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 2,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.32,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "UNCTAD Data Protection and Privacy Legislation Worldwide",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU GDPR Enforcement Tracker",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Global Data Alliance Data Localization Tracker",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TEC-004",
@@ -1430,14 +2817,33 @@
     "Layer_2_Primary": "Technology Policy & Regulatory Restrictions",
     "Layer_2_Secondary": "2.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "USTR Section 301 Report on China",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "EU Chamber of Commerce Business Confidence Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "World Bank Ease of Doing Business (IP Protection)",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-TEC-005",
@@ -1448,14 +2854,33 @@
     "Layer_2_Primary": "Technology Policy & Regulatory Restrictions",
     "Layer_2_Secondary": "2.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "EU FDI Screening Mechanism Database",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "CFIUS (Committee on Foreign Investment in US) Annual Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OECD FDI Regulatory Restrictiveness Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-FIN-001",
@@ -1466,14 +2891,33 @@
     "Layer_2_Primary": "Financial Market Disruptions",
     "Layer_2_Secondary": "2.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.04,
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.04,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "SWIFT Annual Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Payment System Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Treasury OFAC Sanctions",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-FIN-002",
@@ -1484,14 +2928,33 @@
     "Layer_2_Primary": "Financial Market Disruptions",
     "Layer_2_Secondary": "2.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "IMF Article IV Consultations",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Triennial FX Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Reuters FX Market Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-FIN-003",
@@ -1502,14 +2965,33 @@
     "Layer_2_Primary": "Financial Market Disruptions",
     "Layer_2_Secondary": "2.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ECB Bank Lending Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Federal Reserve Senior Loan Officer Opinion Survey",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "S&P LCD Leveraged Loan Index",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-FIN-004",
@@ -1520,14 +3002,33 @@
     "Layer_2_Primary": "Financial Market Disruptions",
     "Layer_2_Secondary": "2.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.7
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Lloyd's of London Market Reports",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "Munich Re NatCatSERVICE",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Swiss Re Sigma Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "STR-FIN-005",
@@ -1538,32 +3039,70 @@
     "Layer_2_Primary": "Financial Market Disruptions",
     "Layer_2_Secondary": "2.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.02,
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "LOW",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 1,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.02,
-    "base_impact": 0.2
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "World Federation of Exchanges",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "PRIMARY",
+        "name": "BIS Securities Market Statistics",
+        "type": "Database",
+        "cost": "Free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "IOSCO Market Integrity Reports",
+        "type": "Database",
+        "cost": "Free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-001",
     "Event_Name": "Ransomware attack on hospital/healthcare system",
-    "Event_Description": "Ransomware attack encrypting healthcare IT systems (EHR, patient records, scheduling) causing patient care disruption \u226524 hours",
+    "Event_Description": "Ransomware attack encrypting healthcare IT systems (EHR, patient records, scheduling) causing patient care disruption ≥24 hours",
     "Layer_1_Primary": "DIGITAL",
     "Layer_1_Secondary": "",
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-002",
@@ -1574,32 +3113,70 @@
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.05,
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.05,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-003",
     "Event_Name": "Energy grid/utility cyberattack",
-    "Event_Description": "Cyber-attack on electrical grid infrastructure, causing power outages, grid instability, or control system compromise affecting \u226510,000 customers",
+    "Event_Description": "Cyber-attack on electrical grid infrastructure, causing power outages, grid instability, or control system compromise affecting ≥10,000 customers",
     "Layer_1_Primary": "DIGITAL",
     "Layer_1_Secondary": "",
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-004",
@@ -1610,14 +3187,33 @@
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.04,
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.04,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-005",
@@ -1628,14 +3224,33 @@
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CIC-006",
@@ -1646,32 +3261,70 @@
     "Layer_2_Primary": "CRITICAL INFRASTRUCTURE CYBERATTACKS",
     "Layer_2_Secondary": "3.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.02,
+    "base_rate_pct": 2.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT + INDUSTRY DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.02,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025 (4,875 incidents analyzed)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA ICS-CERT advisories (annual)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATT&CK for ICS framework",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-001",
     "Event_Name": "ERP/business system ransomware",
-    "Event_Description": "Ransomware attack encrypting core business systems (ERP, CRM, financial systems) causing operational disruption \u226524 hours",
+    "Event_Description": "Ransomware attack encrypting core business systems (ERP, CRM, financial systems) causing operational disruption ≥24 hours",
     "Layer_1_Primary": "DIGITAL",
     "Layer_1_Secondary": "",
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-002",
@@ -1682,14 +3335,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-003",
@@ -1700,14 +3372,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-004",
@@ -1718,14 +3409,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-005",
@@ -1736,14 +3446,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.07,
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.07,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-006",
@@ -1754,14 +3483,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-007",
@@ -1772,14 +3520,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-RDE-008",
@@ -1790,14 +3557,33 @@
     "Layer_2_Primary": "RANSOMWARE, DATA BREACHES & EXFILTRATION",
     "Layer_2_Secondary": "3.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.09,
+    "base_rate_pct": 9.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (MULTIPLE INDEPENDENT SOURCES, 10,000+ INCIDENTS/YEAR)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.09,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Verizon Data Breach Investigations Report 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "IBM X-Force Threat Intelligence Index",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SCC-001",
@@ -1808,14 +3594,33 @@
     "Layer_2_Primary": "SUPPLY CHAIN CYBERATTACKS",
     "Layer_2_Secondary": "3.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SCC-002",
@@ -1826,14 +3631,33 @@
     "Layer_2_Primary": "SUPPLY CHAIN CYBERATTACKS",
     "Layer_2_Secondary": "3.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.05,
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.05,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SCC-003",
@@ -1844,14 +3668,33 @@
     "Layer_2_Primary": "SUPPLY CHAIN CYBERATTACKS",
     "Layer_2_Secondary": "3.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SCC-004",
@@ -1862,14 +3705,33 @@
     "Layer_2_Primary": "SUPPLY CHAIN CYBERATTACKS",
     "Layer_2_Secondary": "3.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.04,
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.04,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SCC-005",
@@ -1880,14 +3742,33 @@
     "Layer_2_Primary": "SUPPLY CHAIN CYBERATTACKS",
     "Layer_2_Secondary": "3.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT ADVISORIES, INDUSTRY TRACKING)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "CISA supply chain security alerts",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "NIST National Vulnerability Database (NVD)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-001",
@@ -1898,14 +3779,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-002",
@@ -1916,14 +3816,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-003",
@@ -1934,14 +3853,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-004",
@@ -1952,14 +3890,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.04,
+    "base_rate_pct": 4.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.04,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-005",
@@ -1970,14 +3927,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-006",
@@ -1988,14 +3964,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-FSD-007",
@@ -2006,14 +4001,33 @@
     "Layer_2_Primary": "FRAUD, SOCIAL ENGINEERING & DENIAL-OF-SERVICE",
     "Layer_2_Secondary": "3.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH (GOVERNMENT STATISTICS, MULTIPLE TRACKING SOURCES)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "FBI Internet Crime Complaint Center (IC3) 2024",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "ENISA Threat Landscape 2025",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Verizon DBIR 2024",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-001",
@@ -2024,32 +4038,70 @@
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-002",
-    "Event_Name": "Cloud service provider outage / Service degradation (\u22654hr, multi-region)",
-    "Event_Description": "Major cloud platform outage affecting multiple regions or availability zones, causing service unavailability \u22654 hours",
+    "Event_Name": "Cloud service provider outage / Service degradation (≥4hr, multi-region)",
+    "Event_Description": "Major cloud platform outage affecting multiple regions or availability zones, causing service unavailability ≥4 hours",
     "Layer_1_Primary": "DIGITAL",
     "Layer_1_Secondary": "",
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-003",
@@ -2060,14 +4112,33 @@
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-004",
@@ -2078,14 +4149,33 @@
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-005",
@@ -2096,14 +4186,33 @@
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-CLS-006",
@@ -2114,14 +4223,33 @@
     "Layer_2_Primary": "CLOUD & PLATFORM SOVEREIGNTY",
     "Layer_2_Secondary": "3.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENT DATA)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Gartner cloud surveys",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "FinOps Foundation State of FinOps report",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "European Union Data Center Association (EUDCA)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-001",
@@ -2132,14 +4260,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-002",
@@ -2150,14 +4297,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-003",
@@ -2168,14 +4334,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-004",
@@ -2186,14 +4371,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.03,
+    "base_rate_pct": 3.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.03,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-005",
@@ -2204,14 +4408,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-006",
@@ -2222,14 +4445,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-HWS-007",
@@ -2240,14 +4482,33 @@
     "Layer_2_Primary": "HARDWARE, INDUSTRIAL EQUIPMENT & SEMICONDUCTOR SOVEREIGNTY",
     "Layer_2_Secondary": "3.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY ASSOCIATION DATA, GOVERNMENT REPORTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Semiconductor Industry Association (SEMI)",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "US Bureau of Industry and Security (BIS) export controls",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "VDW (German Machine Tool Builders' Association)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-001",
@@ -2258,14 +4519,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-002",
@@ -2276,14 +4556,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-003",
@@ -2294,14 +4593,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-004",
@@ -2312,14 +4630,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-005",
@@ -2330,14 +4667,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-006",
@@ -2348,14 +4704,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.07,
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.07,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-007",
@@ -2366,14 +4741,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "DIG-SWS-008",
@@ -2384,14 +4778,33 @@
     "Layer_2_Primary": "SOFTWARE & AI SOVEREIGNTY",
     "Layer_2_Secondary": "3.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MEDIUM-HIGH (INDUSTRY SURVEYS, PUBLIC INCIDENTS)",
     "Geographic_Scope": "EU",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Vendor license audit reports, sanctions announcements",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "OpenSSF (Open Source Security Foundation) health metrics",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "MITRE ATLAS (AI/ML security framework)",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-001",
@@ -2402,14 +4815,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-002",
@@ -2420,14 +4852,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-003",
@@ -2438,14 +4889,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-004",
@@ -2456,14 +4926,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-005",
@@ -2474,14 +4963,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.15,
+    "base_rate_pct": 15.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.15,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-006",
@@ -2492,14 +5000,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MAR-007",
@@ -2510,14 +5037,33 @@
     "Layer_2_Primary": "Port & Maritime Logistics",
     "Layer_2_Secondary": "4.1",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-AIR-001",
@@ -2528,14 +5074,33 @@
     "Layer_2_Primary": "Air Freight & Aviation",
     "Layer_2_Secondary": "4.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-AIR-002",
@@ -2546,14 +5111,33 @@
     "Layer_2_Primary": "Air Freight & Aviation",
     "Layer_2_Secondary": "4.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-AIR-003",
@@ -2564,14 +5148,33 @@
     "Layer_2_Primary": "Air Freight & Aviation",
     "Layer_2_Secondary": "4.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.05,
+    "base_rate_pct": 5.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.05,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-AIR-004",
@@ -2582,14 +5185,33 @@
     "Layer_2_Primary": "Air Freight & Aviation",
     "Layer_2_Secondary": "4.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-AIR-005",
@@ -2600,14 +5222,33 @@
     "Layer_2_Primary": "Air Freight & Aviation",
     "Layer_2_Secondary": "4.2",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-001",
@@ -2618,14 +5259,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.25,
+    "base_rate_pct": 25.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.25,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-002",
@@ -2636,14 +5296,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-003",
@@ -2654,14 +5333,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-004",
@@ -2672,14 +5370,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-005",
@@ -2690,14 +5407,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-RLD-006",
@@ -2708,14 +5444,33 @@
     "Layer_2_Primary": "Road & Rail Transport",
     "Layer_2_Secondary": "4.3",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-001",
@@ -2726,14 +5481,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-002",
@@ -2744,14 +5518,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-003",
@@ -2762,14 +5555,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-004",
@@ -2780,14 +5592,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-005",
@@ -2798,14 +5629,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-CMP-006",
@@ -2816,14 +5666,33 @@
     "Layer_2_Primary": "Component & Materials Shortages",
     "Layer_2_Secondary": "4.4",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-001",
@@ -2834,14 +5703,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-002",
@@ -2852,14 +5740,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-003",
@@ -2870,14 +5777,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-004",
@@ -2888,14 +5814,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-005",
@@ -2906,14 +5851,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.2,
+    "base_rate_pct": 20.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.2,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-SUP-006",
@@ -2924,14 +5888,33 @@
     "Layer_2_Primary": "Supplier & Vendor Disruptions",
     "Layer_2_Secondary": "4.5",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-001",
@@ -2942,14 +5925,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.28,
+    "base_rate_pct": 28.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.28,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-002",
@@ -2960,14 +5962,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.06,
+    "base_rate_pct": 6.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.06,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-003",
@@ -2978,14 +5999,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-004",
@@ -2996,14 +6036,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.18,
+    "base_rate_pct": 18.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.18,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-005",
@@ -3014,14 +6073,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.08,
+    "base_rate_pct": 8.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.08,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-MFG-006",
@@ -3032,14 +6110,33 @@
     "Layer_2_Primary": "Manufacturing & Production Disruptions",
     "Layer_2_Secondary": "4.6",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.22,
+    "base_rate_pct": 22.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.22,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-WHS-001",
@@ -3050,14 +6147,33 @@
     "Layer_2_Primary": "Warehouse & Inventory Management",
     "Layer_2_Secondary": "4.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.07,
+    "base_rate_pct": 7.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.07,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-WHS-002",
@@ -3068,14 +6184,33 @@
     "Layer_2_Primary": "Warehouse & Inventory Management",
     "Layer_2_Secondary": "4.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.12,
+    "base_rate_pct": 12.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.12,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-WHS-003",
@@ -3086,14 +6221,33 @@
     "Layer_2_Primary": "Warehouse & Inventory Management",
     "Layer_2_Secondary": "4.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.16,
+    "base_rate_pct": 16.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 4,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.16,
-    "base_impact": 0.8
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-WHS-004",
@@ -3104,31 +6258,69 @@
     "Layer_2_Primary": "Warehouse & Inventory Management",
     "Layer_2_Secondary": "4.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.14,
+    "base_rate_pct": 14.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED-HIGH",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.14,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   },
   {
     "Event_ID": "OPS-WHS-005",
-    "Event_Name": "Theft or Inventory Shrinkage (>\u20ac1M)",
-    "Event_Description": "Theft or Inventory Shrinkage (>\u20ac1M) affecting EU operations and supply chains.",
+    "Event_Name": "Theft or Inventory Shrinkage (>€1M)",
+    "Event_Description": "Theft or Inventory Shrinkage (>€1M) affecting EU operations and supply chains.",
     "Layer_1_Primary": "OPERATIONAL",
     "Layer_1_Secondary": "",
     "Layer_2_Primary": "Warehouse & Inventory Management",
     "Layer_2_Secondary": "4.7",
     "Super_Risk": "NO",
-    "Affected_Industries": "",
+    "base_probability": 0.1,
+    "base_rate_pct": 10.0,
+    "base_rate_frequency": "annual",
+    "confidence_level": "MED",
     "Geographic_Scope": "EU and key trade partners",
     "Time_Horizon": "annual",
-    "Baseline_Probability": 1,
-    "Baseline_Impact": 2,
-    "Source_Category": "PRIMARY",
-    "base_probability": 0.1,
-    "base_impact": 0.5
+    "Affected_Industries": "",
+    "data_sources": [
+      {
+        "tier": "PRIMARY",
+        "name": "Official EU/regulatory sources",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "SECONDARY",
+        "name": "Industry reports and databases",
+        "url": "",
+        "cost": "free"
+      },
+      {
+        "tier": "TERTIARY",
+        "name": "Academic and research publications",
+        "url": "",
+        "cost": "free"
+      }
+    ]
   }
 ]
