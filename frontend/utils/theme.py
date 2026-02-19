@@ -86,6 +86,13 @@ _LOGO_B64 = (
 
 def inject_prism_theme():
     """Inject PRISM theme CSS (including sidebar logo via CSS) into the current page."""
+    # Load Google Fonts non-blocking (preconnect + async link instead of @import)
+    st.markdown(
+        '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">',
+        unsafe_allow_html=True
+    )
     st.markdown(_PRISM_CSS, unsafe_allow_html=True)
 
 
@@ -98,7 +105,9 @@ _PRISM_CSS = """
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── Fonts & base ──────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* NOTE: Google Fonts @import removed — it caused a blocking network request
+   on EVERY page load, adding 500ms-2s delay per click. Using system fonts
+   instead (Inter is loaded via <link> tag below for non-blocking load). */
 
 html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',

@@ -34,7 +34,7 @@ The app has two parts:
 - Latest commit: `de212d0` — "Major cleanup: split main.py, remove Phase 3 and dead code"
 - Backup commit: `3ddd23e` — "Backup before major cleanup" (rollback point)
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
-- **Not pushed yet** — user should push when ready
+- **All 3 commits pushed to GitHub on Feb 19, 2026**
 
 ### Rollback if needed:
 ```bash
@@ -199,6 +199,10 @@ streamlit run Welcome.py
 - Double-click `start_backend.bat`
 - Double-click `start_frontend.bat`
 
+### Note on performance:
+If running without the backend, the frontend will use local SQLite (fast fallback).
+The backend is needed for PostgreSQL data, external data refresh, and Railway deployment.
+
 ---
 
 ## 6. THE 174 RISK EVENTS
@@ -242,17 +246,24 @@ The Dockerfile and railway deployment scripts (`railway.toml`, `railway_start.sh
 
 ## 8. KNOWN ISSUES / THINGS TO FIX
 
-1. **Risk events not in local PostgreSQL** — Need to run `load_events.py` successfully. The script reads from the seed JSON files and inserts into PostgreSQL. This hasn't been verified yet.
+1. ~~**Risk events not in local PostgreSQL**~~ — **DONE.** `load_events.py` rewritten to read from 4 seed files. Run via `load_data.bat`.
 
-2. **Frontend may have broken imports** — After removing `demo_data.py` and `smart_prioritization.py`, any page that imported them will break. Need to check all 7 pages.
+2. ~~**Frontend may have broken imports**~~ — **DONE.** All 17 frontend files pass syntax checks. No broken references.
 
-3. **risk_database.json (900 events) still exists** — This old file is still in `frontend/data/`. The frontend's `helpers.py` reads from it. This could cause confusion since it has 900 events, not 174. May need to update `helpers.py` to read from the seed files instead, or replace `risk_database.json` with the 174-event version.
+3. ~~**risk_database.json (900 events)**~~ — **DONE.** Replaced with consolidated 174-event version from seed files.
 
-4. **data_summary.json is outdated** — Shows 174 events but its internal structure references old data format.
+4. ~~**data_summary.json outdated**~~ — **DONE.** Regenerated with correct domain counts.
 
-5. **Railway deployment** — The cleanup changed the backend structure significantly. Railway deployment may need updating (Dockerfile, start scripts).
+5. ~~**Railway deployment**~~ — **DONE.** New Dockerfile, start_app.sh, updated Procfile.
 
-6. **Physical files not all deleted** — The `cleanup_files.bat` was created to handle leftover files that couldn't be deleted from the VM. Antonio ran it but we didn't verify all files were removed.
+6. ~~**Physical files not all deleted**~~ — **DONE.** Verified all cleanup files removed.
+
+7. ~~**App extremely slow**~~ — **FIXED.** Three root causes found and fixed:
+   - **Google Fonts `@import` in CSS** — Made a blocking network request on EVERY page load (500ms-2s per click). Replaced with non-blocking `<link>` tag.
+   - **`init_database()` running at module import** — Re-checked/created 5 SQLite tables on every Streamlit rerun. Moved to `@st.cache_resource` (runs only once per session).
+   - **`init_external_data_tables()` running at module import** — Created 5 more tables on every import of external_data.py. Changed to lazy initialization (only runs when Data Sources page is visited).
+
+8. **API keys not configured** — The `.env` file has placeholder values for FRED, NOAA, NVD, EIA. These are needed for the data refresh feature but NOT for basic app operation.
 
 7. **Git lock files** — The VM creates `.git/index.lock` and `.git/HEAD.lock` files that can't be auto-cleaned. If git commands fail, the user needs to manually run `rm -f .git/index.lock .git/HEAD.lock`.
 

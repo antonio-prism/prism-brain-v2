@@ -47,7 +47,20 @@ if 'assessment_mode' not in st.session_state:
     st.session_state.assessment_mode = 'guided'  # 'guided' or 'table'
 
 
-def client_selector_sidebar():
+# ---- Performance: load data ONCE and reuse across all functions ----
+def _load_page_data():
+    """Load all data needed by this page once, cache in session_state."""
+    cid = st.session_state.current_client_id
+    if not cid:
+        return None, [], [], []
+    client = get_client(cid)
+    processes = get_client_processes(cid)
+    risks = get_client_risks(cid, prioritized_only=True)
+    assessments = get_assessments(cid) or []
+    return client, processes, risks, assessments
+
+
+def client_selector_sidebar(processes, risks, assessments):
     """Sidebar for client selection and progress."""
     st.sidebar.header("🏢 Current Client")
     clients = get_all_clients()
@@ -70,12 +83,8 @@ def client_selector_sidebar():
         st.session_state.current_client_id = selected_id
         st.rerun()
 
-    # Progress indicator
+    # Progress indicator (uses data passed in, not re-fetched)
     if st.session_state.current_client_id:
-        processes = get_client_processes(st.session_state.current_client_id)
-        risks = get_client_risks(st.session_state.current_client_id, prioritized_only=True)
-        assessments = get_assessments(st.session_state.current_client_id)
-
         total_combinations = len(processes) * len(risks)
         completed = len(assessments)
 
@@ -91,18 +100,13 @@ def client_selector_sidebar():
             st.sidebar.warning("No combinations to assess")
 
 
-def assessment_overview():
+def assessment_overview(client, processes, risks, assessments):
     """Overview of assessment status."""
     st.subheader("📊 Assessment Overview")
 
     if not st.session_state.current_client_id:
         st.warning("Please select a client")
         return
-
-    client = get_client(st.session_state.current_client_id)
-    processes = get_client_processes(st.session_state.current_client_id)
-    risks = get_client_risks(st.session_state.current_client_id, prioritized_only=True)
-    assessments = get_assessments(st.session_state.current_client_id)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -129,9 +133,8 @@ def assessment_overview():
     # Create matrix view
     matrix_data = []
 
-    # Pre-fetch all assessments from backend (backend-aware)
-    all_assessments_overview = get_assessments(st.session_state.current_client_id) or []
-    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in all_assessments_overview}
+    # Use assessments passed in (no re-fetch)
+    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in assessments}
 
     for proc in processes:
         row = {"Process": proc['custom_name'] or proc['process_name']}
@@ -158,16 +161,12 @@ def assessment_overview():
     st.dataframe(df_matrix, width="stretch", hide_index=True)
 
 
-def guided_assessment():
+def guided_assessment(client, processes, risks, assessments):
     """Guided step-by-step assessment interface."""
     st.subheader("🎯 Guided Assessment")
 
     if not st.session_state.current_client_id:
         return
-
-    client = get_client(st.session_state.current_client_id)
-    processes = get_client_processes(st.session_state.current_client_id)
-    risks = get_client_risks(st.session_state.current_client_id, prioritized_only=True)
 
     if not processes or not risks:
         st.warning("Please ensure you have selected both processes and risks.")
@@ -176,9 +175,8 @@ def guided_assessment():
     currency = client.get('currency', 'EUR')
     symbol = CURRENCY_SYMBOLS.get(currency, '€')
 
-    # Build list of combinations (using backend-aware bulk fetch)
-    all_assessments_guided = get_assessments(st.session_state.current_client_id) or []
-    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in all_assessments_guided}
+    # Build list of combinations (using data passed in, no re-fetch)
+    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in assessments}
 
     combinations = []
     for proc in processes:
@@ -376,16 +374,12 @@ def assessment_form(process, risk, existing, client):
             st.rerun()
 
 
-def batch_assessment():
+def batch_assessment(client, processes, risks, assessments):
     """Batch assessment table interface."""
     st.subheader("📊 Batch Assessment")
 
     if not st.session_state.current_client_id:
         return
-
-    client = get_client(st.session_state.current_client_id)
-    processes = get_client_processes(st.session_state.current_client_id)
-    risks = get_client_risks(st.session_state.current_client_id, prioritized_only=True)
 
     if not processes or not risks:
         st.warning("Please ensure you have selected both processes and risks.")
@@ -395,9 +389,8 @@ def batch_assessment():
     Enter assessments in bulk using the table below. Edit the values directly in the table, then click Save.
     """)
 
-    # Build data for editing - pre-fetch all assessments from backend (backend-aware)
-    all_assessments_batch = get_assessments(st.session_state.current_client_id) or []
-    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in all_assessments_batch}
+    # Use assessments passed in (no re-fetch)
+    assessment_lookup = {(a['process_id'], a['risk_id']): a for a in assessments}
 
     data = []
     id_mapping = []  # Store process/risk IDs separately by row index
@@ -458,18 +451,13 @@ def batch_assessment():
         st.rerun()  # Refresh to show updated values
 
 
-def import_export_assessments():
+def import_export_assessments(client, processes, risks, assessments):
     """Import/Export assessments via XLSX."""
     st.subheader("📥 Import / Export")
 
     if not st.session_state.current_client_id:
         st.warning("Please select a client to continue")
         return
-
-    client = get_client(st.session_state.current_client_id)
-    processes = get_client_processes(st.session_state.current_client_id)
-    risks = get_client_risks(st.session_state.current_client_id, prioritized_only=True)
-    assessments = get_assessments(st.session_state.current_client_id) or []
 
     if not processes or not risks:
         st.warning("Please ensure you have selected both processes and risks.")
@@ -586,7 +574,10 @@ def main():
     st.title("🎯 Risk Assessment")
     st.markdown("Assess vulnerability, resilience, and downtime for each process-risk combination.")
 
-    client_selector_sidebar()
+    # Load ALL data once, pass to every function
+    client, processes, risks, assessments = _load_page_data()
+
+    client_selector_sidebar(processes, risks, assessments)
 
     if not st.session_state.current_client_id:
         st.warning("Please select a client to continue")
@@ -602,13 +593,13 @@ def main():
     ])
 
     with tab1:
-        batch_assessment()
+        batch_assessment(client, processes, risks, assessments)
 
     with tab2:
-        guided_assessment()
+        guided_assessment(client, processes, risks, assessments)
 
     with tab3:
-        import_export_assessments()
+        import_export_assessments(client, processes, risks, assessments)
 
     # Navigation
     st.divider()
@@ -619,7 +610,6 @@ def main():
             st.switch_page("pages/3_Risk_Selection.py")
 
     with col3:
-        assessments = get_assessments(st.session_state.current_client_id)
         if assessments:
             if st.button("Next: Results →", type="primary"):
                 st.switch_page("pages/5_Results_Dashboard.py")

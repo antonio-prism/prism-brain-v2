@@ -27,7 +27,8 @@ from modules.external_data import (
     get_api_key,
     validate_api_key,
     get_refresh_schedule,
-    update_refresh_schedule
+    update_refresh_schedule,
+    ensure_external_tables
 )
 from modules.probability_engine import (
     calculate_all_probabilities,
@@ -44,6 +45,9 @@ st.set_page_config(
 )
 
 inject_prism_theme()
+
+# Initialize external data tables (lazy — only runs once, on first visit to this page)
+ensure_external_tables()
 
 
 def show_refresh_trigger():

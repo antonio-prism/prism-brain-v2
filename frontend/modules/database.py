@@ -8,11 +8,40 @@ Phase 2: Hybrid mode — tries backend API first, falls back to local SQLite.
 import sqlite3
 import json
 import os
+import time
 import logging
 from datetime import datetime
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+# --- Simple time-based cache for read operations ---
+_data_cache = {}
+_DATA_CACHE_TTL = 5  # seconds
+
+
+def _get_data_cached(key):
+    """Get cached data if not expired."""
+    if key in _data_cache:
+        entry = _data_cache[key]
+        if time.time() - entry['ts'] < _DATA_CACHE_TTL:
+            return entry['data'], True
+    return None, False
+
+
+def _set_data_cached(key, data):
+    """Store data in cache."""
+    _data_cache[key] = {'data': data, 'ts': time.time()}
+
+
+def _clear_data_cache(prefix=None):
+    """Clear cached data. Optionally only keys starting with prefix."""
+    if prefix:
+        keys_to_remove = [k for k in _data_cache if k.startswith(prefix)]
+        for k in keys_to_remove:
+            del _data_cache[k]
+    else:
+        _data_cache.clear()
 
 # Get the data directory path
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -183,16 +212,18 @@ def create_client(name, location="", industry="", revenue=0, employees=0,
                                        primary_markets, sectors, notes)
             if result is not None:
                 logger.info(f"Client created on backend: {result}")
-                # Also create locally for offline access
                 _create_client_local(name, location, industry, revenue,
                                      employees, currency, export_percentage,
                                      primary_markets, sectors, notes)
+                _clear_data_cache("all_clients")
                 return result
         except Exception as e:
             logger.warning(f"Backend create_client failed, using local: {e}")
-    return _create_client_local(name, location, industry, revenue, employees,
+    result = _create_client_local(name, location, industry, revenue, employees,
                                 currency, export_percentage, primary_markets,
                                 sectors, notes)
+    _clear_data_cache("all_clients")
+    return result
 
 
 def _create_client_local(name, location="", industry="", revenue=0, employees=0,
@@ -214,11 +245,15 @@ def _create_client_local(name, location="", industry="", revenue=0, employees=0,
 
 
 def get_all_clients():
-    """Get all clients. Tries backend API first."""
+    """Get all clients. Uses cache to avoid repeated API calls on Streamlit reruns."""
+    cached, hit = _get_data_cached("all_clients")
+    if hit:
+        return cached
     if is_backend_online():
         try:
             result = api_get_all_clients()
             if result is not None:
+                _set_data_cached("all_clients", result)
                 return result
         except Exception as e:
             logger.warning(f"Backend get_all_clients failed, using local: {e}")
@@ -227,15 +262,21 @@ def get_all_clients():
     cursor.execute('SELECT * FROM clients ORDER BY updated_at DESC')
     clients = [dict(row) for row in cursor.fetchall()]
     conn.close()
+    _set_data_cached("all_clients", clients)
     return clients
 
 
 def get_client(client_id):
-    """Get a specific client by ID. Tries backend API first."""
+    """Get a specific client by ID. Uses cache to avoid repeated API calls."""
+    cache_key = f"client_{client_id}"
+    cached, hit = _get_data_cached(cache_key)
+    if hit:
+        return cached
     if is_backend_online():
         try:
             result = api_get_client(client_id)
             if result is not None:
+                _set_data_cached(cache_key, result)
                 return result
         except Exception as e:
             logger.warning(f"Backend get_client failed, using local: {e}")
@@ -244,7 +285,9 @@ def get_client(client_id):
     cursor.execute('SELECT * FROM clients WHERE id = ?', (client_id,))
     row = cursor.fetchone()
     conn.close()
-    return dict(row) if row else None
+    result = dict(row) if row else None
+    _set_data_cached(cache_key, result)
+    return result
 
 
 def update_client(client_id, **kwargs):
@@ -253,12 +296,16 @@ def update_client(client_id, **kwargs):
         try:
             result = api_update_client(client_id, **kwargs)
             if result:
-                # Also update locally
                 _update_client_local(client_id, **kwargs)
+                _clear_data_cache("all_clients")
+                _clear_data_cache(f"client_{client_id}")
                 return True
         except Exception as e:
             logger.warning(f"Backend update_client failed, using local: {e}")
-    return _update_client_local(client_id, **kwargs)
+    result = _update_client_local(client_id, **kwargs)
+    _clear_data_cache("all_clients")
+    _clear_data_cache(f"client_{client_id}")
+    return result
 
 
 def _update_client_local(client_id, **kwargs):
@@ -288,10 +335,13 @@ def delete_client(client_id):
             result = api_delete_client(client_id)
             if result:
                 _delete_client_local(client_id)
+                _clear_data_cache()  # Clear all cache on delete
                 return True
         except Exception as e:
             logger.warning(f"Backend delete_client failed, using local: {e}")
-    return _delete_client_local(client_id)
+    result = _delete_client_local(client_id)
+    _clear_data_cache()
+    return result
 
 
 def _delete_client_local(client_id):
@@ -341,11 +391,14 @@ def add_client_process(client_id, process_id, process_name, custom_name="",
             if result is not None:
                 _add_process_local(client_id, process_id, process_name,
                                    custom_name, category, criticality_per_day, notes)
+                _clear_data_cache(f"processes_{client_id}")
                 return result
         except Exception as e:
             logger.warning(f"Backend add_process failed, using local: {e}")
-    return _add_process_local(client_id, process_id, process_name,
+    result = _add_process_local(client_id, process_id, process_name,
                               custom_name, category, criticality_per_day, notes)
+    _clear_data_cache(f"processes_{client_id}")
+    return result
 
 
 def _add_process_local(client_id, process_id, process_name, custom_name="",
@@ -366,11 +419,16 @@ def _add_process_local(client_id, process_id, process_name, custom_name="",
 
 
 def get_client_processes(client_id):
-    """Get all processes for a client. Tries backend API first."""
+    """Get all processes for a client. Uses cache to avoid repeated API calls."""
+    cache_key = f"processes_{client_id}"
+    cached, hit = _get_data_cached(cache_key)
+    if hit:
+        return cached
     if is_backend_online():
         try:
             result = api_get_processes(client_id)
             if result is not None:
+                _set_data_cached(cache_key, result)
                 return result
         except Exception as e:
             logger.warning(f"Backend get_processes failed, using local: {e}")
@@ -383,6 +441,7 @@ def get_client_processes(client_id):
     ''', (client_id,))
     processes = [dict(row) for row in cursor.fetchall()]
     conn.close()
+    _set_data_cached(cache_key, processes)
     return processes
 
 
@@ -449,7 +508,6 @@ def _delete_process_local(process_db_id):
 def add_client_risk(client_id, risk_id, risk_name, domain="", category="",
                     probability=0.5, is_prioritized=0, notes=""):
     """Add a risk to a client's risk portfolio. Tries backend API first."""
-    # Convert int to bool for API compatibility
     is_prio_bool = bool(is_prioritized)
     if is_backend_online():
         try:
@@ -458,11 +516,14 @@ def add_client_risk(client_id, risk_id, risk_name, domain="", category="",
             if result is not None:
                 _add_risk_local(client_id, risk_id, risk_name, domain,
                                 category, probability, is_prioritized, notes)
+                _clear_data_cache(f"risks_{client_id}")
                 return result
         except Exception as e:
             logger.warning(f"Backend add_risk failed, using local: {e}")
-    return _add_risk_local(client_id, risk_id, risk_name, domain,
+    result = _add_risk_local(client_id, risk_id, risk_name, domain,
                            category, probability, is_prioritized, notes)
+    _clear_data_cache(f"risks_{client_id}")
+    return result
 
 
 def _add_risk_local(client_id, risk_id, risk_name, domain="", category="",
@@ -483,11 +544,16 @@ def _add_risk_local(client_id, risk_id, risk_name, domain="", category="",
 
 
 def get_client_risks(client_id, prioritized_only=False):
-    """Get all risks for a client. Tries backend API first."""
+    """Get all risks for a client. Uses cache to avoid repeated API calls."""
+    cache_key = f"risks_{client_id}_{prioritized_only}"
+    cached, hit = _get_data_cached(cache_key)
+    if hit:
+        return cached
     if is_backend_online():
         try:
             result = api_get_risks(client_id, prioritized_only)
             if result is not None:
+                _set_data_cached(cache_key, result)
                 return result
         except Exception as e:
             logger.warning(f"Backend get_risks failed, using local: {e}")
@@ -507,6 +573,7 @@ def get_client_risks(client_id, prioritized_only=False):
         ''', (client_id,))
     risks = [dict(row) for row in cursor.fetchall()]
     conn.close()
+    _set_data_cached(cache_key, risks)
     return risks
 
 
@@ -558,12 +625,15 @@ def save_assessment(client_id, process_id, risk_id, vulnerability,
                 _save_assessment_local(client_id, process_id, risk_id,
                                        vulnerability, resilience,
                                        expected_downtime, notes)
+                _clear_data_cache(f"assessments_{client_id}")
                 return True
         except Exception as e:
             logger.warning(f"Backend save_assessment failed, using local: {e}")
-    return _save_assessment_local(client_id, process_id, risk_id,
+    result = _save_assessment_local(client_id, process_id, risk_id,
                                   vulnerability, resilience,
                                   expected_downtime, notes)
+    _clear_data_cache(f"assessments_{client_id}")
+    return result
 
 
 def _save_assessment_local(client_id, process_id, risk_id, vulnerability,
@@ -584,11 +654,16 @@ def _save_assessment_local(client_id, process_id, risk_id, vulnerability,
 
 
 def get_assessments(client_id):
-    """Get all assessments for a client with process and risk details. Tries backend API first."""
+    """Get all assessments for a client with process and risk details. Uses cache."""
+    cache_key = f"assessments_{client_id}"
+    cached, hit = _get_data_cached(cache_key)
+    if hit:
+        return cached
     if is_backend_online():
         try:
             result = api_get_assessments(client_id)
             if result is not None:
+                _set_data_cached(cache_key, result)
                 return result
         except Exception as e:
             logger.warning(f"Backend get_assessments failed, using local: {e}")
@@ -613,6 +688,7 @@ def get_assessments(client_id):
     ''', (client_id,))
     assessments = [dict(row) for row in cursor.fetchall()]
     conn.close()
+    _set_data_cached(cache_key, assessments)
     return assessments
 
 
@@ -701,5 +777,6 @@ def get_risk_exposure_summary(client_id):
     return summary
 
 
-# Initialize database on module import
-init_database()
+# NOTE: init_database() is NOT called at import time.
+# It is called once via @st.cache_resource in Welcome.py.
+# This avoids re-creating/checking tables on every Streamlit rerun.

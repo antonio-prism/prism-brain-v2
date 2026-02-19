@@ -984,8 +984,18 @@ def refresh_all_data(client_industry: str = "general",
     }
 
 
-# Initialize tables when module is imported
-try:
-    init_external_data_tables()
-except Exception as e:
-    print(f"Warning: Could not initialize external data tables: {e}")
+# NOTE: init_external_data_tables() is NOT called at import time.
+# It is called lazily on first use by the Data Sources page.
+# This avoids re-creating/checking tables on every Streamlit rerun.
+_external_tables_initialized = False
+
+
+def ensure_external_tables():
+    """Initialize external data tables once, lazily."""
+    global _external_tables_initialized
+    if not _external_tables_initialized:
+        try:
+            init_external_data_tables()
+            _external_tables_initialized = True
+        except Exception as e:
+            print(f"Warning: Could not initialize external data tables: {e}")

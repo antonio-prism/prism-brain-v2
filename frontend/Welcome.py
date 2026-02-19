@@ -18,6 +18,15 @@ from utils.constants import APP_NAME, APP_VERSION, APP_SUBTITLE, RISK_DOMAINS
 from utils.helpers import load_data_summary
 from utils.theme import inject_prism_theme, page_header, page_footer, domain_card_html, DOMAIN_COLORS
 from modules.database import init_database, is_backend_online, get_data_source, refresh_backend_status
+
+
+# --- One-time initialization (cached, won't re-run on Streamlit reruns) ---
+@st.cache_resource
+def _init_once():
+    init_database()
+    return True
+
+
 # Page configuration
 st.set_page_config(
     page_title=f"{APP_NAME} - Welcome",
@@ -26,8 +35,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Initialize database
-init_database()
+_init_once()
 
 # --- Backend Status Indicator (sidebar) ---
 with st.sidebar:

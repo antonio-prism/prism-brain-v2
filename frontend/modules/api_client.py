@@ -39,7 +39,7 @@ def _get_api_base_url() -> str:
     return _DEFAULT_API_URL
 
 API_BASE_URL = _get_api_base_url()
-API_TIMEOUT = 5  # seconds (local backend should respond in <1s)
+API_TIMEOUT = 2  # seconds (local backend should respond in <1s)
 CACHE_TTL = 300  # 5 minutes in seconds
 
 # Simple in-memory cache
@@ -74,7 +74,7 @@ def check_backend_health() -> Dict:
     """
     try:
         start = time.time()
-        resp = requests.get(f"{API_BASE_URL}/health", timeout=3)
+        resp = requests.get(f"{API_BASE_URL}/health", timeout=0.5)
         elapsed_ms = round((time.time() - start) * 1000)
         if resp.status_code == 200:
             data = resp.json()
@@ -513,9 +513,22 @@ def normalize_v2_event(event: Dict) -> Dict:
 def fetch_v2_events_normalized(domain: str = None,
                                 family_code: str = None,
                                 search: str = None) -> List[Dict]:
-    """Fetch V2 events from backend and normalize for frontend use."""
+    """Fetch V2 events from backend and normalize for frontend use.
+    Results are cached via the in-memory cache in api_v2_get_events."""
     events = api_v2_get_events(domain=domain, family_code=family_code,
                                 search=search)
     if not events:
         return []
     return [normalize_v2_event(e) for e in events]
+
+
+# Streamlit-cached version for pages that load events repeatedly
+if _HAS_STREAMLIT:
+    @st.cache_data(ttl=300, show_spinner=False)
+    def fetch_v2_events_cached(domain: str = None,
+                                family_code: str = None,
+                                search: str = None) -> List[Dict]:
+        """Streamlit-cached wrapper for fetch_v2_events_normalized."""
+        return fetch_v2_events_normalized(domain=domain,
+                                           family_code=family_code,
+                                           search=search)

@@ -80,7 +80,7 @@ class DataFetcher:
     """
 
     def __init__(self):
-        self.timeout = aiohttp.ClientTimeout(total=30)
+        self.timeout = aiohttp.ClientTimeout(total=10)
 
     async def fetch_usgs_earthquakes(self, days: int = 30) -> Dict[str, Any]:
         """Fetch earthquake data from USGS."""

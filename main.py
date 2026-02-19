@@ -24,6 +24,14 @@ Kept endpoints (used by frontend):
 """
 
 import logging
+
+# Load .env file BEFORE any other imports that use environment variables
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed; rely on system environment variables
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
