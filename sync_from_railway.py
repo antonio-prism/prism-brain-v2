@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Railway production database (public URL for external access)
-RAILWAY_URL = "postgresql://postgres:GuDIefSxVNllIGCEHlyYIgwGQfYPHRVp@switchyard.proxy.rlwy.net:16186/railway"
+# Set RAILWAY_DATABASE_URL environment variable or pass as argument
+RAILWAY_URL = os.getenv("RAILWAY_DATABASE_URL", "")
 
 # Local database from .env
 LOCAL_URL = os.getenv("DATABASE_URL", "postgresql://prism_user:prism2026@127.0.0.1:5432/prism_brain_v2")
