@@ -9,9 +9,17 @@ Three methods for computing base probability (prior):
 
 import logging
 
+from ..annual_data import (
+    get_dbir_base_rate,
+    get_dbir_attack_shares,
+    get_dark_figures,
+    get_subsplit_override,
+)
+
 logger = logging.getLogger(__name__)
 
-# DBIR-derived constants (update annually from Type B manual entry)
+# DBIR-derived constants (loaded from annual_updates.json if available,
+# otherwise these hardcoded values are used as defaults)
 DBIR_BASE_BREACH_RATE = 0.18  # 18% annual probability of any breach type
 
 DBIR_ATTACK_SHARES = {
@@ -120,6 +128,9 @@ def method_b_prior(event_id: str, incident_rate: float | None = None,
     Used for per-organization risk from surveys (DBIR, IC3, Dragos).
 
     prior = incident_rate × dark_figure (capped at 0.95)
+
+    Values are loaded from annual_updates.json if available,
+    otherwise hardcoded defaults in this module are used.
     """
     if incident_rate is None:
         # Derive from DBIR mapping
@@ -136,12 +147,19 @@ def method_b_prior(event_id: str, incident_rate: float | None = None,
             incident_rate = mapping["fixed_rate"]
             formula_detail = f"fixed rate {incident_rate} from {mapping['subsplit_source']}"
         else:
+            # Load from annual overrides (falls back to hardcoded defaults)
+            base_rate = get_dbir_base_rate()
+            attack_shares = get_dbir_attack_shares()
             share_key = mapping["share"]
-            share_value = DBIR_ATTACK_SHARES[share_key]
-            subsplit = mapping["subsplit"]
-            incident_rate = DBIR_BASE_BREACH_RATE * share_value * subsplit
+            share_value = attack_shares.get(share_key, DBIR_ATTACK_SHARES.get(share_key, 0))
+
+            # Check for subsplit override from annual data
+            subsplit_override = get_subsplit_override(event_id)
+            subsplit = subsplit_override if subsplit_override is not None else mapping["subsplit"]
+
+            incident_rate = base_rate * share_value * subsplit
             formula_detail = (
-                f"{DBIR_BASE_BREACH_RATE} base × {share_value} {share_key} share "
+                f"{base_rate} base × {share_value} {share_key} share "
                 f"× {subsplit} subsplit = {incident_rate:.4f}"
             )
     else:

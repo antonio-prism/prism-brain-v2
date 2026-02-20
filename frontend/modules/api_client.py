@@ -105,165 +105,17 @@ def check_backend_health() -> Dict:
         return {'status': 'unhealthy', 'error': str(e), 'checked_at': datetime.utcnow().isoformat()}
 
 
-def fetch_events(limit: int = 500, skip: int = 0, use_cache: bool = True) -> Optional[List[Dict]]:
-    """
-    Fetch risk events from the backend.
-    Returns list of event dicts or None on error.
-    """
-    cache_key = f"events_{limit}_{skip}"
+def api_engine_status(use_cache: bool = True) -> Optional[Dict]:
+    """Get engine health/status including version, credentials, and event counts."""
+    cache_key = "engine_status"
     if use_cache:
         cached = _get_cached(cache_key)
         if cached is not None:
             return cached
-    
-    try:
-        resp = _http_session.get(
-            f"{API_BASE_URL}/api/v1/events",
-            params={'limit': limit, 'skip': skip},
-            timeout=API_TIMEOUT
-        )
-        if resp.status_code == 200:
-            data = resp.json()
-            events = data if isinstance(data, list) else data.get('events', data.get('data', []))
-            _set_cached(cache_key, events)
-            return events
-        else:
-            logger.warning(f"Failed to fetch events: HTTP {resp.status_code}")
-            return None
-    except Exception as e:
-        logger.error(f"Error fetching events: {e}")
-        return None
-
-
-def fetch_probabilities(limit: int = 0, skip: int = 0, use_cache: bool = True) -> Optional[Dict[str, Dict]]:
-    """
-    Fetch latest calculated probabilities from the backend.
-    Uses pagination (max 500 per request) to retrieve all entries.
-    Returns dict mapping event_id -> probability data, or None on error.
-    """
-    cache_key = "probabilities_all"
-    if use_cache:
-        cached = _get_cached(cache_key)
-        if cached is not None:
-            return cached
-    
-    PAGE_SIZE = 500  # Backend maximum limit per request
-    prob_dict = {}
-    current_skip = 0
-    total = None
-    
-    try:
-        while True:
-            resp = _http_session.get(
-                f"{API_BASE_URL}/api/v1/probabilities",
-                params={'limit': PAGE_SIZE, 'skip': current_skip},
-                timeout=API_TIMEOUT
-            )
-            if resp.status_code != 200:
-                logger.warning(f"Failed to fetch probabilities page at skip={current_skip}: HTTP {resp.status_code}")
-                break
-            
-            data = resp.json()
-            if total is None:
-                total = data.get('total', 0)
-            
-            prob_list = data if isinstance(data, list) else data.get('probabilities', data.get('data', []))
-            if not prob_list:
-                break
-            
-            for p in prob_list:
-                eid = p.get('event_id')
-                if eid and eid not in prob_dict:  # Keep first (newest) record per event
-                    prob_dict[eid] = {
-                        'probability': p.get('probability_pct', 50.0) / 100.0,
-                        'probability_pct': p.get('probability_pct', 50.0),
-                        'confidence_score': p.get('confidence_score', 0.5),
-                        'ci_lower_pct': p.get('ci_lower_pct'),
-                        'ci_upper_pct': p.get('ci_upper_pct'),
-                        'precision_band': p.get('precision_band', 'UNKNOWN'),
-                        'calculation_date': p.get('calculation_date'),
-                        'flags': p.get('flags', ''),
-                        'data_sources_used': p.get('data_sources_used', 0),
-                        'baseline_probability_pct': p.get('baseline_probability_pct'),
-                        'log_odds': p.get('log_odds'),
-                        'total_adjustment': p.get('total_adjustment'),
-                        'change_direction': p.get('change_direction'),
-                        'attribution': p.get('attribution'),
-                        'explanation': p.get('explanation'),
-                        'methodology_tier': p.get('methodology_tier'),
-                        'signal': p.get('signal'),
-                        'momentum': p.get('momentum'),
-                        'trend': p.get('trend'),
-                        'is_anomaly': p.get('is_anomaly', False)
-                    }
-            
-            current_skip += len(prob_list)
-            if total and current_skip >= total:
-                break
-            if len(prob_list) < PAGE_SIZE:
-                break
-        
-        if prob_dict:
-            logger.info(f"Fetched {len(prob_dict)} probabilities from backend (paginated, {current_skip} total entries)")
-            _set_cached(cache_key, prob_dict)
-            return prob_dict
-        else:
-            logger.warning("No probabilities returned from backend after pagination")
-            return None
-    except Exception as e:
-        logger.error(f"Error fetching probabilities: {e}")
-        if prob_dict:
-            logger.info(f"Returning {len(prob_dict)} partial probabilities despite error")
-            return prob_dict
-        return None
-
-
-def fetch_data_sources(use_cache: bool = True) -> Optional[List[Dict]]:
-    cache_key = "data_sources"
-    if use_cache:
-        cached = _get_cached(cache_key)
-        if cached is not None:
-            return cached
-    try:
-        resp = _http_session.get(f"{API_BASE_URL}/api/v1/data-sources/health", timeout=API_TIMEOUT)
-        if resp.status_code == 200:
-            data = resp.json()
-            sources = data if isinstance(data, list) else data.get('data_sources', data.get('sources', data.get('data', [])))
-            _set_cached(cache_key, sources)
-            return sources
-        else:
-            return None
-    except Exception as e:
-        return None
-
-
-def trigger_data_refresh(recalculate: bool = True, limit: int = 1000) -> Optional[Dict]:
-    try:
-        resp = _http_session.post(f"{API_BASE_URL}/api/v1/data/refresh", params={'recalculate': recalculate, 'limit': limit}, timeout=120)
-        if resp.status_code == 200:
-            clear_cache()
-            return resp.json()
-        return None
-    except Exception as e:
-        return None
-
-
-def trigger_recalculation(limit: int = 1000) -> Optional[Dict]:
-    try:
-        resp = _http_session.post(f"{API_BASE_URL}/api/v1/calculations/trigger-full", params={'limit': limit}, timeout=90)
-        if resp.status_code == 200:
-            clear_cache()
-            return resp.json()
-        return None
-    except Exception as e:
-        return None
-
-
-def get_event_probability(event_id: str, use_cache: bool = True) -> Optional[Dict]:
-    all_probs = fetch_probabilities(use_cache=use_cache)
-    if all_probs and event_id in all_probs:
-        return all_probs[event_id]
-    return None
+    result = _api_request("GET", "/api/v2/engine/status", timeout=10)
+    if result:
+        _set_cached(cache_key, result)
+    return result
 
 
 # =============================================================================
@@ -536,6 +388,19 @@ def get_engine_probability(event_id: str) -> Optional[float]:
         if isinstance(result, dict):
             return result.get("layer1", {}).get("p_global")
     return None
+
+
+def api_engine_get_annual_data() -> Optional[Dict]:
+    """Get current annual update data (DBIR rates, Dragos stats, dark figures)."""
+    return _api_request("GET", "/api/v2/engine/annual-data", timeout=5)
+
+
+def api_engine_save_annual_data(data: Dict) -> Optional[Dict]:
+    """Save annual update data (DBIR rates, Dragos stats, dark figures)."""
+    result = _api_request("PUT", "/api/v2/engine/annual-data", json_data=data, timeout=5)
+    if result:
+        clear_cache()  # Invalidate cached probabilities since inputs changed
+    return result
 
 
 def get_best_probability(event_id: str, fallback: float = 0.5) -> float:

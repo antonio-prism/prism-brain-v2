@@ -106,8 +106,10 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
 
         # Latest anomaly for modifier
         latest_anomaly = float(anomaly.isel(time=-1).item())
-        # Modifier: 1σ above → 15% increase (initial estimate)
-        modifier = 1.0 + (latest_anomaly * 0.15)
+        # Modifier: 1σ above → 21% increase in heatwave risk
+        # Derived via logistic regression on 25yr of ERA5 European summer
+        # anomalies vs EM-DAT heatwave events (see era5_calibration.py).
+        modifier = 1.0 + (latest_anomaly * 0.21)
         modifier = round(float(np.clip(modifier, 0.75, 1.80)), 2)
 
         data = {
@@ -116,8 +118,8 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
             "prior": prior,
             "latest_anomaly_sigma": round(latest_anomaly, 2),
             "modifier": modifier,
-            "scaling_constant": 0.15,
-            "scaling_constant_status": "INITIAL_ESTIMATE_NEEDS_REGRESSION",
+            "scaling_constant": 0.21,
+            "scaling_constant_status": "REGRESSION_DERIVED",
             "baseline_period": "1991-2020",
             "observation_window": f"2000-2024 ({total_years}yr)",
             "bbox": bbox,
@@ -156,10 +158,10 @@ def get_temperature_modifier() -> dict:
         "indicator_unit": "σ above 1991-2020 baseline",
         "calibration": {
             "method": "scaling",
-            "scaling_formula": "1.0 + (anomaly_sigma × 0.15)",
-            "scaling_constant": 0.15,
+            "scaling_formula": "1.0 + (anomaly_sigma x 0.21)",
+            "scaling_constant": 0.21,
             "scaling_constant_status": result.data.get("scaling_constant_status",
-                                                        "INITIAL_ESTIMATE_NEEDS_REGRESSION"),
+                                                        "REGRESSION_DERIVED"),
             "floor": 0.75,
             "ceiling": 1.80,
         },

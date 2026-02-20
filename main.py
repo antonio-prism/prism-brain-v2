@@ -1,26 +1,16 @@
 """
-PRISM Brain FastAPI Application - v3.0.0
+PRISM Brain FastAPI Application - v3.1.0
 
 Slim entry point for the REST API.
-Phase 1-3: Database, API, Railway deployment, 905 events, probability engine.
-Phase 4A-4E: Signal extraction, ML enhancement, explainability, risk modeling.
 
-Removed endpoints (not used by frontend):
-- Single event detail, bulk events, bulk weights, bulk values
-- Indicator weights listing, indicator values listing
-- Probability history, attribution, explanation, dependencies (endpoints removed, but model kept)
-- Dashboard summary, calculations listing, legacy trigger
-- Data sources listing (redundant with data-sources/health)
-- Dashboard HTML page (static file)
+Active route groups:
+- GET  /health                     — Health check
+- /api/v1/clients/*                — Client CRUD (client_routes.py)
+- /api/v2/*                        — V2 taxonomy, events, probabilities (v2_routes.py)
+- /api/v2/engine/*                 — Probability engine (prism_engine/api_routes.py)
 
-Kept endpoints (used by frontend):
-- GET /health
-- GET /api/v1/events (list events)
-- GET /api/v1/probabilities (list probabilities)
-- GET /api/v1/data-sources/health
-- POST /api/v1/data/refresh
-- POST /api/v1/calculations/trigger-full
-- GET /api/v1/stats
+Legacy V1 data/calculation routes have been retired — the probability engine
+(prism_engine) replaces them entirely.
 """
 
 import logging
@@ -39,9 +29,6 @@ from datetime import datetime
 
 from config.settings import get_settings
 from database.connection import init_db, get_session_context
-from routes.events import register_events_routes
-from routes.calculations import register_calculations_routes
-from routes.data_sources import register_data_sources_routes
 from client_routes import register_client_routes
 from v2_routes import register_v2_routes
 from prism_engine.api_routes import register_engine_routes
@@ -56,7 +43,7 @@ settings = get_settings()
 # Create FastAPI app
 app = FastAPI(
     title=settings.app_name,
-    version="3.0.0",
+    version="3.1.0",
     description="Probability calculation engine for 900 risk events with signal extraction, ML enhancement, and explainability",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -74,9 +61,6 @@ app.add_middleware(
 # Register all route modules
 register_client_routes(app, get_session_context)
 register_v2_routes(app, get_session_context)
-register_events_routes(app, get_session_context)
-register_calculations_routes(app, get_session_context)
-register_data_sources_routes(app, get_session_context)
 register_engine_routes(app)
 
 
@@ -88,10 +72,10 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
-        "version": "3.0.0",
+        "version": "3.1.0",
         "features": [
-            "signal_extraction", "explainability",
-            "dependency_modeling", "enhanced_confidence"
+            "probability_engine", "annual_data_updates",
+            "method_c_research", "era5_calibration"
         ]
     }
 
@@ -135,7 +119,7 @@ def ensure_schema_updates(session):
 @app.on_event("startup")
 async def startup_event():
     """Initialize database and run schema migrations on startup."""
-    logger.info("Starting PRISM Brain API v3.0.0...")
+    logger.info("Starting PRISM Brain API v3.1.0...")
     init_db()
     logger.info("Database initialized")
     # Run schema migrations

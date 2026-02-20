@@ -7,13 +7,15 @@ Adds endpoints that expose the probability engine to the existing app:
   GET  /api/v2/engine/compute-phase1      — Compute 10 Phase 1 events only
   GET  /api/v2/engine/status              — Engine health/status
   GET  /api/v2/engine/fallback-rates      — List all fallback rates
+  GET  /api/v2/engine/annual-data         — Get current annual update data
+  PUT  /api/v2/engine/annual-data         — Save annual update data
 """
 
 import logging
 from datetime import datetime
 from typing import Optional
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Request
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +100,71 @@ def register_engine_routes(app: FastAPI):
         return {
             "count": len(rates),
             "rates": rates,
+        }
+
+    # ── Annual data management endpoints ────────────────────────────────
+
+    @app.get("/api/v2/engine/annual-data")
+    async def get_annual_data():
+        """Get current annual update data (DBIR rates, Dragos stats, dark figures)."""
+        from prism_engine.annual_data import load_annual_data
+        return load_annual_data()
+
+    @app.get("/api/v2/engine/era5-calibration")
+    async def era5_calibration():
+        """Run ERA5 temperature scaling regression and return results."""
+        from prism_engine.computation.era5_calibration import run_scaling_regression
+        return run_scaling_regression()
+
+    @app.put("/api/v2/engine/annual-data")
+    async def save_annual_data_endpoint(request: Request):
+        """Save annual update data from the manual entry page."""
+        from prism_engine.annual_data import save_annual_data
+        body = await request.json()
+        success = save_annual_data(body)
+        if success:
+            return {"status": "saved", "message": "Annual data updated successfully"}
+        return {"status": "error", "message": "Failed to save annual data"}
+
+    # ── Method C research integration ─────────────────────────────────
+
+    @app.post("/api/v2/engine/load-method-c-research")
+    async def load_method_c_research(request: Request):
+        """Load and integrate Method C research output JSON.
+
+        Accepts the JSON body directly (same schema as method_c_research_output.json).
+        Validates, integrates, and returns stats.
+        """
+        from prism_engine.method_c_loader import load_research_output, integrate_research
+        import tempfile
+        from pathlib import Path
+
+        body = await request.json()
+
+        # Write to temp file and validate
+        tmp = Path(tempfile.mktemp(suffix=".json"))
+        try:
+            with open(tmp, "w", encoding="utf-8") as f:
+                import json
+                json.dump(body, f)
+            data, errors = load_research_output(tmp)
+        finally:
+            tmp.unlink(missing_ok=True)
+
+        if data is None:
+            return {"status": "error", "errors": errors}
+
+        if errors:
+            return {
+                "status": "warning",
+                "message": f"Loaded with {len(errors)} validation warnings",
+                "errors": errors[:20],
+                "stats": integrate_research(data),
+            }
+
+        return {
+            "status": "success",
+            "stats": integrate_research(data),
         }
 
     logger.info("Registered prism_engine API routes at /api/v2/engine/*")

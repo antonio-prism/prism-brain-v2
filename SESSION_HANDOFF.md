@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 20, 2026 — Session 6)
+## 2. CURRENT STATE (as of Feb 20, 2026 — Session 7)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -32,7 +32,7 @@ The app has two parts:
 - **Probability Engine (prism_engine) built and integrated:**
   - **ALL 174 events computing successfully (Phase 2 complete)**
   - Engine version 2.0.0
-  - 10 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, ACLED, EM-DAT, Copernicus)
+  - 10 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, UCDP, EM-DAT, Copernicus)
   - 3 computation methods: A (frequency, 33 events), B (incidence rate, 26 events), C (structural calibration, 115 events)
   - Modifier system (ratio + categorical)
   - Fallback chain: computed → cached → hardcoded base rate
@@ -43,8 +43,10 @@ The app has two parts:
 
 ### What still needs work:
 - ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP (Uppsala Conflict Data Program). Free, no API key, 25-year window. STR-GEO-001 now computes 48% prior (12 war-years in 25).
+- ~~**ERA5 scaling constant 0.15**~~ — **RESOLVED.** Derived coefficient 0.21 via logistic regression on 25yr of ERA5 European summer anomalies vs EM-DAT heatwave events. See `prism_engine/computation/era5_calibration.py`.
 - **Copernicus ERA5 downloads are slow:** cdsapi + xarray + netcdf4 installed and configured. CDS API key works. But ERA5 data requests take 30+ minutes — first download not yet completed. Temperature modifier falls back to 1.0 until first cache.
-- **Legacy V1 routes still active:** `routes/data_sources.py` and `routes/calculations.py` kept for frontend compatibility — can be removed now that frontend uses engine
+- **Method C research in progress:** A parallel Claude session is researching evidence-based sub-probabilities for ~115 Method C events using the PRD at `docs/PRD_Method_C_Research.md`. Output expected as `method_c_research_output.json`.
+- ~~**Legacy V1 routes still active**~~ — **RESOLVED.** V1 data/calculation routes retired from `main.py`. Data Sources page rewired to V2 engine endpoints. Client CRUD routes (`/api/v1/clients/*`) kept (still active).
 
 ### Git status:
 - Latest pushed commit: `b798cfc` — Phase 2 engine scaling (all 174 events)
@@ -63,15 +65,16 @@ git checkout 3ddd23e -- .
 ### File Structure:
 ```
 prism-brain-v2/
-├── main.py                    # App entry point, health check, startup, registers all routes
-├── routes/
+├── main.py                    # App entry point (v3.1.0), health check, registers active routes
+├── routes/                    # RETIRED — V1 data/calculation routes (no longer registered)
 │   ├── __init__.py
-│   ├── events.py              # GET /api/v1/events
-│   ├── calculations.py        # LEGACY — Old probability engine (V1, still used by frontend)
-│   └── data_sources.py        # LEGACY — Old DataFetcher (V1, still used by frontend)
+│   ├── events.py              # RETIRED — GET /api/v1/events
+│   ├── calculations.py        # RETIRED — Old probability engine (replaced by prism_engine)
+│   └── data_sources.py        # RETIRED — Old DataFetcher (replaced by prism_engine)
 ├── prism_engine/              # Probability engine (v2.0 — all 174 events)
 │   ├── __init__.py
 │   ├── api_routes.py          # FastAPI routes at /api/v2/engine/*
+│   ├── annual_data.py         # Annual data update persistence (DBIR, Dragos overrides)
 │   ├── engine.py              # Main orchestrator: compute(), compute_all()
 │   ├── fallback.py            # Loads 174 fallback rates from seed files + Risk Catalog
 │   ├── config/
@@ -88,16 +91,19 @@ prism-brain-v2/
 │   │   ├── world_bank.py      # World Bank GDP growth (no key)
 │   │   ├── fred.py            # FRED economic indicators (needs key)
 │   │   ├── nvd.py             # NIST NVD vulnerabilities (needs key)
-│   │   ├── acled.py           # ACLED conflict data (needs key)
+│   │   ├── acled.py           # ACLED conflict data (DEPRECATED — replaced by UCDP)
+│   │   ├── ucdp.py            # UCDP/PRIO conflict data (free, no key)
 │   │   ├── emdat.py           # EM-DAT disasters (local file)
 │   │   └── copernicus.py      # Copernicus ERA5 climate (needs key + cdsapi)
 │   ├── computation/
 │   │   ├── priors.py          # Methods A, B, C for prior calculation
 │   │   ├── modifiers.py       # Ratio and categorical modifier calibration
-│   │   ├── formulas.py        # P_global = prior × ∏(modifiers) with floor/ceiling
+│   │   ├── formulas.py        # P_global = prior x modifiers with floor/ceiling
+│   │   ├── era5_calibration.py # ERA5 temperature scaling regression (derived 0.21 coefficient)
 │   │   └── validation.py      # Value validation and clipping rules
 │   ├── data/
 │   │   ├── manual/news_events.json  # Manual event lists (canal closures, disease outbreaks)
+│   │   ├── annual_updates.json      # Annual data overrides (written by manual entry page)
 │   │   ├── fallback_rates.json      # Cached fallback rates (auto-generated)
 │   │   └── cache/                   # Connector response cache (auto-managed)
 │   ├── manual_entry/templates/      # Templates for manual data entry (DBIR, Dragos)
@@ -125,7 +131,8 @@ prism-brain-v2/
 │   │   ├── 3_Risk_Selection.py
 │   │   ├── 4_Risk_Assessment.py
 │   │   ├── 5_Results_Dashboard.py
-│   │   └── 7_Data_Sources.py
+│   │   ├── 6_Annual_Data_Update.py  # Type B manual entry (DBIR, Dragos, dark figures)
+│   │   └── 7_Data_Sources.py        # Engine status & compute-all (rewired from V1 to V2)
 │   ├── data/
 │   │   ├── seeds/             # 4 JSON files with 174 risk event definitions
 │   │   │   ├── physical_domain_seed.json    (44 events)
@@ -172,23 +179,24 @@ prism-brain-v2/
     └── SETUP_TODO.md
 ```
 
-### Active API Endpoints:
+### Active API Endpoints (v3.1.0):
 | Endpoint | File | Purpose |
 |----------|------|---------|
 | GET /health | main.py | Health check |
-| GET /api/v1/events | routes/events.py | List all risk events |
-| GET /api/v1/probabilities | routes/calculations.py | LEGACY — List probabilities |
-| POST /api/v1/calculations/trigger-full | routes/calculations.py | LEGACY — Run old calculation |
-| GET /api/v1/data-sources/health | routes/data_sources.py | LEGACY — Data source status |
-| POST /api/v1/data/refresh | routes/data_sources.py | LEGACY — Refresh old data |
-| GET /api/v1/stats | routes/data_sources.py | LEGACY — System statistics |
 | All /api/v1/clients/* | client_routes.py | Client CRUD, processes, risks, assessments |
 | All /api/v2/* | v2_routes.py | V2 taxonomy (domains, families, events) |
-| **GET /api/v2/engine/compute/{event_id}** | **prism_engine/api_routes.py** | **Compute single event probability** |
-| **GET /api/v2/engine/compute-all** | **prism_engine/api_routes.py** | **Compute all 174 events (?domain= filter)** |
-| **GET /api/v2/engine/compute-phase1** | **prism_engine/api_routes.py** | **Compute original 10 Phase 1 events only** |
-| **GET /api/v2/engine/status** | **prism_engine/api_routes.py** | **Engine health & credentials** |
-| **GET /api/v2/engine/fallback-rates** | **prism_engine/api_routes.py** | **All 174 fallback rates** |
+| GET /api/v2/engine/compute/{event_id} | prism_engine/api_routes.py | Compute single event probability |
+| GET /api/v2/engine/compute-all | prism_engine/api_routes.py | Compute all 174 events (?domain= filter) |
+| GET /api/v2/engine/compute-phase1 | prism_engine/api_routes.py | Compute original 10 Phase 1 events only |
+| GET /api/v2/engine/status | prism_engine/api_routes.py | Engine health & credentials |
+| GET /api/v2/engine/fallback-rates | prism_engine/api_routes.py | All 174 fallback rates |
+| GET /api/v2/engine/annual-data | prism_engine/api_routes.py | Get annual update data (DBIR, Dragos, dark figures) |
+| PUT /api/v2/engine/annual-data | prism_engine/api_routes.py | Save annual update data from manual entry page |
+| GET /api/v2/engine/era5-calibration | prism_engine/api_routes.py | Run ERA5 temperature scaling regression |
+| POST /api/v2/engine/load-method-c-research | prism_engine/api_routes.py | Load Method C research output JSON |
+
+**Retired V1 routes** (no longer registered in main.py):
+`/api/v1/events`, `/api/v1/probabilities`, `/api/v1/data-sources/health`, `/api/v1/data/refresh`, `/api/v1/calculations/trigger-full`, `/api/v1/stats`
 
 ---
 
@@ -549,6 +557,76 @@ Fixed 3 practical gaps preventing the engine from using real external data.
 - Result: STR-GEO-001 prior = 48% (12 war-years in 25). War years: 2000-2005, 2014-2016, 2022-2024.
 - Files: `ucdp.py` (new connector), `engine.py`, `event_mapping.py`, `sources.py`
 - Old `acled.py` kept but no longer used by the engine
+
+### Phase 15: Type B Manual Entry Page + ERA5 Regression (Session 7)
+Built the annual data update infrastructure and calibrated the ERA5 temperature scaling.
+
+**Step A: Type B Manual Entry Page (COMPLETED)**
+Created a Streamlit page for updating DBIR breach rates, Dragos ICS statistics, and dark figure multipliers when new annual reports are published.
+
+Architecture:
+- `prism_engine/annual_data.py` — Persistence layer. Loads/saves annual data overrides to `prism_engine/data/annual_updates.json`. Falls back to hardcoded defaults if no override file exists.
+- `prism_engine/computation/priors.py` — Modified `method_b_prior()` to call `get_dbir_base_rate()`, `get_dbir_attack_shares()`, and `get_subsplit_override()` from the annual data module instead of using hardcoded constants directly.
+- `prism_engine/api_routes.py` — Added GET/PUT endpoints at `/api/v2/engine/annual-data`.
+- `frontend/modules/api_client.py` — Added `api_engine_get_annual_data()` and `api_engine_save_annual_data()`.
+- `frontend/pages/6_Annual_Data_Update.py` — 4-tab page:
+  - Tab 1: DBIR Breach Rates (base rate + 6 attack type shares, with live probability preview)
+  - Tab 2: Dragos ICS/OT (incidents, manufacturing %, total orgs, dark figure, with live DIG-CIC-002 preview)
+  - Tab 3: Dark Figure Multipliers (6 underreporting correction factors)
+  - Tab 4: Event Subsplits (Advanced) — override individual event subsplit factors
+- `frontend/.streamlit/pages.toml` — Added "Annual Data Update" navigation entry
+
+**Step D: ERA5 Temperature Scaling Regression (COMPLETED)**
+Replaced the hardcoded 0.15 scaling constant with a regression-derived 0.21 coefficient.
+
+Methodology:
+- X = European summer (JJA) temperature anomaly in standard deviations (from C3S/ERA5 published data, 2000-2024)
+- Y = Binary heatwave indicator (1 if EM-DAT reports any heatwave in EEA-Extended that year)
+- Method: Logistic regression via Newton-Raphson IRLS, then marginal effect → relative risk conversion
+- Result: Optimal coefficient = **0.21** (up from 0.15 initial estimate)
+  - At 1.5σ: modifier = 1.32 (logistic predicts 1.34 — excellent fit)
+  - At 2.0σ: modifier = 1.42 (logistic predicts 1.48 — good fit)
+  - At 2.5σ: modifier = 1.53 (logistic predicts 1.57 — good fit)
+  - Pseudo-R² = 0.16, accuracy = 64% (16/25)
+  - Key finding: ALL years with anomaly > 1.5σ had EM-DAT heatwave events (6/6 = 100%)
+
+Files:
+- `prism_engine/computation/era5_calibration.py` — New module with published anomaly table, logistic regression, scaling derivation
+- `prism_engine/connectors/copernicus.py` — Updated: 0.15 → 0.21, status "INITIAL_ESTIMATE_NEEDS_REGRESSION" → "REGRESSION_DERIVED"
+- `prism_engine/api_routes.py` — Added GET `/api/v2/engine/era5-calibration` endpoint
+
+**Step E: ENTSO-E Connector (DEFERRED)**
+Marked as optional in the original plan. Can be added later if needed for PHY-ENE events.
+
+**Method C Research (DELEGATED)**
+A parallel Claude session is researching evidence-based sub-probabilities for 115 Method C events using the PRD at `docs/PRD_Method_C_Research.md`. When the research output (`method_c_research_output.json`) is received, it can be loaded via the POST `/api/v2/engine/load-method-c-research` endpoint or placed at `method_c_research_output.json` in the project root.
+
+### Phase 16: Method C Loader + V1 Route Cleanup (Session 8)
+Finalized the engine integration and removed legacy V1 routes.
+
+**Method C Research Output Loader (COMPLETED)**
+Built the integration pipeline for consuming Method C research output from the parallel Claude session.
+
+Files:
+- `prism_engine/method_c_loader.py` — New module:
+  - `load_research_output(path)` — Validates JSON schema: requires event_id, p_pre, p_trig, p_impl (each 0.01-0.99), plus evidence dict
+  - `integrate_research(data)` — Writes event-level overrides to `prism_engine/data/method_c_overrides.json`
+  - `get_method_c_override(event_id)` — Returns calibrated sub-probabilities for a specific event, or None
+- `prism_engine/engine.py` — Updated `_get_method_c_prior()` priority chain:
+  1. Phase 1 hand-crafted configs (highest priority)
+  2. Event-specific research overrides (from method_c_overrides.json)
+  3. Family-level calibrated defaults (from METHOD_C_FAMILY_DEFAULTS)
+  4. Generic 0.50 defaults (lowest priority)
+- `prism_engine/api_routes.py` — Added POST `/api/v2/engine/load-method-c-research`
+
+**Legacy V1 Route Cleanup (COMPLETED)**
+Retired all V1 data/calculation routes. The probability engine now handles everything.
+
+Changes:
+- `main.py` — Removed imports and registration of `routes/events.py`, `routes/calculations.py`, `routes/data_sources.py`. Version bumped to 3.1.0. Health endpoint features updated.
+- `frontend/modules/api_client.py` — Removed 6 unused V1 functions: `fetch_events`, `fetch_probabilities`, `fetch_data_sources`, `trigger_data_refresh`, `trigger_recalculation`, `get_event_probability`. Added `api_engine_status()`.
+- `frontend/pages/7_Data_Sources.py` — Complete rewrite. Replaced V1 refresh/recalculate buttons with V2 engine compute-all. Shows engine status, API credentials, method distribution. Fixed broken navigation link (6_Results → 5_Results).
+- Route files in `routes/` kept on disk for reference but no longer registered in the FastAPI app.
 
 ---
 

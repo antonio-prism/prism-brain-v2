@@ -433,7 +433,10 @@ def _compute_method_c(event_id: str, config: dict) -> dict:
 
 
 def _get_method_c_prior(event_id: str, config: dict) -> dict:
-    """Get the Method C prior using structural calibration."""
+    """Get the Method C prior using structural calibration.
+
+    Priority: Phase 1 hand-crafted > research overrides > family defaults > generic 0.50.
+    """
 
     # Phase 1 hand-crafted events with manual_c source
     prior_source = config.get("prior_source", "")
@@ -442,6 +445,33 @@ def _get_method_c_prior(event_id: str, config: dict) -> dict:
             return _prior_tariff(config)
         if event_id == "OPS-CMP-001":
             return _prior_chip_shortage(config)
+
+    # Event-specific research overrides (from method_c_research_output.json)
+    from .method_c_loader import get_method_c_override
+    override = get_method_c_override(event_id)
+    if override:
+        evidence = override.get("evidence", {})
+        # Convert nested evidence to flat strings for method_c_prior()
+        flat_evidence = {}
+        for key in ("p_preconditions", "p_trigger", "p_implementation"):
+            ev = evidence.get(key, {})
+            if isinstance(ev, dict):
+                flat_evidence[key] = ev.get("justification", f"Research override: {ev.get('type', 'unknown')}")
+            else:
+                flat_evidence[key] = str(ev)
+
+        prior_data = method_c_prior(
+            p_preconditions=override["p_pre"],
+            p_trigger=override["p_trig"],
+            p_implementation=override["p_impl"],
+            evidence=flat_evidence,
+        )
+        prior_data.update({
+            "data_source": "Structural calibration (event-specific research)",
+            "source_id": "research",
+            "confidence": "Medium",
+        })
+        return prior_data
 
     # Family-level calibrated defaults
     prefix = _get_family_prefix(event_id)

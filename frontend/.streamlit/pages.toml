@@ -29,6 +29,11 @@ name = "Results Dashboard"
 icon = ":material/bar_chart:"
 
 [[pages]]
+path = "pages/6_Annual_Data_Update.py"
+name = "Annual Data Update"
+icon = ":material/edit_calendar:"
+
+[[pages]]
 path = "pages/7_Data_Sources.py"
 name = "Data Sources"
 icon = ":material/library_books:"
