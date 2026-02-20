@@ -240,7 +240,7 @@ METHOD_C_FAMILY_DEFAULTS = {
 DEFAULT_MODIFIER_SOURCES = {
     "PHY-CLI": ["A01"],        # ERA5 temperature anomaly
     "PHY-GEO": ["A02"],        # USGS seismicity
-    "PHY-ENE": [],             # FRED NAPMNOI unreliable (400 errors)
+    "PHY-ENE": ["A03"],        # FRED AMTMNO manufacturing orders (demand pressure)
     "PHY-MAT": ["A03"],        # FRED commodity prices
     "PHY-WAT": ["A01"],        # ERA5 precipitation
     "PHY-POL": [],             # No live modifier

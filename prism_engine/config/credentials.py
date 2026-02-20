@@ -16,8 +16,8 @@ def get_credential(service: str) -> str | None:
         "cds": "CDS_API_KEY",
         "fred": "FRED_API_KEY",
         "nvd": "NVD_API_KEY",
-        "acled_key": "ACLED_KEY",
         "acled_email": "ACLED_EMAIL",
+        "acled_password": "ACLED_PASSWORD",
         "entsoe": "ENTSOE_API_KEY",
     }
     var_name = env_map.get(service)
@@ -32,7 +32,7 @@ def get_credential(service: str) -> str | None:
 
 def check_all_credentials() -> dict[str, bool]:
     """Check which API credentials are configured."""
-    services = ["cds", "fred", "nvd", "acled_key", "acled_email", "entsoe"]
+    services = ["cds", "fred", "nvd", "acled_email", "acled_password", "entsoe"]
     return {svc: get_credential(svc) is not None for svc in services}
 
 

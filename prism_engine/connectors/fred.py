@@ -24,7 +24,7 @@ FRED_SERIES = {
     "T10Y2Y": "10Y-2Y Treasury spread (yield curve inversion → recession signal)",
     "UNRATE": "Unemployment rate",
     "BAMLH0A0HYM2": "High Yield OAS (credit stress signal)",
-    "NAPMNOI": "ISM Manufacturing PMI New Orders (demand pressure)",
+    "AMTMNO": "Manufacturers New Orders: Total Manufacturing (demand pressure)",
     "ACDGNO": "Durable goods new orders - computers (semi demand proxy)",
     "CPIAUCSL": "CPI All Items (inflation tracker)",
     "DTWEXBGS": "Trade-weighted USD index (currency strength)",
@@ -220,12 +220,14 @@ def get_durable_goods_modifier() -> dict:
     }
 
 
-def get_pmi_modifier() -> dict:
+def get_manufacturing_orders_modifier() -> dict:
     """
-    Compute PMI new orders demand modifier (C05).
-    PMI 50 = neutral. modifier = NAPMNOI / 50.
+    Compute manufacturing demand modifier (C05) from total new orders.
+    Uses AMTMNO (Manufacturers New Orders: Total Manufacturing).
+    modifier = current / rolling 60-month mean (ratio method).
+    Replaces discontinued NAPMNOI (ISM removed all data from FRED in 2016).
     """
-    result = fetch_series("NAPMNOI")
+    result = fetch_series("AMTMNO")
     if not result.success:
         return {"modifier": 1.0, "status": "FALLBACK", "error": result.error}
 
@@ -233,18 +235,27 @@ def get_pmi_modifier() -> dict:
     if not obs:
         return {"modifier": 1.0, "status": "FALLBACK", "error": "No observations"}
 
-    latest = obs[-1]["value"]
-    modifier = round(max(0.50, min(2.00, latest / 50.0)), 2)
+    values = pd.Series([o["value"] for o in obs])
+    latest = float(values.iloc[-1])
+
+    rolling_mean = values.rolling(60, min_periods=36).mean()
+    if rolling_mean.dropna().empty:
+        return {"modifier": 1.0, "status": "FALLBACK", "error": "Not enough data"}
+
+    baseline = float(rolling_mean.dropna().iloc[-1])
+    ratio = latest / baseline if baseline > 0 else 1.0
+
+    modifier = round(max(0.50, min(2.00, ratio)), 2)
 
     return {
-        "name": "ISM PMI new orders demand pressure (C05)",
+        "name": "Manufacturing new orders demand pressure (C05)",
         "source_id": "A03",
         "modifier": modifier,
         "status": "COMPUTED",
-        "series_id": "NAPMNOI",
-        "indicator_value": round(latest, 1),
-        "indicator_unit": "PMI index points",
-        "neutral_value": 50,
+        "series_id": "AMTMNO",
+        "indicator_value": round(latest, 0),
+        "indicator_unit": "millions USD",
+        "baseline_mean": round(baseline, 0),
         "proxy": "C05",
     }
 

@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 20, 2026 — Session 5)
+## 2. CURRENT STATE (as of Feb 20, 2026 — Session 6)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -42,15 +42,13 @@ The app has two parts:
   - Method C family-level calibration for 23 event families
 
 ### What still needs work:
-- **ACLED API key not configured:** User has research account but can't find key. STR-GEO-001 falls back to hardcoded 12%.
-- **cdsapi not installed:** `pip install cdsapi` needed for Copernicus ERA5 temperature modifier. Falls back gracefully.
+- **ACLED API access tier:** OAuth authentication works (token obtained), but data queries return HTTP 403. Account is on "Open" tier which doesn't include API access. Need to request upgrade to "Research" tier at acleddata.com or contact access@acleddata.com. STR-GEO-001 falls back to hardcoded 12%.
+- **Copernicus ERA5 downloads are slow:** cdsapi + xarray + netcdf4 installed and configured. CDS API key works. But ERA5 data requests take 30+ minutes — first download not yet completed. Temperature modifier falls back to 1.0 until first cache.
 - **Legacy V1 routes still active:** `routes/data_sources.py` and `routes/calculations.py` kept for frontend compatibility — can be removed now that frontend uses engine
-- **Unpushed changes** — Session 3 + Session 4 + Session 5 changes need to be committed and pushed to GitHub
-- **FRED NAPMNOI series returns HTTP 400** — ISM PMI New Orders. PHY-ENE modifiers disabled for now (no impact on priors).
 
 ### Git status:
-- Latest pushed commit: `ce089fe` — performance fixes
-- Unpushed changes: Process Criticality redesign, import/export template, sync fixes, Results Dashboard fix, V2 Event Explorer removal, **Phase 2 engine scaling (all 174 events)**
+- Latest pushed commit: `b798cfc` — Phase 2 engine scaling (all 174 events)
+- Unpushed changes: Connector fixes (FRED AMTMNO, Copernicus cdsapi, ACLED OAuth rewrite)
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
 
 ### Rollback if needed:
@@ -211,8 +209,10 @@ NOAA_API_KEY=your_key_here
 NVD_API_KEY=<configured>
 EIA_API_KEY=your_key_here
 CDS_API_KEY=<configured>
+ACLED_EMAIL=<configured>
+ACLED_PASSWORD=<configured>
 ```
-**Note:** ACLED API key still needed (user has research account but hasn't located the key).
+**Note:** ACLED credentials configured and OAuth works, but account needs Research-tier access for API data queries (currently returns 403).
 
 ### Railway database (for reference):
 - Public URL: `postgresql://postgres:GuDIefSxVNllIGCEHlyYIgwGQfYPHRVp@switchyard.proxy.rlwy.net:16186/railway`
@@ -519,9 +519,31 @@ Replaced hardcoded 10-event dispatch with config-driven routing so all 174 event
 | **Total** | **174** | — | **0 fallbacks** |
 
 **Bugs fixed during Phase 13:**
-- FRED NAPMNOI returns HTTP 400 → Removed PHY-ENE from live modifiers (falls back to 1.0)
+- ~~FRED NAPMNOI returns HTTP 400~~ → **Fixed in Phase 14:** Replaced with AMTMNO, PHY-ENE modifiers re-enabled
 - "Unknown modifier source 'categorical' for PHY-BIO-*" → Changed PHY-BIO default modifiers to `[]`
 - FastAPI not installed → Ran `pip install -r requirements.txt`
+
+### Phase 14: Connector Fixes — Real Data for Engine (Session 6)
+Fixed 3 practical gaps preventing the engine from using real external data.
+
+**Fix 1: FRED NAPMNOI → AMTMNO (FIXED)**
+- Problem: ISM removed all data from FRED in 2016. NAPMNOI series doesn't exist → HTTP 400.
+- Solution: Replaced with AMTMNO (Manufacturers' New Orders: Total Manufacturing) which has data through Nov 2025.
+- New modifier: ratio-to-rolling-60-month-mean (instead of dividing by 50). Tested: modifier = 1.08.
+- Files: `fred.py` (new `get_manufacturing_orders_modifier()`), `engine.py`, `event_mapping.py`, `sources.py`
+
+**Fix 2: Copernicus ERA5 (FIXED — packages installed, config updated)**
+- Problem: cdsapi package not installed, API key not being passed to client.
+- Solution: Installed cdsapi 0.7.7, xarray 2026.2.0, netcdf4 1.7.4. Updated `copernicus.py` to pass API key from env var to `cdsapi.Client()` constructor.
+- Note: ERA5 data requests take 30+ minutes. First download not yet triggered. Falls back to modifier=1.0 until cache populated.
+- Files: `copernicus.py`
+
+**Fix 3: ACLED OAuth Rewrite (PARTIALLY FIXED — auth works, data access blocked)**
+- Problem: ACLED switched from API keys to OAuth in 2025. Old API URL (api.acleddata.com) dead.
+- Solution: Complete rewrite of `acled.py` with OAuth token flow (email+password → 24h JWT Bearer token). Updated `credentials.py` to map acled_email/acled_password instead of acled_key.
+- Current status: OAuth token acquisition succeeds, but data queries return HTTP 403. Research shows this is an **account tier issue** — ACLED now has Open/Research/Partner/Enterprise tiers, and the Open tier does not include API access.
+- Action needed: Antonio needs to request Research-tier access at acleddata.com or contact access@acleddata.com.
+- Files: `acled.py` (complete rewrite), `credentials.py`, `.env`
 
 ---
 

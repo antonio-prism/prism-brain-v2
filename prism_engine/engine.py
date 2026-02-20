@@ -638,16 +638,16 @@ def _fetch_modifier(event_id: str, source: str, config: dict) -> dict | None:
                 "status": dg.get("status", "FALLBACK"),
             }
         if _get_family_prefix(event_id) == "PHY-ENE":
-            from .connectors.fred import get_pmi_modifier
-            pmi = get_pmi_modifier()
+            from .connectors.fred import get_manufacturing_orders_modifier
+            mfg = get_manufacturing_orders_modifier()
             return {
-                "name": pmi.get("name", "PMI demand"),
+                "name": mfg.get("name", "Manufacturing demand"),
                 "source_id": "A03",
-                "indicator_value": pmi.get("indicator_value"),
-                "indicator_unit": pmi.get("indicator_unit", ""),
-                "modifier_value": pmi.get("modifier", 1.0),
-                "calibration": {"series_id": "NAPMNOI", "proxy": "C05"},
-                "status": pmi.get("status", "FALLBACK"),
+                "indicator_value": mfg.get("indicator_value"),
+                "indicator_unit": mfg.get("indicator_unit", ""),
+                "modifier_value": mfg.get("modifier", 1.0),
+                "calibration": {"series_id": "AMTMNO", "proxy": "C05"},
+                "status": mfg.get("status", "FALLBACK"),
             }
 
     if source == "A04":

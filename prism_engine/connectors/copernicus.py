@@ -62,7 +62,11 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
         import cdsapi
         import xarray as xr
 
-        client = cdsapi.Client()
+        api_key = get_credential("cds")
+        client = cdsapi.Client(
+            url="https://cds.climate.copernicus.eu/api",
+            key=api_key,
+        )
         output_file = str(DATA_DIR / "era5_monthly_t2m_europe_summer.nc")
 
         client.retrieve(

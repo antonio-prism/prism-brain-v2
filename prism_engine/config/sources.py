@@ -159,10 +159,10 @@ TYPE_C_PROXIES = {
         "calculation": "Count months with NAO < -1.0 per year",
     },
     "C05": {
-        "name": "Semiconductor demand pressure proxy",
-        "proxy_indicator": "ISM Manufacturing PMI New Orders",
+        "name": "Manufacturing demand pressure proxy",
+        "proxy_indicator": "Manufacturers New Orders: Total Manufacturing",
         "proxy_source": "A03",
-        "fred_series": "NAPMNOI",
-        "calculation": "modifier = NAPMNOI / 50",
+        "fred_series": "AMTMNO",
+        "calculation": "modifier = AMTMNO / rolling_60m_mean",
     },
 }
