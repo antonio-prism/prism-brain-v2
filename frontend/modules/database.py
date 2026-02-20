@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 # --- Simple time-based cache for read operations ---
 _data_cache = {}
-_DATA_CACHE_TTL = 5  # seconds
+_DATA_CACHE_TTL = 30  # seconds — long enough to survive rapid Streamlit reruns
 
 
 def _get_data_cached(key):
@@ -447,17 +447,22 @@ def get_client_processes(client_id):
 
 def update_client_process(process_db_id, **kwargs):
     """Update a client process. Tries backend API first."""
-    # Need client_id for API call — extract from kwargs or look up
+    # Need client_id for API call and cache clearing — extract from kwargs
     client_id = kwargs.pop('client_id', None)
     if is_backend_online() and client_id:
         try:
             result = api_update_process(client_id, process_db_id, **kwargs)
             if result:
                 _update_process_local(process_db_id, **kwargs)
+                if client_id:
+                    _clear_data_cache(f"processes_{client_id}")
                 return True
         except Exception as e:
             logger.warning(f"Backend update_process failed, using local: {e}")
-    return _update_process_local(process_db_id, **kwargs)
+    result = _update_process_local(process_db_id, **kwargs)
+    if client_id:
+        _clear_data_cache(f"processes_{client_id}")
+    return result
 
 
 def _update_process_local(process_db_id, **kwargs):
@@ -485,10 +490,15 @@ def delete_client_process(process_db_id, client_id=None):
             result = api_delete_process(client_id, process_db_id)
             if result:
                 _delete_process_local(process_db_id)
+                if client_id:
+                    _clear_data_cache(f"processes_{client_id}")
                 return True
         except Exception as e:
             logger.warning(f"Backend delete_process failed, using local: {e}")
-    return _delete_process_local(process_db_id)
+    result = _delete_process_local(process_db_id)
+    if client_id:
+        _clear_data_cache(f"processes_{client_id}")
+    return result
 
 
 def _delete_process_local(process_db_id):
@@ -721,7 +731,7 @@ def calculate_risk_exposure(criticality, vulnerability, resilience,
 
 def get_risk_exposure_summary(client_id):
     """Get comprehensive risk exposure summary for a client.
-    
+
     Always computes summary from assessments data to ensure consistency
     across Executive Summary, Visualizations, and Detailed Results.
     Assessments are fetched from backend API when online, local SQLite otherwise.

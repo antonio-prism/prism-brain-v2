@@ -1,0 +1,60 @@
+{
+  "event_id": "DIG-CIC-002",
+  "event_name": "SCADA/ICS system compromised in manufacturing",
+  "domain": "Digital",
+  "family": "Critical Infrastructure Cyberattacks",
+  "layer1": {
+    "prior": 0.0221,
+    "method": "B",
+    "derivation": {
+      "formula": "(3300 \u00d7 0.67 / 300000) \u00d7 3.0 = 0.0221",
+      "data_source": "Dragos Year-in-Review 2026",
+      "source_id": "B04",
+      "observation_window": "Annual (Dragos 2025 data)",
+      "n_observations": 1,
+      "calculation_steps": "Dragos: 3300 ransomware incidents \u00d7 0.67 manufacturing share / 300000 total mfg orgs \u00d7 3.0 dark figure",
+      "confidence": "Medium",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "ICS CVE growth",
+        "source_id": "A04",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {
+          "proxy": "C02"
+        },
+        "status": "FALLBACK"
+      },
+      {
+        "name": "CISA KEV growth rate",
+        "source_id": "A05",
+        "indicator_value": 1524,
+        "indicator_unit": "total known exploited vulnerabilities",
+        "modifier_value": 1.32,
+        "calibration": {
+          "yoy_growth": 1.32
+        },
+        "status": "COMPUTED"
+      }
+    ],
+    "p_global": 0.0292,
+    "p_global_raw": 0.0292,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.327342Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.05,
+    "divergence_from_fallback": 0.56,
+    "divergence_acceptable": false,
+    "divergence_reason": "Dragos 2026 methodology: 3300 incidents x 67% manufacturing / 300K orgs x 3.0 dark figure = 2.21%. Old rate (5%) may have used a smaller denominator or higher incident count. Dragos data is the most authoritative source."
+  }
+}

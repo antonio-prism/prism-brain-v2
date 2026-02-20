@@ -121,8 +121,7 @@ def main():
         - Analyze risk by domain, process, and risk event
         - Export results to Excel for reporting
 
-        You can also use the **Event Explorer** to browse and search the full risk taxonomy,
-        or the **Data Sources** page to manage external data feeds.
+        You can also use the **Data Sources** page to manage external data feeds.
         """)
 
         st.info("\U0001f448 Use the sidebar to navigate between modules.")

@@ -44,6 +44,7 @@ from routes.calculations import register_calculations_routes
 from routes.data_sources import register_data_sources_routes
 from client_routes import register_client_routes
 from v2_routes import register_v2_routes
+from prism_engine.api_routes import register_engine_routes
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -76,6 +77,7 @@ register_v2_routes(app, get_session_context)
 register_events_routes(app, get_session_context)
 register_calculations_routes(app, get_session_context)
 register_data_sources_routes(app, get_session_context)
+register_engine_routes(app)
 
 
 # ============== Health Check ==============

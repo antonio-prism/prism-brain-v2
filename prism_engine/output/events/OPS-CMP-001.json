@@ -1,0 +1,63 @@
+{
+  "event_id": "OPS-CMP-001",
+  "event_name": "Critical semiconductor chip shortage",
+  "domain": "Operational",
+  "family": "Component & Materials Shortages",
+  "layer1": {
+    "prior": 0.168,
+    "method": "C",
+    "derivation": {
+      "formula": "0.7 \u00d7 0.4 \u00d7 0.6 = 0.168",
+      "data_source": "Structural analysis + FRED durable goods proxy",
+      "source_id": "B04+C01",
+      "observation_window": "Structural (ongoing)",
+      "n_observations": null,
+      "calculation_steps": "",
+      "confidence": "Low",
+      "sub_probabilities": {
+        "p_preconditions": {
+          "value": 0.7,
+          "evidence": "TSMC holds 60%+ of advanced semiconductor manufacturing. Geographic concentration in Taiwan creates structural fragility. WEF Global Risks 2025: supply chain concentration ranked #7."
+        },
+        "p_trigger": {
+          "value": 0.4,
+          "evidence": "Moderate: no active demand surge signal (PMI new orders near neutral). But geopolitical risk to Taiwan and potential trade restrictions remain."
+        },
+        "p_implementation": {
+          "value": 0.6,
+          "evidence": "2020-2022 shortage lasted 18+ months. Lead times expanded from 12 to 26 weeks. Once triggered, semiconductor shortages persist due to 6-month fab cycle times."
+        }
+      }
+    },
+    "modifiers": [
+      {
+        "name": "Durable goods demand",
+        "source_id": "A03",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {
+          "series_id": "ACDGNO",
+          "proxy": "C01"
+        },
+        "status": "FALLBACK"
+      }
+    ],
+    "p_global": 0.168,
+    "p_global_raw": 0.168,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.834323Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.2,
+    "divergence_from_fallback": 0.16,
+    "divergence_acceptable": true,
+    "divergence_reason": null
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "event_id": "OPS-MAR-002",
+  "event_name": "Major canal or strait closure disrupting trade",
+  "domain": "Operational",
+  "family": "Port & Maritime Logistics",
+  "layer1": {
+    "prior": 0.12,
+    "method": "A",
+    "derivation": {
+      "formula": "3 event-years / 25 total years",
+      "data_source": "Manual event compilation + EM-DAT",
+      "source_id": "A08+manual",
+      "observation_window": "2000-2024",
+      "n_observations": 25,
+      "calculation_steps": "Counted 3 distinct years with major chokepoint disruptions: 2021 (Ever Given Suez Canal blockage (6 days)), 2023 (Panama Canal drought restrictions (6+ months)), 2024 (Houthi attacks on Red Sea shipping (ongoing))",
+      "confidence": "Medium",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "GPR Index",
+        "source_id": "A06",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {},
+        "status": "FALLBACK"
+      }
+    ],
+    "p_global": 0.12,
+    "p_global_raw": 0.12,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.832811Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.08,
+    "divergence_from_fallback": 0.5,
+    "divergence_acceptable": true,
+    "divergence_reason": null
+  }
+}

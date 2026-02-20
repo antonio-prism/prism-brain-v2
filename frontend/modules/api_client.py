@@ -20,7 +20,9 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Configuration — URL is configurable via Streamlit secrets or environment variable
-_DEFAULT_API_URL = "http://localhost:8000"
+# IMPORTANT: Use 127.0.0.1 instead of "localhost" — on Windows, "localhost" triggers
+# a slow DNS lookup (IPv6 → IPv4 fallback) that adds 200-500ms per HTTP call.
+_DEFAULT_API_URL = "http://127.0.0.1:8000"
 
 def _get_api_base_url() -> str:
     """Get API base URL from Streamlit secrets, env var, or default."""
@@ -41,6 +43,10 @@ def _get_api_base_url() -> str:
 API_BASE_URL = _get_api_base_url()
 API_TIMEOUT = 2  # seconds (local backend should respond in <1s)
 CACHE_TTL = 300  # 5 minutes in seconds
+
+# Reusable HTTP session — keeps TCP connections alive between calls,
+# avoiding the overhead of creating a new connection for every request.
+_http_session = requests.Session()
 
 # Simple in-memory cache
 _cache: Dict[str, Dict[str, Any]] = {}
@@ -74,7 +80,7 @@ def check_backend_health() -> Dict:
     """
     try:
         start = time.time()
-        resp = requests.get(f"{API_BASE_URL}/health", timeout=0.5)
+        resp = _http_session.get(f"{API_BASE_URL}/health", timeout=0.5)
         elapsed_ms = round((time.time() - start) * 1000)
         if resp.status_code == 200:
             data = resp.json()
@@ -111,7 +117,7 @@ def fetch_events(limit: int = 500, skip: int = 0, use_cache: bool = True) -> Opt
             return cached
     
     try:
-        resp = requests.get(
+        resp = _http_session.get(
             f"{API_BASE_URL}/api/v1/events",
             params={'limit': limit, 'skip': skip},
             timeout=API_TIMEOUT
@@ -148,7 +154,7 @@ def fetch_probabilities(limit: int = 0, skip: int = 0, use_cache: bool = True) -
     
     try:
         while True:
-            resp = requests.get(
+            resp = _http_session.get(
                 f"{API_BASE_URL}/api/v1/probabilities",
                 params={'limit': PAGE_SIZE, 'skip': current_skip},
                 timeout=API_TIMEOUT
@@ -219,7 +225,7 @@ def fetch_data_sources(use_cache: bool = True) -> Optional[List[Dict]]:
         if cached is not None:
             return cached
     try:
-        resp = requests.get(f"{API_BASE_URL}/api/v1/data-sources/health", timeout=API_TIMEOUT)
+        resp = _http_session.get(f"{API_BASE_URL}/api/v1/data-sources/health", timeout=API_TIMEOUT)
         if resp.status_code == 200:
             data = resp.json()
             sources = data if isinstance(data, list) else data.get('data_sources', data.get('sources', data.get('data', [])))
@@ -233,7 +239,7 @@ def fetch_data_sources(use_cache: bool = True) -> Optional[List[Dict]]:
 
 def trigger_data_refresh(recalculate: bool = True, limit: int = 1000) -> Optional[Dict]:
     try:
-        resp = requests.post(f"{API_BASE_URL}/api/v1/data/refresh", params={'recalculate': recalculate, 'limit': limit}, timeout=120)
+        resp = _http_session.post(f"{API_BASE_URL}/api/v1/data/refresh", params={'recalculate': recalculate, 'limit': limit}, timeout=120)
         if resp.status_code == 200:
             clear_cache()
             return resp.json()
@@ -244,7 +250,7 @@ def trigger_data_refresh(recalculate: bool = True, limit: int = 1000) -> Optiona
 
 def trigger_recalculation(limit: int = 1000) -> Optional[Dict]:
     try:
-        resp = requests.post(f"{API_BASE_URL}/api/v1/calculations/trigger-full", params={'limit': limit}, timeout=90)
+        resp = _http_session.post(f"{API_BASE_URL}/api/v1/calculations/trigger-full", params={'limit': limit}, timeout=90)
         if resp.status_code == 200:
             clear_cache()
             return resp.json()
@@ -270,13 +276,13 @@ def _api_request(method: str, path: str, json_data: dict = None,
     t = timeout or API_TIMEOUT
     try:
         if method == "GET":
-            resp = requests.get(url, params=params, timeout=t)
+            resp = _http_session.get(url, params=params, timeout=t)
         elif method == "POST":
-            resp = requests.post(url, json=json_data, params=params, timeout=t)
+            resp = _http_session.post(url, json=json_data, params=params, timeout=t)
         elif method == "PUT":
-            resp = requests.put(url, json=json_data, params=params, timeout=t)
+            resp = _http_session.put(url, json=json_data, params=params, timeout=t)
         elif method == "DELETE":
-            resp = requests.delete(url, params=params, timeout=t)
+            resp = _http_session.delete(url, params=params, timeout=t)
         else:
             return None
         if resp.status_code in (200, 201):
@@ -473,6 +479,77 @@ def api_v2_health(use_cache: bool = True) -> Optional[Dict]:
     if result:
         _set_cached(cache_key, result)
     return result
+
+
+# =============================================================================
+# Engine API: New probability engine endpoints
+# =============================================================================
+
+def api_engine_compute_all(use_cache: bool = True) -> Optional[Dict]:
+    """Compute probabilities for all 174 events via the prism_engine.
+
+    Returns dict keyed by event_id, e.g.:
+        {"PHY-GEO-001": {"event_id": ..., "layer1": {"p_global": 0.86}, ...}, ...}
+
+    Uses a longer timeout (120s) because the engine calls external APIs
+    for 174 events on the first request.  Results are cached for 5 minutes.
+    """
+    cache_key = "engine_compute_all"
+    if use_cache:
+        cached = _get_cached(cache_key)
+        if cached is not None:
+            return cached
+    result = _api_request("GET", "/api/v2/engine/compute-all", timeout=120)
+    if result and "events" in result:
+        _set_cached(cache_key, result["events"])
+        return result["events"]
+    return None
+
+
+def api_engine_get_fallback_rates(use_cache: bool = True) -> Optional[Dict]:
+    """Get all 174 fallback rates from the engine.
+
+    Returns dict keyed by event_id with decimal probabilities, e.g.:
+        {"PHY-GEO-001": 0.035, "STR-ECO-001": 0.15, ...}
+    """
+    cache_key = "engine_fallback_rates"
+    if use_cache:
+        cached = _get_cached(cache_key)
+        if cached is not None:
+            return cached
+    result = _api_request("GET", "/api/v2/engine/fallback-rates", timeout=10)
+    if result and "rates" in result:
+        _set_cached(cache_key, result["rates"])
+        return result["rates"]
+    return None
+
+
+def get_engine_probability(event_id: str) -> Optional[float]:
+    """Get engine-computed P_global for a single event.
+
+    Returns probability as a decimal (0-1), or None if the event
+    is not a Phase 1 event or the engine is unavailable.
+    """
+    all_results = api_engine_compute_all()
+    if all_results and event_id in all_results:
+        result = all_results[event_id]
+        if isinstance(result, dict):
+            return result.get("layer1", {}).get("p_global")
+    return None
+
+
+def get_best_probability(event_id: str, fallback: float = 0.5) -> float:
+    """Get the best available probability for an event.
+
+    Priority: engine-computed P_global > fallback rate > provided default.
+    Returns probability as a decimal (0-1).
+    """
+    # Try engine first (only works for Phase 1 events)
+    engine_prob = get_engine_probability(event_id)
+    if engine_prob is not None:
+        return engine_prob
+    # Fall back to the provided default (typically base_rate_pct / 100)
+    return fallback
 
 
 # =============================================================================

@@ -1,0 +1,23 @@
+{
+    "source_id": "B01",
+    "source_name": "Verizon DBIR",
+    "report_year": null,
+    "entry_date": null,
+    "entered_by": null,
+    "data": {
+        "ransomware_pct": null,
+        "third_party_pct": null,
+        "social_engineering_pct": null,
+        "credential_theft_pct": null,
+        "web_app_exploit_pct": null,
+        "insider_misuse_pct": null,
+        "total_incidents": null,
+        "total_breaches": null,
+        "contributing_orgs": null,
+        "double_extortion_pct": null
+    },
+    "validation": {
+        "all_pct_fields_between_0_and_1": true,
+        "total_breaches_less_than_total_incidents": true
+    }
+}

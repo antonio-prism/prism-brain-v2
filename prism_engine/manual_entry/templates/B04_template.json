@@ -1,0 +1,21 @@
+{
+    "source_id": "B04",
+    "source_name": "Dragos Year-in-Review",
+    "report_year": null,
+    "entry_date": null,
+    "entered_by": null,
+    "data": {
+        "ransomware_groups_count": null,
+        "ransomware_incidents": null,
+        "threat_groups_active": null,
+        "ot_shutdown_pct": null,
+        "manufacturing_pct": null,
+        "energy_pct": null,
+        "water_pct": null,
+        "transport_pct": null
+    },
+    "validation": {
+        "all_pct_fields_between_0_and_1": true,
+        "ransomware_incidents_positive": true
+    }
+}

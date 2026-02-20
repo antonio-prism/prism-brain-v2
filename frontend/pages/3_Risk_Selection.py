@@ -35,6 +35,8 @@ from modules.api_client import (
     api_v2_get_taxonomy,
     api_v2_get_probabilities,
     api_v2_health,
+    api_engine_compute_all,
+    get_best_probability,
 )
 
 st.set_page_config(
@@ -171,6 +173,13 @@ def risk_selection_interface():
         search=search_term if search_term else None
     )
 
+    # Sort by domain, then family_code, then event ID so risks in the same family appear together
+    filtered_risks.sort(key=lambda r: (
+        r.get('domain', ''),
+        r.get('family_code', ''),
+        r.get('id', '')
+    ))
+
     # ---------- Bulk actions ----------
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -186,6 +195,9 @@ def risk_selection_interface():
         st.write(f"**{len(st.session_state.selected_risks)}** risks selected")
 
     # ---------- Risk table ----------
+    # Pre-fetch engine results so we can show computed probabilities
+    engine_results = api_engine_compute_all() or {}
+
     st.subheader(f"Available Risks ({len(filtered_risks)})")
 
     header_cols = st.columns([1, 4, 2, 2, 2])
@@ -198,7 +210,7 @@ def risk_selection_interface():
     with header_cols[3]:
         st.write("**Domain**")
     with header_cols[4]:
-        st.write("**Base Rate**")
+        st.write("**Probability**")
 
     st.divider()
 
@@ -231,8 +243,14 @@ def risk_selection_interface():
             st.write(risk['domain'])
 
         with cols[4]:
-            prob = risk.get('default_probability', 0)
-            st.write(format_percentage(prob))
+            # Show engine probability for Phase 1 events, base rate for others
+            engine_data = engine_results.get(risk_id)
+            if engine_data and isinstance(engine_data, dict):
+                prob = engine_data.get("layer1", {}).get("p_global", 0)
+                st.write(f"{format_percentage(prob)} \u25CF")
+            else:
+                prob = risk.get('default_probability', 0)
+                st.write(format_percentage(prob))
 
     # ---------- Save inline ----------
     st.divider()
@@ -243,7 +261,7 @@ def risk_selection_interface():
 # ====================== Probabilities Tab ======================
 
 def probability_overview_interface():
-    """Show current V2 probabilities for selected risks."""
+    """Show engine-computed probabilities for selected risks."""
     st.subheader("\U0001F4CA Risk Probabilities")
 
     risks = load_risks()
@@ -253,42 +271,53 @@ def probability_overview_interface():
         st.info("Select risks in the 'Select Risks' tab first.")
         return
 
-    # Fetch latest probabilities from backend
-    v2_probs = api_v2_get_probabilities()
-    prob_map = {}
-    if v2_probs:
-        for p in v2_probs:
-            prob_map[p['event_id']] = p
+    # Fetch engine-computed probabilities (Phase 1 events)
+    with st.spinner("Computing probabilities..."):
+        engine_results = api_engine_compute_all() or {}
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Selected Risks", len(selected_risks))
     with col2:
+        engine_count = sum(1 for r in selected_risks if r['id'] in engine_results)
+        st.metric("Engine-Computed", engine_count)
+    with col3:
         backend_status = "\U0001F7E2 Online" if is_backend_online() else "\U0001F534 Offline"
         st.write(f"**Backend:** {backend_status}")
 
     st.divider()
 
-    # Results table
+    # Build results table with engine data
     results_data = []
     for risk in selected_risks:
-        p = prob_map.get(risk['id'])
-        if p:
-            prob_pct = p.get('probability_pct', risk.get('base_rate_pct', 0))
-            method = p.get('calculation_method', 'BASE_RATE')
-            direction = p.get('change_direction', 'STABLE')
+        engine_data = engine_results.get(risk['id'])
+
+        if engine_data and isinstance(engine_data, dict):
+            # Engine-computed probability
+            layer1 = engine_data.get("layer1", {})
+            metadata = engine_data.get("metadata", {})
+            derivation = layer1.get("derivation", {})
+
+            prob_pct = layer1.get("p_global", 0) * 100
+            method = layer1.get("method", "?")
+            confidence = derivation.get("confidence", "")
+            source = "Engine"
+            data_src = derivation.get("data_source", "")
         else:
+            # Fallback to base rate
             prob_pct = risk.get('base_rate_pct', 0)
-            method = 'BASE_RATE'
-            direction = 'STABLE'
+            method = "-"
+            confidence = ""
+            source = "Base Rate"
+            data_src = ""
 
         results_data.append({
             'Event ID': risk['id'],
             'Risk Name': risk['name'],
-            'Family': f"{risk.get('family_code', '')} {risk.get('family_name', '')}",
-            'Probability %': prob_pct,
+            'Probability %': round(prob_pct, 2),
             'Method': method,
-            'Trend': direction,
+            'Confidence': confidence,
+            'Source': source,
         })
 
     results_df = pd.DataFrame(results_data)
@@ -308,8 +337,11 @@ def probability_overview_interface():
         },
     )
 
-    st.caption("Probabilities are Phase 1 base rates (environmental exposure). "
-               "Phase 2 will add industry/geography multipliers.")
+    # Legend
+    st.caption(
+        "**Method:** A = Frequency count, B = Incidence rate, C = Structural calibration. "
+        "**Source:** Engine = computed from live data, Base Rate = raw seed value."
+    )
 
 
 # ====================== Save Tab ======================
@@ -328,14 +360,17 @@ def save_risks_interface():
 
     st.write(f"**Client:** {client['name']}  \u2014  **Selected Risks:** {len(selected_risks)}")
 
-    # Summary table
+    # Summary table — show engine probability when available
+    engine_results = api_engine_compute_all() or {}
     selected_df = pd.DataFrame([
         {
             'Event ID': r['id'],
             'Risk Name': r['name'],
             'Domain': r['domain'],
             'Family': r.get('family_name', ''),
-            'Probability (%)': f"{r.get('default_probability', 0) * 100:.1f}%"
+            'Probability (%)': f"{engine_results[r['id']]['layer1']['p_global'] * 100:.1f}%"
+                if r['id'] in engine_results and isinstance(engine_results[r['id']], dict)
+                else f"{r.get('default_probability', 0) * 100:.1f}%"
         }
         for r in selected_risks
     ])
@@ -354,15 +389,20 @@ def save_risks_interface():
 def _save_selected_risks(all_risks):
     """Save all selected risks to the client's risk portfolio.
 
-    Converts V2 base_rate_pct (0-100) to probability (0-1) before saving,
-    because the exposure formula expects 0-1 scale.
+    Uses engine-computed probability for Phase 1 events, otherwise falls
+    back to base_rate_pct.  Probability stored as 0-1 (exposure formula
+    expects this scale).
     """
     saved = 0
+    engine_count = 0
     for risk_id in st.session_state.selected_risks:
         risk = next((r for r in all_risks if r['id'] == risk_id), None)
         if risk:
-            # Probability stored as 0-1 (the exposure formula expects this)
-            prob_01 = risk.get('default_probability', 0.5)
+            # Use engine probability if available, else fallback to base rate
+            base_prob = risk.get('default_probability', 0.5)
+            prob_01 = get_best_probability(risk_id, fallback=base_prob)
+            if prob_01 != base_prob:
+                engine_count += 1
 
             add_client_risk(
                 client_id=st.session_state.current_client_id,
@@ -375,7 +415,11 @@ def _save_selected_risks(all_risks):
                 notes=risk.get('description', ''),
             )
             saved += 1
-    st.success(f"Saved {saved} risks for this client!")
+
+    msg = f"Saved {saved} risks for this client!"
+    if engine_count > 0:
+        msg += f" ({engine_count} with engine-computed probabilities)"
+    st.success(msg)
 
 
 # ====================== Import/Export Tab ======================
@@ -397,15 +441,24 @@ def import_export_risks():
     selected_risks = [r for r in risks if r['id'] in st.session_state.selected_risks]
 
     if selected_risks:
+        engine_results = api_engine_compute_all() or {}
         export_data = []
         for risk in selected_risks:
-            prob = risk.get('default_probability', 0)
+            # Use engine probability if available
+            engine_data = engine_results.get(risk['id'])
+            if engine_data and isinstance(engine_data, dict):
+                prob = engine_data.get("layer1", {}).get("p_global", 0)
+                source = "Engine"
+            else:
+                prob = risk.get('default_probability', 0)
+                source = "Base Rate"
             export_data.append({
                 'Domain': risk['domain'],
                 'Family': risk.get('family_name', ''),
                 'Event ID': risk['id'],
                 'Event Name': risk['name'],
                 'Probability (%)': round(prob * 100, 2),
+                'Source': source,
                 'Selected': 'Yes'
             })
 

@@ -1,0 +1,72 @@
+{
+  "event_id": "STR-TRD-001",
+  "event_name": "Major tariff increases >25% on key inputs",
+  "domain": "Structural",
+  "family": "Trade & Economic Policy Shifts",
+  "layer1": {
+    "prior": 0.336,
+    "method": "C",
+    "derivation": {
+      "formula": "0.8 \u00d7 0.6 \u00d7 0.7 = 0.336",
+      "data_source": "WTO Trade Monitoring Report + structural analysis",
+      "source_id": "B08+manual",
+      "observation_window": "2016-2024 (structural analysis)",
+      "n_observations": null,
+      "calculation_steps": "",
+      "confidence": "Low",
+      "sub_probabilities": {
+        "p_preconditions": {
+          "value": 0.8,
+          "evidence": "WTO TMR: cumulative trade-restrictive stockpile at record $2.4T. GPR trade tension sub-index elevated since 2018."
+        },
+        "p_trigger": {
+          "value": 0.6,
+          "evidence": "Non-election year but persistent US-China/EU-China tensions. WTO: 70% of election years 2016-2024 had new major measures."
+        },
+        "p_implementation": {
+          "value": 0.7,
+          "evidence": "Historical: ~70% of announced >25% tariffs implemented within 12 months. Based on WTO stockpile data 2016-2024."
+        }
+      }
+    },
+    "modifiers": [
+      {
+        "name": "GPR Index",
+        "source_id": "A06",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {},
+        "status": "FALLBACK"
+      },
+      {
+        "name": "US election year",
+        "source_id": "categorical",
+        "indicator_value": false,
+        "indicator_unit": "boolean",
+        "modifier_value": 1.0,
+        "calibration": {
+          "method": "categorical",
+          "justification": "WTO data: Trade restrictive measures increase ~25% in US election years (2016: +28%, 2020: +22%, 2024: +31% vs non-election year baseline)"
+        },
+        "status": "COMPUTED"
+      }
+    ],
+    "p_global": 0.336,
+    "p_global_raw": 0.336,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.324318Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.22,
+    "divergence_from_fallback": 0.53,
+    "divergence_acceptable": false,
+    "divergence_reason": "Method C structural analysis with 2024-2026 evidence: preconditions=0.80 (WTO stockpile at record), trigger=0.60, implementation=0.70. Higher than old estimate (22%) due to elevated trade tensions since 2018."
+  }
+}

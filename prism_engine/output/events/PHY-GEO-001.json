@@ -1,0 +1,52 @@
+{
+  "event_id": "PHY-GEO-001",
+  "event_name": "Major earthquake disrupting operations/supply chain",
+  "domain": "Physical",
+  "family": "Geophysical Disasters",
+  "layer1": {
+    "prior": 0.95,
+    "method": "A",
+    "derivation": {
+      "formula": "1 - \u220f(1 - P_zone_i) where P_zone = 1 - e^(-\u03bb)",
+      "data_source": "USGS ComCat",
+      "source_id": "A02",
+      "observation_window": "2000-01-01 to 2024-12-31",
+      "n_observations": null,
+      "calculation_steps": "Counted M6.0+ earthquakes in 6 seismic zones, computed P(at least 1 in any zone) using inclusion-exclusion.",
+      "confidence": "High",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "Recent seismicity rate",
+        "source_id": "A02",
+        "indicator_value": 0.91,
+        "indicator_unit": "ratio (recent vs long-term annual rate)",
+        "modifier_value": 0.91,
+        "calibration": {
+          "method": "ratio",
+          "recent_days": 90,
+          "recent_annualized": 438.3,
+          "longterm_annual": 480.8
+        },
+        "status": "COMPUTED"
+      }
+    ],
+    "p_global": 0.8645,
+    "p_global_raw": 0.8645,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:04.339734Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.035,
+    "divergence_from_fallback": 26.14,
+    "divergence_acceptable": false,
+    "divergence_reason": "EXPECTED: Old rate (3.5%) included P(material impact on specific company). New Layer 1 prior (95%) is P(M6.0+ earthquake occurs anywhere in major seismic zones) which is nearly certain annually. The impact probability belongs in Layer 2."
+  }
+}

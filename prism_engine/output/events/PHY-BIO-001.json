@@ -1,0 +1,50 @@
+{
+  "event_id": "PHY-BIO-001",
+  "event_name": "Major zoonotic disease outbreak affecting workforce/supply chain",
+  "domain": "Physical",
+  "family": "Biological & Pandemic Risks",
+  "layer1": {
+    "prior": 0.36,
+    "method": "A",
+    "derivation": {
+      "formula": "9 event-years / 25 total years",
+      "data_source": "WHO DON + manual event compilation",
+      "source_id": "A11+manual",
+      "observation_window": "2000-2024",
+      "n_observations": 25,
+      "calculation_steps": "Counted 9 years with major zoonotic outbreaks from manual list: 2003 (SARS outbreak), 2009 (H1N1 pandemic), 2012 (MERS emergence), 2014 (Ebola West Africa epidemic), 2015 (Zika virus epidemic)...",
+      "confidence": "High",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "WHO PHEIC active",
+        "source_id": "categorical",
+        "indicator_value": false,
+        "indicator_unit": "boolean",
+        "modifier_value": 1.0,
+        "calibration": {
+          "method": "categorical",
+          "justification": "During COVID PHEIC (2020-2023), supply chain disruption frequency was ~50% above historical average per Munich Re"
+        },
+        "status": "COMPUTED"
+      }
+    ],
+    "p_global": 0.36,
+    "p_global_raw": 0.36,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.836338Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.35,
+    "divergence_from_fallback": 0.03,
+    "divergence_acceptable": true,
+    "divergence_reason": null
+  }
+}

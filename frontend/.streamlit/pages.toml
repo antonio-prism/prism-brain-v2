@@ -29,11 +29,6 @@ name = "Results Dashboard"
 icon = ":material/bar_chart:"
 
 [[pages]]
-path = "pages/6_V2_Event_Explorer.py"
-name = "Event Explorer"
-icon = ":material/search:"
-
-[[pages]]
 path = "pages/7_Data_Sources.py"
 name = "Data Sources"
 icon = ":material/library_books:"

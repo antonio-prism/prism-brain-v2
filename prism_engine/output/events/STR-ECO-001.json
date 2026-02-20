@@ -1,0 +1,49 @@
+{
+  "event_id": "STR-ECO-001",
+  "event_name": "Recession in major trading partner economy",
+  "domain": "Structural",
+  "family": "Macroeconomic Shocks",
+  "layer1": {
+    "prior": 0.44,
+    "method": "A",
+    "derivation": {
+      "formula": "11 recession-years / 25 total years",
+      "data_source": "World Bank GDP growth + FRED yield curve",
+      "source_id": "A09+A03",
+      "observation_window": "2000-2024",
+      "n_observations": 25,
+      "calculation_steps": "Counted years with negative GDP growth in any OECD major economy. Result: 11 of 25 years. Recession years: [2002, 2003, 2008, 2009, 2012, 2013, 2014, 2019, 2020, 2023, 2024]",
+      "confidence": "High",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "Yield curve",
+        "source_id": "A03",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {
+          "series_id": "T10Y2Y"
+        },
+        "status": "FALLBACK"
+      }
+    ],
+    "p_global": 0.44,
+    "p_global_raw": 0.44,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.836338Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.15,
+    "divergence_from_fallback": 1.93,
+    "divergence_acceptable": false,
+    "divergence_reason": "World Bank data: counted G7 years with negative GDP growth. Any G7 country having a recession is frequent (44% of years since 2000). Old rate (15%) may have been for synchronized global recession, which is rarer."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "event_id": "DIG-RDE-001",
+  "event_name": "ERP system encrypted by ransomware",
+  "domain": "Digital",
+  "family": "Ransomware, Data Breaches & Exfiltration",
+  "layer1": {
+    "prior": 0.0396,
+    "method": "B",
+    "derivation": {
+      "formula": "0.0396 \u00d7 1.0 dark figure = 0.0396",
+      "data_source": "Verizon DBIR 2025",
+      "source_id": "B01",
+      "observation_window": "Annual (DBIR 2025)",
+      "n_observations": 1,
+      "calculation_steps": "",
+      "confidence": "Medium",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "CISA KEV growth rate",
+        "source_id": "A05",
+        "indicator_value": 1524,
+        "indicator_unit": "total known exploited vulnerabilities",
+        "modifier_value": 1.32,
+        "calibration": {
+          "yoy_growth": 1.32
+        },
+        "status": "COMPUTED"
+      }
+    ],
+    "p_global": 0.0523,
+    "p_global_raw": 0.0523,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:05.326332Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.12,
+    "divergence_from_fallback": 0.67,
+    "divergence_acceptable": false,
+    "divergence_reason": "DBIR 2025 decomposition: 18% base breach rate x 44% ransomware share x 50% ERP subsplit = 3.96%. Old rate (12%) was likely overall ransomware rate without the ERP-specific subsplit. New methodology is more precise."
+  }
+}

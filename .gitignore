@@ -5,3 +5,6 @@ __pycache__/
 *.lock
 docs/source_data/
 docs/setup_guides/
+prism_engine/data/cache/
+prism_engine/data/emdat_public.*
+.claude/

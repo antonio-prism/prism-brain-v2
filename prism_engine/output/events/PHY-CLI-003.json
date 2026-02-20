@@ -1,0 +1,47 @@
+{
+  "event_id": "PHY-CLI-003",
+  "event_name": "Extreme heat wave affecting production/logistics",
+  "domain": "Physical",
+  "family": "Climate Extremes & Weather Events",
+  "layer1": {
+    "prior": 0.065,
+    "method": "A",
+    "derivation": {
+      "formula": "Fallback: 0.065",
+      "data_source": "hardcoded_seed",
+      "source_id": "fallback",
+      "observation_window": "",
+      "n_observations": null,
+      "calculation_steps": "",
+      "confidence": "Low",
+      "sub_probabilities": null
+    },
+    "modifiers": [
+      {
+        "name": "ERA5 temperature anomaly",
+        "source_id": "A01",
+        "indicator_value": null,
+        "indicator_unit": "",
+        "modifier_value": 1.0,
+        "calibration": {},
+        "status": "FALLBACK"
+      }
+    ],
+    "p_global": 0.065,
+    "p_global_raw": 0.065,
+    "p_global_capped_at": null
+  },
+  "layer2": {
+    "note": "Layer 2 (client-specific) not computed in Phase 1"
+  },
+  "metadata": {
+    "last_computed": "2026-02-20T08:31:04.337729Z",
+    "spec_version": "2.3",
+    "engine_version": "1.0.0",
+    "data_freshness": {},
+    "fallback_rate": 0.065,
+    "divergence_from_fallback": 0.0,
+    "divergence_acceptable": true,
+    "divergence_reason": null
+  }
+}

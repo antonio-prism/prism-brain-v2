@@ -68,7 +68,47 @@ def executive_summary():
         return
 
     client = get_client(st.session_state.current_client_id)
-    summary = get_risk_exposure_summary(st.session_state.current_client_id)
+    cid = st.session_state.current_client_id
+
+    # ── Workflow progress check ──
+    processes = get_client_processes(cid)
+    risks = get_client_risks(cid, prioritized_only=True)
+    raw_assessments = get_assessments(cid) or []
+
+    step1_ok = len(processes) > 0
+    step2_ok = len(risks) > 0
+    step3_ok = len(raw_assessments) > 0
+    has_criticality = any(
+        (p.get("criticality_per_day") or 0) > 0 for p in processes
+    ) if processes else False
+
+    if not (step1_ok and step2_ok and step3_ok):
+        st.markdown("### 📋 Data Readiness")
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            icon = "✅" if step1_ok else "❌"
+            st.markdown(f"{icon} **Processes:** {len(processes)} selected")
+        with c2:
+            icon = "✅" if has_criticality else "⚠️"
+            st.markdown(f"{icon} **Revenue Impact:** {'set' if has_criticality else 'not set'}")
+        with c3:
+            icon = "✅" if step2_ok else "❌"
+            st.markdown(f"{icon} **Risks:** {len(risks)} selected")
+        with c4:
+            icon = "✅" if step3_ok else "❌"
+            st.markdown(f"{icon} **Assessments:** {len(raw_assessments)} completed")
+
+        if not step1_ok:
+            st.warning("Step 1: Go to **Process Criticality** and select processes.")
+        elif not has_criticality:
+            st.warning("Step 2: Go to **Process Criticality → Criticality tab** and set Daily Downtime Revenue Impact values.")
+        elif not step2_ok:
+            st.warning("Step 3: Go to **Risk Selection** and select risks.")
+        elif not step3_ok:
+            st.warning("Step 4: Go to **Risk Assessment** and complete at least one process-risk assessment.")
+        return
+
+    summary = get_risk_exposure_summary(cid)
 
     if not summary:
         st.warning("No assessments completed yet. Please complete risk assessments first.")
@@ -219,12 +259,16 @@ def heatmap_chart(summary, currency):
     if not summary['assessments']:
         return None
 
+    symbol = CURRENCY_SYMBOLS.get(currency, '€')
+
     # Aggregate by process and domain
     heatmap_data = {}
+    actual_domains = set()
     for a in summary['assessments']:
-        process = a['process_name'][:20]
+        process = a['process_name'][:25]
         domain = a['domain']
         exposure = a['exposure']
+        actual_domains.add(domain)
 
         if process not in heatmap_data:
             heatmap_data[process] = {}
@@ -232,9 +276,12 @@ def heatmap_chart(summary, currency):
             heatmap_data[process][domain] = 0
         heatmap_data[process][domain] += exposure
 
-    # Convert to matrix
+    if not heatmap_data:
+        return None
+
+    # Use actual domains from data (in case they don't match RISK_DOMAINS keys)
+    domains = sorted(actual_domains)
     processes = list(heatmap_data.keys())
-    domains = list(RISK_DOMAINS.keys())
 
     z_data = []
     for proc in processes:
@@ -246,14 +293,14 @@ def heatmap_chart(summary, currency):
         x=domains,
         y=processes,
         colorscale='RdYlGn_r',
-        text=[[f"€{v:,.0f}" for v in row] for row in z_data],
+        text=[[f"{symbol}{v:,.0f}" for v in row] for row in z_data],
         texttemplate="%{text}",
         textfont={"size": 10},
     ))
 
     fig.update_layout(
         title='Risk Heatmap: Process × Domain',
-        height=max(400, len(processes) * 30),
+        height=max(400, len(processes) * 40 + 100),
         xaxis_title='Domain',
         yaxis_title='Process'
     )
@@ -284,18 +331,18 @@ def visualizations_tab():
         # Domain breakdown
         fig1 = domain_breakdown_chart(summary, currency)
         if fig1:
-            st.plotly_chart(fig1, width="stretch")
+            st.plotly_chart(fig1, use_container_width=True)
 
         # Top risks
         fig3 = risk_exposure_chart(summary, currency)
         if fig3:
-            st.plotly_chart(fig3, width="stretch")
+            st.plotly_chart(fig3, use_container_width=True)
 
     with col2:
         # Top processes
         fig2 = process_exposure_chart(summary, currency)
         if fig2:
-            st.plotly_chart(fig2, width="stretch")
+            st.plotly_chart(fig2, use_container_width=True)
 
         # Domain totals bar
         if summary['by_domain']:
@@ -311,13 +358,13 @@ def visualizations_tab():
                 color_discrete_map={d: get_domain_color(d) for d in RISK_DOMAINS.keys()}
             )
             fig4.update_layout(showlegend=False, height=350)
-            st.plotly_chart(fig4, width="stretch")
+            st.plotly_chart(fig4, use_container_width=True)
 
     # Full heatmap
     st.divider()
     fig_heatmap = heatmap_chart(summary, currency)
     if fig_heatmap:
-        st.plotly_chart(fig_heatmap, width="stretch")
+        st.plotly_chart(fig_heatmap, use_container_width=True)
 
 
 def detailed_results_tab():
@@ -394,7 +441,7 @@ def detailed_results_tab():
     # Display
     st.dataframe(
         df,
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
         column_config={
             f"Criticality ({symbol}/day)": st.column_config.NumberColumn(format=f"{symbol}%d"),
@@ -443,7 +490,7 @@ def export_tab():
         st.markdown("### 📊 Excel Export")
         st.markdown("Comprehensive workbook with all data and calculations.")
 
-        if st.button("Generate Excel Report", type="primary", width="stretch"):
+        if st.button("Generate Excel Report", type="primary", use_container_width=True):
             with st.spinner("Generating Excel report..."):
                 excel_data = generate_excel_report(client, summary, currency)
                 st.download_button(
@@ -451,104 +498,318 @@ def export_tab():
                     data=excel_data,
                     file_name=f"PRISM_Brain_{client['name'].replace(' ', '_')}_{export_timestamp()}.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    width="stretch"
+                    use_container_width=True
                 )
 
     with col2:
         st.markdown("### 📄 CSV Export")
         st.markdown("Raw data for further analysis.")
 
-        if st.button("Generate CSV", width="stretch"):
+        if st.button("Generate CSV", use_container_width=True):
             csv_data = generate_csv_report(summary, currency)
             st.download_button(
                 label="📥 Download CSV",
                 data=csv_data,
                 file_name=f"PRISM_Brain_{client['name'].replace(' ', '_')}_{export_timestamp()}.csv",
                 mime="text/csv",
-                width="stretch"
+                use_container_width=True
             )
 
 
+def _auto_width(ws, min_width=10, max_width=45):
+    """Auto-fit column widths for a worksheet."""
+    from openpyxl.cell.cell import MergedCell
+    for col in ws.columns:
+        # Skip merged cells which lack column_letter attribute
+        first_cell = col[0]
+        if isinstance(first_cell, MergedCell):
+            continue
+        col_letter = first_cell.column_letter
+        lengths = []
+        for cell in col:
+            if isinstance(cell, MergedCell):
+                continue
+            try:
+                lengths.append(len(str(cell.value or "")))
+            except Exception:
+                pass
+        best = max(lengths) if lengths else min_width
+        ws.column_dimensions[col_letter].width = max(min_width, min(best + 3, max_width))
+
+
 def generate_excel_report(client, summary, currency):
-    """Generate comprehensive Excel report."""
+    """Generate a professional 3-tab Excel report.
+
+    Tab 1 — Company Profile: client info from Client Setup.
+    Tab 2 — Risk Overview: summary tables by domain, process, risk.
+    Tab 3 — Detailed Results: full process × risk matrix.
+    """
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    from openpyxl.chart import BarChart, PieChart, Reference
     from openpyxl.utils import get_column_letter
 
     symbol = CURRENCY_SYMBOLS.get(currency, '€')
+    cur_fmt = f'#,##0'
+    pct_fmt = '0.0%'
+
+    # ── Shared styles ──
+    PRISM_BLUE = "1F4E79"
+    PRISM_LIGHT = "D6E4F0"
+    PRISM_ACCENT = "2E75B6"
+
+    title_font = Font(name="Arial", bold=True, size=16, color="FFFFFF")
+    title_fill = PatternFill("solid", fgColor=PRISM_BLUE)
+    section_font = Font(name="Arial", bold=True, size=12, color=PRISM_BLUE)
+    header_font = Font(name="Arial", bold=True, size=10, color="FFFFFF")
+    header_fill = PatternFill("solid", fgColor=PRISM_ACCENT)
+    label_font = Font(name="Arial", bold=True, size=10)
+    value_font = Font(name="Arial", size=10)
+    alt_fill = PatternFill("solid", fgColor=PRISM_LIGHT)
+    thin_border = Border(
+        bottom=Side(style="thin", color="CCCCCC")
+    )
+
+    def _write_title_row(ws, text, row=1, cols=6):
+        """Merge cells and write a coloured title bar."""
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=cols)
+        cell = ws.cell(row=row, column=1, value=text)
+        cell.font = title_font
+        cell.fill = title_fill
+        cell.alignment = Alignment(horizontal="left", vertical="center")
+        ws.row_dimensions[row].height = 32
+        for c in range(2, cols + 1):
+            ws.cell(row=row, column=c).fill = title_fill
+
+    def _write_header_row(ws, headers, row):
+        for col, h in enumerate(headers, 1):
+            cell = ws.cell(row=row, column=col, value=h)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal="center", wrap_text=True)
+        ws.row_dimensions[row].height = 22
 
     wb = Workbook()
 
-    # Styles
-    header_fill = PatternFill("solid", fgColor="1F4E79")
-    header_font = Font(bold=True, color="FFFFFF")
-    currency_format = f'{symbol}#,##0'
-    percent_format = '0.0%'
+    # ================================================================
+    # TAB 1 — COMPANY PROFILE
+    # ================================================================
+    ws1 = wb.active
+    ws1.title = "Company Profile"
+    ws1.sheet_properties.tabColor = PRISM_BLUE
 
-    # Sheet 1: Dashboard
-    ws_dash = wb.active
-    ws_dash.title = "Dashboard"
+    _write_title_row(ws1, f"PRISM Brain — Risk Report: {client['name']}", row=1, cols=4)
 
-    ws_dash['A1'] = f"PRISM Brain Risk Report - {client['name']}"
-    ws_dash['A1'].font = Font(bold=True, size=16)
+    # Report metadata
+    ws1.cell(row=3, column=1, value="Report Generated").font = label_font
+    ws1.cell(row=3, column=2, value=datetime.now().strftime("%d %B %Y, %H:%M")).font = value_font
 
-    ws_dash['A3'] = "Total Annual Risk Exposure:"
-    ws_dash['B3'] = summary['total_exposure']
-    ws_dash['B3'].number_format = currency_format
+    # Company details — label/value pairs
+    fields = [
+        ("Company Name", client.get("name", "")),
+        ("Location", client.get("location", "")),
+        ("Industry", client.get("industry", "")),
+        ("Sectors", client.get("sectors", "")),
+        ("Annual Revenue", client.get("revenue", 0)),
+        ("Employees", client.get("employees", 0)),
+        ("Currency", currency),
+        ("Export Percentage", client.get("export_percentage", 0)),
+        ("Primary Markets", client.get("primary_markets", "")),
+        ("Notes", client.get("notes", "")),
+    ]
 
-    ws_dash['A4'] = "Report Generated:"
-    ws_dash['B4'] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    ws1.cell(row=5, column=1, value="Company Information").font = section_font
+    r = 6
+    for label, val in fields:
+        ws1.cell(row=r, column=1, value=label).font = label_font
+        c = ws1.cell(row=r, column=2, value=val)
+        c.font = value_font
+        if label == "Annual Revenue":
+            c.number_format = f'{symbol}#,##0'
+        elif label == "Export Percentage":
+            c.number_format = '0%'
+        ws1.cell(row=r, column=1).border = thin_border
+        ws1.cell(row=r, column=2).border = thin_border
+        r += 1
 
-    ws_dash['A6'] = "Exposure by Domain"
-    ws_dash['A6'].font = Font(bold=True)
-    row = 7
-    for domain, exposure in summary['by_domain'].items():
-        ws_dash[f'A{row}'] = domain
-        ws_dash[f'B{row}'] = exposure
-        ws_dash[f'B{row}'].number_format = currency_format
-        row += 1
+    # Key metrics section
+    r += 1
+    ws1.cell(row=r, column=1, value="Risk Exposure Summary").font = section_font
+    r += 1
 
-    # Sheet 2: Detailed Results
-    ws_detail = wb.create_sheet("Detailed Results")
+    metrics = [
+        ("Total Annual Risk Exposure", summary["total_exposure"], f'{symbol}#,##0'),
+        ("Processes Assessed", len(summary.get("by_process", {})), '#,##0'),
+        ("Risks Assessed", len(summary.get("by_risk", {})), '#,##0'),
+        ("Domains Covered", len(summary.get("by_domain", {})), '#,##0'),
+        ("Total Assessments", len(summary.get("assessments", [])), '#,##0'),
+    ]
 
-    headers = ["Process", "Risk", "Domain", f"Criticality ({symbol}/day)",
-               "Vulnerability", "Resilience", "Downtime (days)",
-               "Probability", f"Exposure ({symbol}/yr)"]
+    revenue = client.get("revenue", 0)
+    if revenue and revenue > 0:
+        ratio = summary["total_exposure"] / revenue
+        metrics.insert(1, ("% of Revenue at Risk", ratio, '0.0%'))
 
-    for col, header in enumerate(headers, 1):
-        cell = ws_detail.cell(row=1, column=col, value=header)
-        cell.fill = header_fill
-        cell.font = header_font
+    for label, val, fmt in metrics:
+        ws1.cell(row=r, column=1, value=label).font = label_font
+        c = ws1.cell(row=r, column=2, value=val)
+        c.font = Font(name="Arial", bold=True, size=11, color=PRISM_BLUE)
+        c.number_format = fmt
+        ws1.cell(row=r, column=1).border = thin_border
+        ws1.cell(row=r, column=2).border = thin_border
+        r += 1
 
-    for row, a in enumerate(summary['assessments'], 2):
-        ws_detail.cell(row=row, column=1, value=a['process_name'])
-        ws_detail.cell(row=row, column=2, value=a['risk_name'])
-        ws_detail.cell(row=row, column=3, value=a['domain'])
-        ws_detail.cell(row=row, column=4, value=a['criticality_per_day']).number_format = currency_format
-        ws_detail.cell(row=row, column=5, value=a['vulnerability']).number_format = percent_format
-        ws_detail.cell(row=row, column=6, value=a['resilience']).number_format = percent_format
-        ws_detail.cell(row=row, column=7, value=a['expected_downtime'])
-        ws_detail.cell(row=row, column=8, value=a['probability']).number_format = percent_format
-        ws_detail.cell(row=row, column=9, value=a['exposure']).number_format = currency_format
+    ws1.column_dimensions["A"].width = 28
+    ws1.column_dimensions["B"].width = 35
 
-    # Auto-width columns
-    for ws in [ws_dash, ws_detail]:
-        for col in ws.columns:
-            max_length = 0
-            column = col[0].column_letter
-            for cell in col:
-                try:
-                    if len(str(cell.value)) > max_length:
-                        max_length = len(str(cell.value))
-                except:
-                    pass
-            ws.column_dimensions[column].width = min(max_length + 2, 40)
+    # ================================================================
+    # TAB 2 — RISK OVERVIEW (data for visualisation)
+    # ================================================================
+    ws2 = wb.create_sheet("Risk Overview")
+    ws2.sheet_properties.tabColor = "2E75B6"
 
-    # Save to bytes
+    _write_title_row(ws2, "Risk Exposure Overview", row=1, cols=6)
+
+    # Section A: Exposure by Domain
+    ws2.cell(row=3, column=1, value="Exposure by Domain").font = section_font
+    _write_header_row(ws2, ["Domain", f"Exposure ({symbol}/yr)", "% of Total"], row=4)
+
+    total_exp = summary["total_exposure"] or 1
+    r = 5
+    domain_start = r
+    for domain, exposure in sorted(summary["by_domain"].items(),
+                                    key=lambda x: x[1], reverse=True):
+        ws2.cell(row=r, column=1, value=domain).font = value_font
+        ws2.cell(row=r, column=2, value=exposure).number_format = cur_fmt
+        ws2.cell(row=r, column=3, value=exposure / total_exp).number_format = pct_fmt
+        if (r - domain_start) % 2 == 1:
+            for c in range(1, 4):
+                ws2.cell(row=r, column=c).fill = alt_fill
+        r += 1
+    domain_end = r - 1
+
+    # Pie chart for domain breakdown
+    if domain_end >= domain_start:
+        pie = PieChart()
+        pie.title = "Exposure by Domain"
+        pie.style = 10
+        data_ref = Reference(ws2, min_col=2, min_row=4, max_row=domain_end)
+        cats_ref = Reference(ws2, min_col=1, min_row=5, max_row=domain_end)
+        pie.add_data(data_ref, titles_from_data=True)
+        pie.set_categories(cats_ref)
+        pie.width = 16
+        pie.height = 10
+        ws2.add_chart(pie, f"E3")
+
+    # Section B: Top Processes
+    r += 2
+    ws2.cell(row=r, column=1, value="Top Processes by Exposure").font = section_font
+    r += 1
+    _write_header_row(ws2, ["Process", f"Exposure ({symbol}/yr)", "% of Total"], row=r)
+    r += 1
+    proc_start = r
+
+    sorted_procs = sorted(summary["by_process"].items(),
+                           key=lambda x: x[1], reverse=True)[:15]
+    for proc_name, exposure in sorted_procs:
+        ws2.cell(row=r, column=1, value=proc_name).font = value_font
+        ws2.cell(row=r, column=2, value=exposure).number_format = cur_fmt
+        ws2.cell(row=r, column=3, value=exposure / total_exp).number_format = pct_fmt
+        if (r - proc_start) % 2 == 1:
+            for c in range(1, 4):
+                ws2.cell(row=r, column=c).fill = alt_fill
+        r += 1
+    proc_end = r - 1
+
+    # Bar chart for top processes
+    if proc_end >= proc_start:
+        bar = BarChart()
+        bar.type = "bar"
+        bar.title = "Top Processes by Exposure"
+        bar.style = 10
+        bar.y_axis.title = None
+        bar.x_axis.title = f"Exposure ({symbol}/yr)"
+        data_ref = Reference(ws2, min_col=2, min_row=proc_start - 1, max_row=proc_end)
+        cats_ref = Reference(ws2, min_col=1, min_row=proc_start, max_row=proc_end)
+        bar.add_data(data_ref, titles_from_data=True)
+        bar.set_categories(cats_ref)
+        bar.width = 18
+        bar.height = 12
+        ws2.add_chart(bar, f"E{proc_start - 1}")
+
+    # Section C: Top Risks
+    r += 2
+    ws2.cell(row=r, column=1, value="Top Risks by Exposure").font = section_font
+    r += 1
+    _write_header_row(ws2, ["Risk", f"Exposure ({symbol}/yr)", "% of Total"], row=r)
+    r += 1
+    risk_start = r
+
+    sorted_risks = sorted(summary["by_risk"].items(),
+                            key=lambda x: x[1], reverse=True)[:15]
+    for risk_name, exposure in sorted_risks:
+        ws2.cell(row=r, column=1, value=risk_name).font = value_font
+        ws2.cell(row=r, column=2, value=exposure).number_format = cur_fmt
+        ws2.cell(row=r, column=3, value=exposure / total_exp).number_format = pct_fmt
+        if (r - risk_start) % 2 == 1:
+            for c in range(1, 4):
+                ws2.cell(row=r, column=c).fill = alt_fill
+        r += 1
+
+    _auto_width(ws2)
+
+    # ================================================================
+    # TAB 3 — DETAILED RESULTS
+    # ================================================================
+    ws3 = wb.create_sheet("Detailed Results")
+    ws3.sheet_properties.tabColor = "70AD47"
+
+    _write_title_row(ws3, "Detailed Risk Assessment Results", row=1, cols=9)
+
+    detail_headers = [
+        "Process", "Risk", "Domain",
+        f"Criticality ({symbol}/day)", "Vulnerability",
+        "Resilience", "Downtime (days)",
+        "Probability", f"Exposure ({symbol}/yr)"
+    ]
+    _write_header_row(ws3, detail_headers, row=3)
+
+    # Freeze top rows so headers stay visible when scrolling
+    ws3.freeze_panes = "A4"
+
+    for i, a in enumerate(summary["assessments"]):
+        r = i + 4
+        ws3.cell(row=r, column=1, value=a["process_name"]).font = value_font
+        ws3.cell(row=r, column=2, value=a["risk_name"]).font = value_font
+        ws3.cell(row=r, column=3, value=a["domain"]).font = value_font
+        ws3.cell(row=r, column=4, value=a["criticality_per_day"]).number_format = cur_fmt
+        ws3.cell(row=r, column=5, value=a["vulnerability"]).number_format = pct_fmt
+        ws3.cell(row=r, column=6, value=a["resilience"]).number_format = pct_fmt
+        ws3.cell(row=r, column=7, value=a["expected_downtime"])
+        ws3.cell(row=r, column=8, value=a["probability"]).number_format = pct_fmt
+        ws3.cell(row=r, column=9, value=a["exposure"]).number_format = cur_fmt
+        # Alternating row shading
+        if i % 2 == 1:
+            for c in range(1, 10):
+                ws3.cell(row=r, column=c).fill = alt_fill
+
+    # Totals row
+    n = len(summary["assessments"])
+    if n > 0:
+        total_row = n + 4
+        ws3.cell(row=total_row, column=1, value="TOTAL").font = Font(
+            name="Arial", bold=True, size=10)
+        total_cell = ws3.cell(row=total_row, column=9,
+                               value=f"=SUM(I4:I{total_row - 1})")
+        total_cell.number_format = cur_fmt
+        total_cell.font = Font(name="Arial", bold=True, size=10, color=PRISM_BLUE)
+
+    _auto_width(ws3)
+
+    # ── Save ──
     output = BytesIO()
     wb.save(output)
     output.seek(0)
-
     return output.getvalue()
 
 
