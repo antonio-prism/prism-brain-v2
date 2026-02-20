@@ -42,7 +42,7 @@ The app has two parts:
   - Method C family-level calibration for 23 event families
 
 ### What still needs work:
-- **ACLED API access tier:** OAuth authentication works (token obtained), but data queries return HTTP 403. Account is on "Open" tier which doesn't include API access. Need to request upgrade to "Research" tier at acleddata.com or contact access@acleddata.com. STR-GEO-001 falls back to hardcoded 12%.
+- ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP (Uppsala Conflict Data Program). Free, no API key, 25-year window. STR-GEO-001 now computes 48% prior (12 war-years in 25).
 - **Copernicus ERA5 downloads are slow:** cdsapi + xarray + netcdf4 installed and configured. CDS API key works. But ERA5 data requests take 30+ minutes — first download not yet completed. Temperature modifier falls back to 1.0 until first cache.
 - **Legacy V1 routes still active:** `routes/data_sources.py` and `routes/calculations.py` kept for frontend compatibility — can be removed now that frontend uses engine
 
@@ -538,12 +538,17 @@ Fixed 3 practical gaps preventing the engine from using real external data.
 - Note: ERA5 data requests take 30+ minutes. First download not yet triggered. Falls back to modifier=1.0 until cache populated.
 - Files: `copernicus.py`
 
-**Fix 3: ACLED OAuth Rewrite (PARTIALLY FIXED — auth works, data access blocked)**
-- Problem: ACLED switched from API keys to OAuth in 2025. Old API URL (api.acleddata.com) dead.
-- Solution: Complete rewrite of `acled.py` with OAuth token flow (email+password → 24h JWT Bearer token). Updated `credentials.py` to map acled_email/acled_password instead of acled_key.
-- Current status: OAuth token acquisition succeeds, but data queries return HTTP 403. Research shows this is an **account tier issue** — ACLED now has Open/Research/Partner/Enterprise tiers, and the Open tier does not include API access.
-- Action needed: Antonio needs to request Research-tier access at acleddata.com or contact access@acleddata.com.
-- Files: `acled.py` (complete rewrite), `credentials.py`, `.env`
+**Fix 3: ACLED → UCDP Replacement (FIXED)**
+- Problem: ACLED switched from API keys to OAuth in 2025. Even with OAuth working, data queries return HTTP 403 because the account needs paid Research-tier access.
+- Solution: Replaced ACLED entirely with **UCDP** (Uppsala Conflict Data Program) — the academic gold standard for armed conflict data, used by UN and World Bank. Completely free, no API key required.
+- Improvements over ACLED:
+  - 25-year observation window (2000-2024) vs ACLED's 7 years (2018-2024) — much more statistically robust
+  - Pre-aggregated country-year records (no need to count individual events)
+  - Filters for war-level conflicts (1000+ battle deaths/yr) to capture supply-chain-disrupting events
+  - Handles interstate conflicts with comma-separated country codes (e.g. "365, 369" for Russia-Ukraine)
+- Result: STR-GEO-001 prior = 48% (12 war-years in 25). War years: 2000-2005, 2014-2016, 2022-2024.
+- Files: `ucdp.py` (new connector), `engine.py`, `event_mapping.py`, `sources.py`
+- Old `acled.py` kept but no longer used by the engine
 
 ---
 

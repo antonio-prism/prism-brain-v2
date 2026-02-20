@@ -114,8 +114,8 @@ def _get_method_a_prior(event_id: str, config: dict) -> dict:
     if prior_source == "usgs":
         return _prior_earthquake(config)
 
-    # ── ACLED: armed conflict ────────────────────────────────────────
-    if prior_source == "acled":
+    # ── UCDP: armed conflict ─────────────────────────────────────────
+    if prior_source in ("ucdp", "acled"):
         return _prior_armed_conflict(config)
 
     # ── World Bank: recession ────────────────────────────────────────
@@ -217,10 +217,10 @@ def _prior_earthquake(config: dict) -> dict:
 
 
 def _prior_armed_conflict(config: dict) -> dict:
-    """STR-GEO-001: Armed conflict in supplier country from ACLED."""
-    from .connectors.acled import count_conflict_years
+    """STR-GEO-001: Armed conflict in supplier country from UCDP."""
+    from .connectors.ucdp import count_conflict_years
 
-    result = count_conflict_years(start_year=2018, end_year=2024)
+    result = count_conflict_years(start_year=2000, end_year=2024)
 
     if result.success:
         d = result.data
@@ -228,14 +228,14 @@ def _prior_armed_conflict(config: dict) -> dict:
             "prior": clip_value("prior", d["prior"]),
             "method": "A",
             "formula": d["formula"],
-            "data_source": "ACLED",
+            "data_source": "UCDP/PRIO Armed Conflict Dataset",
             "source_id": "A07",
             "observation_window": d["observation_window"],
             "calculation_steps": (
-                f"Counted years with at least 1 battle event in TOP20 supplier countries. "
+                f"Counted years with at least 1 armed conflict in TOP20 supplier countries. "
                 f"Result: {d['conflict_year_count']} of {d['total_years']} years."
             ),
-            "confidence": "Medium",
+            "confidence": "High",
             "n_observations": d["total_years"],
             "note": d.get("note", ""),
         }
