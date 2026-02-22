@@ -118,7 +118,7 @@ def ensure_schema_updates(session):
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database and run schema migrations on startup."""
+    """Initialize database, run schema migrations, and integrate research on startup."""
     logger.info("Starting PRISM Brain API v3.1.0...")
     init_db()
     logger.info("Database initialized")
@@ -129,6 +129,25 @@ async def startup_event():
             logger.info("Schema updates applied")
     except Exception as e:
         logger.warning(f"Schema update warning (may be OK on first run): {e}")
+
+    # Auto-integrate Method C research if available and overrides are missing/stale
+    try:
+        from prism_engine.method_c_loader import DEFAULT_RESEARCH_PATH, OVERRIDES_PATH, load_and_integrate
+        if DEFAULT_RESEARCH_PATH.exists():
+            needs_integration = (
+                not OVERRIDES_PATH.exists()
+                or DEFAULT_RESEARCH_PATH.stat().st_mtime > OVERRIDES_PATH.stat().st_mtime
+            )
+            if needs_integration:
+                stats = load_and_integrate()
+                logger.info(
+                    f"Method C auto-integration: {stats['integrated']} events integrated, "
+                    f"{stats['skipped']} skipped, schema={stats.get('schema', '?')}"
+                )
+            else:
+                logger.info("Method C overrides up to date (skipping re-integration)")
+    except Exception as e:
+        logger.warning(f"Method C auto-integration skipped: {e}")
 
 
 @app.on_event("shutdown")

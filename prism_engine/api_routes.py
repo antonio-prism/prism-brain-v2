@@ -9,6 +9,8 @@ Adds endpoints that expose the probability engine to the existing app:
   GET  /api/v2/engine/fallback-rates      — List all fallback rates
   GET  /api/v2/engine/annual-data         — Get current annual update data
   PUT  /api/v2/engine/annual-data         — Save annual update data
+  GET  /api/v2/engine/method-c-status     — Method C integration status
+  POST /api/v2/engine/method-c-integrate  — Integrate research from file
 """
 
 import asyncio
@@ -132,6 +134,51 @@ def register_engine_routes(app: FastAPI):
         return {"status": "error", "message": "Failed to save annual data"}
 
     # ── Method C research integration ─────────────────────────────────
+
+    @app.get("/api/v2/engine/method-c-status")
+    async def method_c_status():
+        """Check Method C research integration status."""
+        from prism_engine.method_c_loader import OVERRIDES_PATH, FULL_RESEARCH_PATH
+        import json
+        from pathlib import Path
+
+        result = {"overrides_loaded": False, "override_count": 0}
+
+        if OVERRIDES_PATH.exists():
+            try:
+                with open(OVERRIDES_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                overrides = data.get("overrides", {})
+                metadata = data.get("metadata", {})
+                result["overrides_loaded"] = True
+                result["override_count"] = len(overrides)
+                result["schema_version"] = metadata.get("version", "unknown")
+                result["overrides_file"] = str(OVERRIDES_PATH)
+
+                # Confidence distribution
+                conf_dist = {}
+                for ev in overrides.values():
+                    c = ev.get("confidence", "Unknown")
+                    conf_dist[c] = conf_dist.get(c, 0) + 1
+                result["confidence_distribution"] = conf_dist
+            except Exception as e:
+                result["error"] = str(e)
+
+        result["full_research_available"] = FULL_RESEARCH_PATH.exists()
+        result["timestamp"] = datetime.utcnow().isoformat() + "Z"
+        return result
+
+    @app.post("/api/v2/engine/method-c-integrate")
+    async def method_c_integrate(path: Optional[str] = Query(None)):
+        """Integrate Method C research from a file on disk.
+
+        Uses the default research file (method_c_v3_complete.json) unless
+        a custom path is provided via query parameter.
+        """
+        from prism_engine.method_c_loader import load_and_integrate
+        stats = await asyncio.to_thread(load_and_integrate, path)
+        status = "success" if stats["integrated"] > 0 else "error"
+        return {"status": status, "stats": stats}
 
     @app.post("/api/v2/engine/load-method-c-research")
     async def load_method_c_research(request: Request):

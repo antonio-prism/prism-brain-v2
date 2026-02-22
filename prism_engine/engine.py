@@ -469,7 +469,7 @@ def _get_method_c_prior(event_id: str, config: dict) -> dict:
         prior_data.update({
             "data_source": "Structural calibration (event-specific research)",
             "source_id": "research",
-            "confidence": "Medium",
+            "confidence": override.get("confidence", "Medium"),
         })
         return prior_data
 

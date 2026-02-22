@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 22, 2026 — Session 9)
+## 2. CURRENT STATE (as of Feb 22, 2026 — Session 10)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -33,26 +33,22 @@ The app has two parts:
 - **Probability Engine (prism_engine) built and integrated:**
   - **ALL 174 events computing successfully (Phase 2 complete)**
   - Engine version 2.0.0
-  - 10 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, UCDP, EM-DAT, Copernicus)
+  - 11 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, UCDP, EM-DAT, Copernicus, ENTSO-E)
   - 3 computation methods: A (frequency, 33 events), B (incidence rate, 26 events), C (structural calibration, 115 events)
+  - **Method C research integrated:** All 115 events use event-specific, evidence-based sub-probabilities (from `method_c_v3_complete.json`). Confidence levels: High (3), Medium (44), Low (68).
   - Modifier system (ratio + categorical)
   - Fallback chain: computed → cached → hardcoded base rate
   - API routes registered at `/api/v2/engine/*`
   - Full derivation trail in JSON output (data source, formula, observation window, confidence)
   - Config-driven dispatch (no hardcoded if/elif chains)
-  - Method C family-level calibration for 23 event families
+  - Method C family-level calibration for 23 event families (used as fallback when no research override exists)
 
 ### What still needs work:
 - ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP.
 - ~~**ERA5 scaling constant 0.15**~~ — **RESOLVED.** Derived coefficient 0.21 via logistic regression.
 - ~~**Legacy V1 routes still active**~~ — **RESOLVED.** V1 data/calculation routes retired.
 - ~~**Dead files in repo**~~ — **RESOLVED.** Removed `parse_events.py` and `sync_from_railway.py` (commit 4055365).
-- **METHOD C RESEARCH INTEGRATION (NEXT PRIORITY):**
-  - Research output ready: `method_c_v3_complete.json` (1.4MB, 115 events, in project root)
-  - Format: Phase II dynamic scoring functions with indicators, weights, sigmoid normalization
-  - Current loader (`prism_engine/method_c_loader.py`) expects static `p_pre`/`p_trig`/`p_impl` — needs update to handle dynamic scoring functions
-  - PRD: `docs/PRD_Method_C_Research.md`
-  - POST endpoint ready: `/api/v2/engine/load-method-c-research`
+- ~~**METHOD C RESEARCH INTEGRATION**~~ — **DONE.** All 115 events now use event-specific, evidence-based sub-probabilities from `method_c_v3_complete.json`. Loader updated to handle v3 nested schema. Auto-integration on startup. Phase II scoring functions stored for future use.
 - ~~**Copernicus ERA5 downloads slow**~~ — **RESOLVED.** Rewrote connector to use published C3S/ERA5 anomaly table from `era5_calibration.py` (instant, no CDS download). Raw CDS download preserved as optional cross-validation function.
 - ~~**ENTSO-E connector**~~ — **DONE.** Built `prism_engine/connectors/entso_e.py`. Fetches actual load data from ENTSO-E Transparency Platform, computes peak/average load ratio as grid stress modifier. Wired into engine dispatch at source A10 for PHY-ENE events. Falls back gracefully if no ENTSOE_API_KEY configured (FRED A03 proxy still applies).
 - **API keys not configured:** NOAA, EIA, ENTSO-E (placeholder values in `.env`). Not blocking — connectors use fallback data. To enable ENTSO-E: register free at https://transparency.entsoe.eu/, add `ENTSOE_API_KEY=<token>` to `.env`.
@@ -104,7 +100,8 @@ prism-brain-v2/
 │   │   ├── acled.py           # ACLED conflict data (DEPRECATED — replaced by UCDP)
 │   │   ├── ucdp.py            # UCDP/PRIO conflict data (free, no key)
 │   │   ├── emdat.py           # EM-DAT disasters (local file)
-│   │   └── copernicus.py      # Copernicus ERA5 climate (needs key + cdsapi)
+│   │   ├── copernicus.py      # Copernicus ERA5 climate (uses published anomaly table, instant)
+│   │   └── entso_e.py         # ENTSO-E grid stress (optional key, free registration)
 │   ├── computation/
 │   │   ├── priors.py          # Methods A, B, C for prior calculation
 │   │   ├── modifiers.py       # Ratio and categorical modifier calibration
@@ -112,10 +109,12 @@ prism-brain-v2/
 │   │   ├── era5_calibration.py # ERA5 temperature scaling regression (derived 0.21 coefficient)
 │   │   └── validation.py      # Value validation and clipping rules
 │   ├── data/
-│   │   ├── manual/news_events.json  # Manual event lists (canal closures, disease outbreaks)
-│   │   ├── annual_updates.json      # Annual data overrides (written by manual entry page)
-│   │   ├── fallback_rates.json      # Cached fallback rates (auto-generated)
-│   │   └── cache/                   # Connector response cache (auto-managed)
+│   │   ├── manual/news_events.json       # Manual event lists (canal closures, disease outbreaks)
+│   │   ├── annual_updates.json           # Annual data overrides (written by manual entry page)
+│   │   ├── fallback_rates.json           # Cached fallback rates (auto-generated)
+│   │   ├── method_c_overrides.json       # Event-specific research overrides (115 events, auto-generated)
+│   │   ├── method_c_full_research.json   # Phase II scoring functions, geographic, correlation (auto-generated)
+│   │   └── cache/                        # Connector response cache (auto-managed)
 │   ├── manual_entry/templates/      # Templates for manual data entry (DBIR, Dragos)
 │   ├── output/events/               # Computed event JSON files (Section 9.2 format)
 │   └── tests/
@@ -161,11 +160,10 @@ prism-brain-v2/
 │       ├── config.toml
 │       ├── pages.toml
 │       └── secrets.toml
+├── method_c_v3_complete.json   # Method C research output (115 events, v3 schema, 1.4MB)
 ├── load_events.py             # Script to load seed JSON → PostgreSQL
-├── parse_events.py            # Script that parsed taxonomy MD files → JSON
 ├── migrate.py                 # Database migration (for existing tables only)
 ├── regenerate_weights.py      # Regenerate indicator weights
-├── sync_from_railway.py       # Sync from Railway DB (password removed for security)
 ├── start_backend.bat          # Windows: double-click to start backend
 ├── start_frontend.bat         # Windows: double-click to start frontend
 ├── load_data.bat              # Windows: double-click to load events into DB
@@ -203,7 +201,9 @@ prism-brain-v2/
 | GET /api/v2/engine/annual-data | prism_engine/api_routes.py | Get annual update data (DBIR, Dragos, dark figures) |
 | PUT /api/v2/engine/annual-data | prism_engine/api_routes.py | Save annual update data from manual entry page |
 | GET /api/v2/engine/era5-calibration | prism_engine/api_routes.py | Run ERA5 temperature scaling regression |
-| POST /api/v2/engine/load-method-c-research | prism_engine/api_routes.py | Load Method C research output JSON |
+| GET /api/v2/engine/method-c-status | prism_engine/api_routes.py | Method C integration status & confidence distribution |
+| POST /api/v2/engine/method-c-integrate | prism_engine/api_routes.py | Integrate research from file on disk |
+| POST /api/v2/engine/load-method-c-research | prism_engine/api_routes.py | Load Method C research output JSON (body) |
 
 **Retired V1 routes** (no longer registered in main.py):
 `/api/v1/events`, `/api/v1/probabilities`, `/api/v1/data-sources/health`, `/api/v1/data/refresh`, `/api/v1/calculations/trigger-full`, `/api/v1/stats`
@@ -742,6 +742,48 @@ Built `prism_engine/connectors/entso_e.py` for real European electricity grid da
 
 Files modified: `prism_engine/connectors/copernicus.py`, `prism_engine/engine.py`, `prism_engine/config/event_mapping.py`
 Files created: `prism_engine/connectors/entso_e.py`
+
+### Phase 20: Method C Research Integration (Session 10)
+Integrated the 115 event-specific research sub-probabilities from `method_c_v3_complete.json` into the engine.
+
+**Problem:** The research file uses a v3 nested schema (`event.layer1.derivation.sub_probabilities`) while the existing loader expected a v2 flat schema (`event.evidence`). Evidence field is `evidence_type` (not `type`), each sub-probability has `sources` array and per-sub-prob `confidence`, and overall confidence is at `layer1.derivation.confidence`.
+
+**Solution:**
+
+1. **`prism_engine/method_c_loader.py` — Major rewrite:**
+   - Added `_detect_schema_version()` — auto-detects v2 flat vs v3 nested format
+   - Added `_extract_evidence_v3()` — extracts evidence from nested path into flat format the engine expects
+   - Updated `load_research_output()` — schema-aware validation
+   - Updated `integrate_research()` — extracts confidence per event, writes two output files:
+     - `method_c_overrides.json` (engine consumption: p_pre/p_trig/p_impl + evidence + confidence)
+     - `method_c_full_research.json` (Phase II: scoring_functions, geographic_adjustment, correlation, tail_risk)
+   - Added in-memory cache to `get_method_c_override()` — avoids 115+ file reads during compute-all
+   - Added `invalidate_cache()` and `load_and_integrate()` convenience functions
+   - Updated `DEFAULT_RESEARCH_PATH` to point to `method_c_v3_complete.json`
+
+2. **`prism_engine/engine.py` — One-line fix:**
+   - Changed hardcoded `"confidence": "Medium"` to `override.get("confidence", "Medium")`
+   - Now uses per-event confidence from research (High: 3, Medium: 44, Low: 68)
+
+3. **`prism_engine/api_routes.py` — Two new endpoints:**
+   - `GET /api/v2/engine/method-c-status` — Returns override count, confidence distribution, file timestamps
+   - `POST /api/v2/engine/method-c-integrate` — Triggers re-integration from file on disk
+
+4. **`main.py` — Startup auto-integration:**
+   - On app startup, checks if `method_c_v3_complete.json` exists and overrides are missing/stale
+   - If so, calls `load_and_integrate()` automatically
+   - No manual steps needed — the engine always has the latest research data
+
+**Test results:**
+- 115/115 events integrated, 0 errors, 0 warnings
+- All 115 Method C events confirmed using "event-specific research" data source
+- Confidence distribution: High (3), Medium (44), Low (68)
+- Phase II data preserved: scoring_functions, geographic_adjustment, correlation for all 115 events
+
+**Phase II data stored for future use:**
+The v3 research file includes dynamic scoring functions (indicators, weights, sigmoid parameters) for each sub-probability. These are preserved in `method_c_full_research.json` for future implementation of dynamic recalculation based on live indicator data. The current implementation uses the static calibrated values.
+
+Files modified: `prism_engine/method_c_loader.py`, `prism_engine/engine.py`, `prism_engine/api_routes.py`, `main.py`
 
 ---
 
