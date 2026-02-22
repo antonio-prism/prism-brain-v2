@@ -53,9 +53,9 @@ The app has two parts:
   - Current loader (`prism_engine/method_c_loader.py`) expects static `p_pre`/`p_trig`/`p_impl` — needs update to handle dynamic scoring functions
   - PRD: `docs/PRD_Method_C_Research.md`
   - POST endpoint ready: `/api/v2/engine/load-method-c-research`
-- **Copernicus ERA5 downloads slow:** cdsapi installed, CDS API key works. ERA5 requests take 30+ min. Temperature modifier falls back to 1.0 until first cache populated. Not blocking.
-- **ENTSO-E connector:** Deferred/optional. Would improve PHY-ENE energy supply events.
-- **API keys not configured:** NOAA, EIA (placeholder values in `.env`). Not blocking.
+- ~~**Copernicus ERA5 downloads slow**~~ — **RESOLVED.** Rewrote connector to use published C3S/ERA5 anomaly table from `era5_calibration.py` (instant, no CDS download). Raw CDS download preserved as optional cross-validation function.
+- ~~**ENTSO-E connector**~~ — **DONE.** Built `prism_engine/connectors/entso_e.py`. Fetches actual load data from ENTSO-E Transparency Platform, computes peak/average load ratio as grid stress modifier. Wired into engine dispatch at source A10 for PHY-ENE events. Falls back gracefully if no ENTSOE_API_KEY configured (FRED A03 proxy still applies).
+- **API keys not configured:** NOAA, EIA, ENTSO-E (placeholder values in `.env`). Not blocking — connectors use fallback data. To enable ENTSO-E: register free at https://transparency.entsoe.eu/, add `ENTSOE_API_KEY=<token>` to `.env`.
 
 ### Git status:
 - Latest pushed commit: `4055365` — Risk Selection performance fix + UX redesign (Phases 17-18)
@@ -703,6 +703,45 @@ Redesigned the Risk Selection page to show events grouped by Domain and Family w
 **Tabs unchanged:** Probabilities, Save, Import/Export — all still work with the same `selected_risks` set
 
 File modified: `frontend/pages/3_Risk_Selection.py` (complete rewrite of `risk_selection_interface()`)
+
+### Phase 19: ERA5 Fix + ENTSO-E Connector (Session 10)
+Fixed the ERA5 slow download problem and built the ENTSO-E grid stress connector.
+
+**ERA5 Temperature Modifier Fix:**
+- Problem: `copernicus.py` downloaded raw ERA5 netCDF data from CDS API (30+ minutes). The modifier always fell back to 1.0 because the download never completed.
+- Solution: Rewrote `get_temperature_modifier()` to use the published C3S/ERA5 European summer anomaly table already in `era5_calibration.py`. No download needed — the modifier is computed instantly from the published data (2000-2024, updated annually when C3S ESOTC report is published).
+- Old CDS download preserved as `fetch_era5_temperature_cds()` for optional cross-validation.
+- Result: PHY-CLI events now get a real temperature modifier instantly (latest anomaly: 2024 = 1.54σ → modifier = 1.32).
+
+**ENTSO-E Connector (NEW):**
+Built `prism_engine/connectors/entso_e.py` for real European electricity grid data.
+- Source: ENTSO-E Transparency Platform API (free registration, XML format)
+- Data: Actual load (MW), peak load, day-ahead forecast comparison
+- Modifier: Grid stress = peak/average load ratio over 30 days
+  - Normal (ratio ~1.25): modifier = 1.0
+  - High stress (ratio ~1.35): modifier = 1.1
+  - Extreme (ratio ~1.50): modifier = 1.25
+  - Low demand (ratio ~1.15): modifier = 0.9
+- Bounds: [0.80, 1.50]
+- Areas configured: Germany-Luxembourg, France, Spain, Italy North, Netherlands
+- Default area: Germany (DE_LU) — largest European market
+- Caching: Load data cached 24h, forecast ratios cached 12h
+
+**Engine Integration:**
+- Added A10 handler in `engine.py._fetch_modifier()` — dispatches to `get_grid_stress_modifier()`
+- Updated `DEFAULT_MODIFIER_SOURCES` in `event_mapping.py`: PHY-ENE now uses `["A10", "A03"]`
+  - A10 (ENTSO-E) provides real grid stress data when API key is available
+  - A03 (FRED AMTMNO) remains as fallback proxy for energy demand pressure
+  - When A10 is unavailable (no API key), it returns None and is skipped — A03 still applies
+  - When both are available, both modifiers are applied (grid stress × demand pressure)
+
+**To activate ENTSO-E:**
+1. Register free at https://transparency.entsoe.eu/
+2. Request an API token (Security Token)
+3. Add to `.env`: `ENTSOE_API_KEY=<your-token>`
+
+Files modified: `prism_engine/connectors/copernicus.py`, `prism_engine/engine.py`, `prism_engine/config/event_mapping.py`
+Files created: `prism_engine/connectors/entso_e.py`
 
 ---
 

@@ -1,56 +1,109 @@
 """
-PRISM Engine — Copernicus CDS connector (Source A01).
+PRISM Engine — Copernicus / ERA5 temperature connector (Source A01).
 
-Fetches ERA5 climate reanalysis data for temperature anomalies,
-soil moisture, and other climate indicators.
+Provides temperature anomaly modifier for PHY-CLI (heatwave) events.
 
-Requires CDS_API_KEY environment variable and ~/.cdsapirc configuration.
+Primary source: Published ERA5 European summer anomalies from the C3S
+European State of the Climate (ESOTC) annual reports.  These are updated
+once a year (April) and stored in era5_calibration.py — no CDS download
+required, so the modifier is available instantly.
 
-Note: CDS requests can be slow (30+ minutes for large datasets).
-For Phase 1, we use cached summary statistics and only request fresh
-data when the cache is stale.
+Optional: If CDS_API_KEY is configured and cdsapi is installed, the
+connector can also download raw ERA5 monthly data for cross-validation
+or to extend beyond the published anomaly table.
 """
 
 import logging
-from pathlib import Path
-
 import numpy as np
 
-from .base import ConnectorResult, get_cached, save_cache
+from .base import ConnectorResult
 from ..config.credentials import get_credential
 
 logger = logging.getLogger(__name__)
 
-DATA_DIR = Path(__file__).parent.parent / "data" / "cache"
+# Scaling constant derived via logistic regression (see era5_calibration.py)
+_SCALING_CONSTANT = 0.21
+_MODIFIER_FLOOR = 0.75
+_MODIFIER_CEILING = 1.80
 
 
-def _check_cds_available() -> bool:
-    """Check if CDS API is configured and available."""
-    try:
-        import cdsapi  # noqa: F401
-        key = get_credential("cds")
-        return key is not None
-    except ImportError:
-        logger.warning("cdsapi not installed — CDS connector unavailable")
-        return False
+def _get_published_anomaly() -> dict | None:
+    """Get the most recent published ERA5 anomaly from the calibration table.
 
-
-def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
+    Returns dict with keys: year, anomaly_sigma, modifier — or None.
     """
-    Fetch ERA5 monthly mean 2m temperature for Europe (summer months).
+    try:
+        from ..computation.era5_calibration import get_anomaly_sigma_table
+        sigma_table = get_anomaly_sigma_table()
 
-    For Phase 1: check cache first. If no cached data, attempt CDS request.
-    CDS requests are asynchronous and can take 30+ minutes.
+        if not sigma_table:
+            return None
 
-    bbox: {"north": 47, "south": 34, "west": -10, "east": 40} for EU-South
+        latest_year = max(sigma_table.keys())
+        latest_sigma = sigma_table[latest_year]
+
+        modifier = 1.0 + (latest_sigma * _SCALING_CONSTANT)
+        modifier = round(float(np.clip(modifier, _MODIFIER_FLOOR, _MODIFIER_CEILING)), 2)
+
+        return {
+            "year": latest_year,
+            "anomaly_sigma": latest_sigma,
+            "modifier": modifier,
+            "total_years": len(sigma_table),
+        }
+    except Exception as e:
+        logger.error(f"Failed to load published ERA5 anomalies: {e}")
+        return None
+
+
+def get_temperature_modifier() -> dict:
+    """Get the ERA5 temperature anomaly modifier for heatwave events.
+
+    Uses the published C3S/ERA5 anomaly table (instant, no download).
+    Falls back to neutral (1.0) only if the table is unavailable.
+    """
+    published = _get_published_anomaly()
+
+    if published:
+        return {
+            "name": "ERA5 temperature anomaly",
+            "source_id": "A01",
+            "modifier": published["modifier"],
+            "status": "COMPUTED",
+            "indicator_value": published["anomaly_sigma"],
+            "indicator_unit": "σ above 1991-2020 baseline",
+            "data_year": published["year"],
+            "observation_window": f"2000-{published['year']} ({published['total_years']}yr)",
+            "calibration": {
+                "method": "scaling",
+                "scaling_formula": f"1.0 + (anomaly_sigma x {_SCALING_CONSTANT})",
+                "scaling_constant": _SCALING_CONSTANT,
+                "scaling_constant_status": "REGRESSION_DERIVED",
+                "floor": _MODIFIER_FLOOR,
+                "ceiling": _MODIFIER_CEILING,
+            },
+            "data_source": "C3S European State of the Climate (ERA5 reanalysis)",
+        }
+
+    # Fallback: neutral modifier
+    return {
+        "name": "ERA5 temperature anomaly",
+        "source_id": "A01",
+        "modifier": 1.0,
+        "status": "FALLBACK",
+        "error": "Published ERA5 anomaly table unavailable",
+    }
+
+
+def fetch_era5_temperature_cds(bbox: dict | None = None) -> ConnectorResult:
+    """Download raw ERA5 data from CDS API (optional, for cross-validation).
+
+    This is slow (30+ minutes) and only needed if you want to verify or
+    extend beyond the published anomaly table.  Not used by the main
+    engine modifier pipeline.
     """
     if bbox is None:
         bbox = {"north": 47, "south": 34, "west": -10, "east": 40}
-
-    cache_params = {"source": "era5_t2m", "bbox": bbox}
-    cached = get_cached("copernicus", cache_params, max_age_hours=720)  # 30 days
-    if cached:
-        return ConnectorResult(source_id="A01", success=True, data=cached, cached=True)
 
     if not _check_cds_available():
         return ConnectorResult(
@@ -61,13 +114,21 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
     try:
         import cdsapi
         import xarray as xr
+        from pathlib import Path
+        from .base import get_cached, save_cache
 
+        cache_params = {"source": "era5_t2m", "bbox": bbox}
+        cached = get_cached("copernicus", cache_params, max_age_hours=720)
+        if cached:
+            return ConnectorResult(source_id="A01", success=True, data=cached, cached=True)
+
+        data_dir = Path(__file__).parent.parent / "data" / "cache"
         api_key = get_credential("cds")
         client = cdsapi.Client(
             url="https://cds.climate.copernicus.eu/api",
             key=api_key,
         )
-        output_file = str(DATA_DIR / "era5_monthly_t2m_europe_summer.nc")
+        output_file = str(data_dir / "era5_monthly_t2m_europe_summer.nc")
 
         client.retrieve(
             "reanalysis-era5-single-levels-monthly-means",
@@ -83,45 +144,22 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
             output_file,
         )
 
-        # Process the downloaded data
         ds = xr.open_dataset(output_file)
         t2m = ds["t2m"]
-
-        # Area-weighted spatial mean
         weights = np.cos(np.deg2rad(t2m.latitude))
         monthly_mean = t2m.weighted(weights).mean(dim=["latitude", "longitude"])
-
-        # Baseline: 1991-2020 mean and std per calendar month
         baseline = monthly_mean.sel(time=slice("1991", "2020")).groupby("time.month").mean()
         baseline_std = monthly_mean.sel(time=slice("1991", "2020")).groupby("time.month").std()
-
-        # Anomaly per month (in standard deviations)
         anomaly = (monthly_mean.groupby("time.month") - baseline) / baseline_std
-
-        # Heatwave year = any year with at least 1 month where anomaly > 2.0σ
-        yearly_max_anomaly = anomaly.groupby("time.year").max()
-        heatwave_years = int((yearly_max_anomaly > 2.0).sum().item())
-        total_years = len(yearly_max_anomaly.year)
-        prior = round(heatwave_years / total_years, 4)
-
-        # Latest anomaly for modifier
         latest_anomaly = float(anomaly.isel(time=-1).item())
-        # Modifier: 1σ above → 21% increase in heatwave risk
-        # Derived via logistic regression on 25yr of ERA5 European summer
-        # anomalies vs EM-DAT heatwave events (see era5_calibration.py).
-        modifier = 1.0 + (latest_anomaly * 0.21)
-        modifier = round(float(np.clip(modifier, 0.75, 1.80)), 2)
+        modifier = 1.0 + (latest_anomaly * _SCALING_CONSTANT)
+        modifier = round(float(np.clip(modifier, _MODIFIER_FLOOR, _MODIFIER_CEILING)), 2)
 
         data = {
-            "heatwave_years": heatwave_years,
-            "total_years": total_years,
-            "prior": prior,
             "latest_anomaly_sigma": round(latest_anomaly, 2),
             "modifier": modifier,
-            "scaling_constant": 0.21,
-            "scaling_constant_status": "REGRESSION_DERIVED",
+            "scaling_constant": _SCALING_CONSTANT,
             "baseline_period": "1991-2020",
-            "observation_window": f"2000-2024 ({total_years}yr)",
             "bbox": bbox,
         }
 
@@ -134,35 +172,11 @@ def fetch_era5_temperature(bbox: dict | None = None) -> ConnectorResult:
         return ConnectorResult(source_id="A01", success=False, error=str(e))
 
 
-def get_temperature_modifier() -> dict:
-    """
-    Get the ERA5 temperature anomaly modifier for heatwave events.
-    Falls back to neutral (1.0) if CDS data unavailable.
-    """
-    result = fetch_era5_temperature()
-    if not result.success:
-        return {
-            "name": "ERA5 temperature anomaly",
-            "source_id": "A01",
-            "modifier": 1.0,
-            "status": "FALLBACK",
-            "error": result.error,
-        }
-
-    return {
-        "name": "ERA5 temperature anomaly",
-        "source_id": "A01",
-        "modifier": result.data["modifier"],
-        "status": "COMPUTED",
-        "indicator_value": result.data["latest_anomaly_sigma"],
-        "indicator_unit": "σ above 1991-2020 baseline",
-        "calibration": {
-            "method": "scaling",
-            "scaling_formula": "1.0 + (anomaly_sigma x 0.21)",
-            "scaling_constant": 0.21,
-            "scaling_constant_status": result.data.get("scaling_constant_status",
-                                                        "REGRESSION_DERIVED"),
-            "floor": 0.75,
-            "ceiling": 1.80,
-        },
-    }
+def _check_cds_available() -> bool:
+    """Check if CDS API is configured and available."""
+    try:
+        import cdsapi  # noqa: F401
+        key = get_credential("cds")
+        return key is not None
+    except ImportError:
+        return False

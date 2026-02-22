@@ -706,6 +706,22 @@ def _fetch_modifier(event_id: str, source: str, config: dict) -> dict | None:
             "status": mod.get("status", "FALLBACK"),
         }
 
+    if source == "A10":
+        from .connectors.entso_e import get_grid_stress_modifier
+        mod = get_grid_stress_modifier()
+        if mod.get("status") == "UNAVAILABLE":
+            # ENTSO-E not configured — skip, FRED proxy (A03) handles PHY-ENE
+            return None
+        return {
+            "name": mod.get("name", "ENTSO-E grid stress"),
+            "source_id": "A10",
+            "indicator_value": mod.get("indicator_value"),
+            "indicator_unit": mod.get("indicator_unit", ""),
+            "modifier_value": mod.get("modifier", 1.0),
+            "calibration": mod.get("calibration", {}),
+            "status": mod.get("status", "FALLBACK"),
+        }
+
     if source == "A06":
         from .connectors.gpr import get_gpr_modifier
         mod = get_gpr_modifier()
