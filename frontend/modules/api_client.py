@@ -41,7 +41,7 @@ def _get_api_base_url() -> str:
     return _DEFAULT_API_URL
 
 API_BASE_URL = _get_api_base_url()
-API_TIMEOUT = 2  # seconds (local backend should respond in <1s)
+API_TIMEOUT = 5  # seconds (allows headroom for cold DB queries)
 CACHE_TTL = 300  # 5 minutes in seconds
 
 # Reusable HTTP session — keeps TCP connections alive between calls,

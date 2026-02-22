@@ -249,17 +249,19 @@ def register_v2_routes(app, get_session_context):
                 if domain_key:
                     query = query.filter(RiskEvent.layer1_primary == domain_key)
 
-            # Filter by family code
+            # Filter by family code — use event_id prefix matching instead of loading all events
             if family_code:
-                # Find all events with this family code
-                matching_events = []
-                for event in query.all():
-                    if get_family_code_from_event_id(event.event_id) == family_code:
-                        matching_events.append(event.id)
-                if matching_events:
-                    query = session.query(RiskEvent).filter(RiskEvent.id.in_(matching_events))
+                # Reverse-lookup: find the event_id prefix(es) for this family code
+                matching_prefixes = [
+                    prefix for prefix, code in FAMILY_CODE_MAP.items()
+                    if code == family_code
+                ]
+                if matching_prefixes:
+                    from sqlalchemy import or_
+                    prefix_filters = [RiskEvent.event_id.like(f"{p}%") for p in matching_prefixes]
+                    query = query.filter(or_(*prefix_filters))
                 else:
-                    query = session.query(RiskEvent).filter(False)  # Empty result
+                    return []
 
             # Search
             if search:
@@ -271,18 +273,10 @@ def register_v2_routes(app, get_session_context):
 
             events = query.all()
 
-            # Get latest probabilities for each event
-            probability_map = {}
-            for event_id in [e.event_id for e in events]:
-                latest_prob = session.query(RiskProbability).filter(
-                    RiskProbability.event_id == event_id
-                ).order_by(RiskProbability.calculation_date.desc()).first()
-                probability_map[event_id] = latest_prob
-
-            return [
-                serialize_v2_event(event, probability_map.get(event.event_id))
-                for event in events
-            ]
+            # Skip individual probability lookups — the engine provides real
+            # probabilities.  This eliminates 174 extra DB queries that caused
+            # the page to timeout on first load.
+            return [serialize_v2_event(event) for event in events]
 
     # ============== V2 Single Event ==============
 

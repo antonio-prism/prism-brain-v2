@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 20, 2026 — Session 7)
+## 2. CURRENT STATE (as of Feb 22, 2026 — Session 9)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -26,7 +26,8 @@ The app has two parts:
 - **Performance fixes applied:** non-blocking Google Fonts, cached init_database, lazy external tables, HTTP connection pooling, localhost→127.0.0.1, 30s cache TTL
 - **Process Criticality redesigned:** "Criticality" tab shows Daily Downtime Revenue Impact; inline process IDs
 - **Import/Export redesigned:** uses professional PRISM Questionnaire template (multi-sheet Excel with dropdowns)
-- **Risk Selection sorted** by domain → family → event ID
+- **Risk Selection redesigned** with Domain → Family grouped layout (collapsible expanders, sorted 1.1→4.7)
+- **Risk Selection performance fixed:** page loads instantly (no more compute-all on page load)
 - **Results Dashboard fixed:** workflow progress indicator, heatmap, plotly charts all working
 - **V2 Event Explorer page removed** (no longer needed)
 - **Probability Engine (prism_engine) built and integrated:**
@@ -627,6 +628,70 @@ Changes:
 - `frontend/modules/api_client.py` — Removed 6 unused V1 functions: `fetch_events`, `fetch_probabilities`, `fetch_data_sources`, `trigger_data_refresh`, `trigger_recalculation`, `get_event_probability`. Added `api_engine_status()`.
 - `frontend/pages/7_Data_Sources.py` — Complete rewrite. Replaced V1 refresh/recalculate buttons with V2 engine compute-all. Shows engine status, API credentials, method distribution. Fixed broken navigation link (6_Results → 5_Results).
 - Route files in `routes/` kept on disk for reference but no longer registered in the FastAPI app.
+
+### Phase 17: Risk Selection Performance Fix (Session 9)
+Fixed the Risk Selection page taking 2+ minutes to load.
+
+**Three root causes found and fixed:**
+
+**Root cause 1 — N+1 query in v2_routes.py:**
+The `/api/v2/events` endpoint did 174 individual SQL queries (one per event to fetch the latest probability). Combined with a 2-second API timeout, this caused the page to silently fail on cold starts.
+- Fix: Removed per-event probability lookup loop (174 DB queries → 0). The engine provides probabilities now.
+- Also optimized family_code filtering to use SQL `LIKE` prefix matching instead of loading all events into Python.
+- Result: `/api/v2/events` response time ~2s → **50ms**
+
+**Root cause 2 — compute-all called on every page load:**
+The Risk Selection page called `api_engine_compute_all()` (which calls 10+ external APIs for 174 events) on every page render. This took 120+ seconds and blocked all UI rendering.
+- Fix: Rewrote `3_Risk_Selection.py` to **never call compute-all during page load**. Base rates from seed data are shown instantly. Engine probabilities are only computed when the user explicitly clicks "Compute Engine Probabilities" on the Probabilities tab.
+- Engine results are stored in `st.session_state.engine_results` and reused across tabs without triggering recomputation.
+
+**Root cause 3 — compute-all blocked the event loop:**
+The `compute_all_events()` endpoint was `async def` but called synchronous `compute_all()` directly, blocking the asyncio event loop. While it ran, the backend couldn't serve ANY other request (even `/health`).
+- Fix: Wrapped in `asyncio.to_thread()` so it runs in a thread pool. Other endpoints remain responsive while compute-all runs.
+
+**Frontend timeout also increased:**
+- `api_client.py` `API_TIMEOUT`: 2s → 5s (safety net for cold DB queries)
+
+Files modified: `v2_routes.py`, `frontend/pages/3_Risk_Selection.py`, `frontend/modules/api_client.py`, `prism_engine/api_routes.py`
+
+### Phase 18: Risk Selection UX — Domain/Family Grouped Layout (Session 9)
+Redesigned the Risk Selection page to show events grouped by Domain and Family with collapsible sections, matching the Process Criticality page pattern.
+
+**Before:** Flat list of 174 events with dropdown domain/family filters.
+**After:** 4 domain headers → 28 family expanders → event checkboxes with probabilities.
+
+**Layout structure:**
+```
+🔍 Search [___________]
+[✓ Select All Visible] [✗ Clear Selection]  **X** risks selected
+─────────────────────────────────────────────────
+#### 🌍 PHYSICAL — Climate, Energy, Materials (X selected)
+> **1.1 — Climate Extremes** (2/6 selected)
+    [Select all] [Deselect all]
+    [x] PHY-CLI-001 — River flooding    12.0%
+    [ ] PHY-CLI-002 — Coastal flooding   0.35%
+#### 🏛️ STRUCTURAL — ...
+#### 💻 DIGITAL — ...
+#### ⚙️ OPERATIONAL — ...
+─────────────────────────────────────────────────
+[💾 Save Risk Selection]
+```
+
+**Key design decisions:**
+- Domain order follows family code numbering: Physical (1.x) → Structural (2.x) → Digital (3.x) → Operational (4.x)
+- Each family is an `st.expander()` — same pattern as macro-processes on Process Criticality page
+- `active_family` session state keeps the expander open after user interactions (Select All, checkbox click)
+- Search box filters events across all families; families/domains with zero matches are hidden
+- Probabilities shown next to each event: engine-computed (with dot indicator) or base rate
+- Removed old 3-column domain/family dropdown filter bar — the grouped view replaces it
+- Removed unused imports: `api_v2_get_taxonomy`, `api_v2_get_probabilities`, `get_best_probability`, `get_domain_color`, `get_client_processes`, `update_client_risk`
+
+**Session state additions:**
+- `active_family` — tracks which family expander to keep open (same pattern as `active_macro` on Process page)
+
+**Tabs unchanged:** Probabilities, Save, Import/Export — all still work with the same `selected_risks` set
+
+File modified: `frontend/pages/3_Risk_Selection.py` (complete rewrite of `risk_selection_interface()`)
 
 ---
 

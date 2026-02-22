@@ -11,6 +11,7 @@ Adds endpoints that expose the probability engine to the existing app:
   PUT  /api/v2/engine/annual-data         — Save annual update data
 """
 
+import asyncio
 import logging
 from datetime import datetime
 from typing import Optional
@@ -27,14 +28,18 @@ def register_engine_routes(app: FastAPI):
     async def compute_event(event_id: str):
         """Compute the probability for a single event using the engine."""
         from prism_engine.engine import compute
-        result = compute(event_id)
+        result = await asyncio.to_thread(compute, event_id)
         return result
 
     @app.get("/api/v2/engine/compute-all")
     async def compute_all_events(domain: Optional[str] = Query(None)):
-        """Compute all 174 events. Optionally filter by domain."""
+        """Compute all 174 events. Optionally filter by domain.
+
+        Runs in a thread pool so it doesn't block the event loop — other
+        endpoints (health, events, etc.) remain responsive while this runs.
+        """
         from prism_engine.engine import compute_all
-        results = compute_all()
+        results = await asyncio.to_thread(compute_all)
 
         # Optional domain filter
         if domain:

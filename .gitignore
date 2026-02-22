@@ -8,3 +8,5 @@ docs/setup_guides/
 prism_engine/data/cache/
 prism_engine/data/emdat_public.*
 .claude/
+public_emdat_*.xlsx
+PRISM_Claude_Code_Session_Brief.md

@@ -3,6 +3,7 @@ PRISM Brain V2 - Risk Selection Module
 =======================================
 Select and prioritize risks relevant to the client.
 Uses V2 taxonomy: Domains -> Families -> Events with base-rate probabilities.
+Events are grouped by Domain and Family with collapsible sections.
 """
 
 import streamlit as st
@@ -17,26 +18,20 @@ sys.path.insert(0, str(APP_DIR))
 
 from utils.constants import RISK_DOMAINS
 from utils.helpers import (
-    get_domain_color,
     get_domain_icon,
     format_percentage
 )
 from modules.database import (
     get_client,
-    get_client_processes,
     get_all_clients,
     add_client_risk,
     get_client_risks,
-    update_client_risk,
     is_backend_online
 )
 from modules.api_client import (
     fetch_v2_events_normalized,
-    api_v2_get_taxonomy,
-    api_v2_get_probabilities,
     api_v2_health,
     api_engine_compute_all,
-    get_best_probability,
 )
 
 st.set_page_config(
@@ -54,6 +49,63 @@ if 'current_client_id' not in st.session_state:
 
 if 'selected_risks' not in st.session_state:
     st.session_state.selected_risks = set()
+
+if 'engine_results' not in st.session_state:
+    st.session_state.engine_results = None
+
+if 'active_family' not in st.session_state:
+    st.session_state.active_family = None
+
+# Domain display order (matches family code numbering: 1.x, 2.x, 3.x, 4.x)
+_DOMAIN_ORDER = [
+    ("PHYSICAL", "Physical"),
+    ("STRUCTURAL", "Structural"),
+    ("DIGITAL", "Digital"),
+    ("OPERATIONAL", "Operational"),
+]
+
+
+# ====================== Engine Results Helper ======================
+
+def _get_engine_results_if_cached():
+    """Return engine results from session state if already computed.
+
+    NEVER triggers a new engine computation — returns None if no results
+    are available.  This keeps the page responsive.
+    """
+    return st.session_state.get('engine_results')
+
+
+def _get_probability_for_risk(risk, engine_results=None):
+    """Get the best probability for a risk.
+
+    Uses engine result if available, otherwise falls back to base rate.
+    Returns (probability_0_to_1, source_label).
+    """
+    if engine_results:
+        engine_data = engine_results.get(risk['id'])
+        if engine_data and isinstance(engine_data, dict):
+            prob = engine_data.get("layer1", {}).get("p_global", 0)
+            return prob, "Engine"
+    return risk.get('default_probability', 0), "Base Rate"
+
+
+def _set_active_family(family_code):
+    """Callback: remember which family expander the user is working in."""
+    st.session_state.active_family = family_code
+
+
+def _count_selected_in_risks(risk_list):
+    """Count how many risks from a list are currently selected."""
+    count = 0
+    for r in risk_list:
+        wkey = f"risk_{r['id']}"
+        if wkey in st.session_state:
+            if st.session_state[wkey]:
+                count += 1
+        elif r['id'] in st.session_state.selected_risks:
+            count += 1
+    return count
 
 
 # ====================== Sidebar ======================
@@ -119,138 +171,153 @@ def load_risks():
 # ====================== Risk Selection Tab ======================
 
 def risk_selection_interface():
-    """Main risk selection interface using V2 taxonomy."""
+    """Risk selection interface grouped by Domain and Family.
+
+    Structure: Domain header -> Family expanders -> Event checkboxes.
+    Same pattern as Process Criticality (Scope -> Macro-process -> Sub-process).
+    """
     client = get_client(st.session_state.current_client_id)
     risks = load_risks()
 
     if not risks:
         st.error("Could not load V2 events from the backend. "
-                 "Make sure the backend is running and migrate_v2.py has been executed.")
+                 "Make sure the backend is running.")
         return
 
     st.markdown(f"## Select Risks for {client['name']}")
     st.markdown("Browse risks by domain and family, then check the ones relevant to this client.")
 
-    # ---------- Filters ----------
-    # Get taxonomy for family dropdown
-    taxonomy = api_v2_get_taxonomy()
-    all_families = []
-    if taxonomy:
-        for dom in taxonomy.get("domains", []):
-            for fam in dom.get("families", []):
-                all_families.append(fam)
+    # ---------- Search + Bulk actions ----------
+    search_term = st.text_input("\U0001F50D Search risks", key="risk_search")
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        domain_options = ["All Domains"] + list(RISK_DOMAINS.keys())
-        selected_domain = st.selectbox("Filter by Domain", domain_options, key="domain_filter")
-
-    with col2:
-        if selected_domain == "All Domains":
-            family_list = all_families
-        else:
-            family_list = [f for f in all_families
-                           if any(r['domain'] == selected_domain and r['family_code'] == f['family_code']
-                                  for r in risks)]
-        family_options = ["All Families"] + [
-            f"{f['family_code']} \u2014 {f['family_name']}" for f in family_list
+    # Filter risks by search term
+    if search_term:
+        term = search_term.lower()
+        filtered_risks = [
+            r for r in risks
+            if term in r['name'].lower()
+            or term in r.get('description', '').lower()
+            or term in r.get('id', '').lower()
         ]
-        selected_family_str = st.selectbox("Filter by Family", family_options, key="family_filter")
+    else:
+        filtered_risks = risks
 
-    with col3:
-        search_term = st.text_input("\U0001F50D Search", key="risk_search")
-
-    # Parse family selection
-    filter_domain = None if selected_domain == "All Domains" else selected_domain
-    filter_family = None
-    if selected_family_str != "All Families":
-        filter_family = selected_family_str.split(" \u2014 ")[0].strip()
-
-    # Fetch filtered events from API
-    filtered_risks = fetch_v2_events_normalized(
-        domain=filter_domain,
-        family_code=filter_family,
-        search=search_term if search_term else None
-    )
-
-    # Sort by domain, then family_code, then event ID so risks in the same family appear together
-    filtered_risks.sort(key=lambda r: (
-        r.get('domain', ''),
-        r.get('family_code', ''),
-        r.get('id', '')
-    ))
-
-    # ---------- Bulk actions ----------
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("\u2713 Select All Visible"):
             for r in filtered_risks:
                 st.session_state.selected_risks.add(r['id'])
+                st.session_state[f"risk_{r['id']}"] = True
             st.rerun()
     with col2:
         if st.button("\u2717 Clear Selection"):
             st.session_state.selected_risks.clear()
+            for key in list(st.session_state.keys()):
+                if key.startswith("risk_") and key != "risk_search" and key != "risk_upload":
+                    st.session_state[key] = False
             st.rerun()
     with col3:
-        st.write(f"**{len(st.session_state.selected_risks)}** risks selected")
-
-    # ---------- Risk table ----------
-    # Pre-fetch engine results so we can show computed probabilities
-    engine_results = api_engine_compute_all() or {}
-
-    st.subheader(f"Available Risks ({len(filtered_risks)})")
-
-    header_cols = st.columns([1, 4, 2, 2, 2])
-    with header_cols[0]:
-        st.write("**Select**")
-    with header_cols[1]:
-        st.write("**Risk Name**")
-    with header_cols[2]:
-        st.write("**Family**")
-    with header_cols[3]:
-        st.write("**Domain**")
-    with header_cols[4]:
-        st.write("**Probability**")
+        total_selected = _count_selected_in_risks(risks)
+        st.write(f"**{total_selected}** risks selected")
 
     st.divider()
 
-    for risk in filtered_risks:
-        risk_id = risk['id']
-        cols = st.columns([1, 4, 2, 2, 2])
+    # ---------- Engine results for probability display ----------
+    engine_results = _get_engine_results_if_cached()
 
-        with cols[0]:
-            is_selected = risk_id in st.session_state.selected_risks
-            new_value = st.checkbox(
-                "Select",
-                value=is_selected,
-                key=f"risk_{risk_id}",
-                label_visibility="collapsed"
-            )
-            if new_value != is_selected:
-                if new_value:
-                    st.session_state.selected_risks.add(risk_id)
-                else:
-                    st.session_state.selected_risks.discard(risk_id)
+    # ---------- Group risks by domain and family ----------
+    for domain_key, domain_display in _DOMAIN_ORDER:
+        domain_info = RISK_DOMAINS.get(domain_key, {})
+        domain_icon = domain_info.get("icon", "")
+        domain_desc = domain_info.get("description", "")
 
-        with cols[1]:
-            domain_icon = get_domain_icon(risk['domain'])
-            st.markdown(f"{domain_icon} **{risk['name']}**")
+        # Get filtered risks in this domain
+        domain_risks = [
+            r for r in filtered_risks
+            if r.get('domain', '').upper() == domain_key
+        ]
 
-        with cols[2]:
-            st.write(f"{risk.get('family_code', '')} {risk.get('family_name', '')}")
+        if not domain_risks:
+            continue
 
-        with cols[3]:
-            st.write(risk['domain'])
+        # Group by family
+        families = {}
+        for r in domain_risks:
+            fc = r.get('family_code', '0.0')
+            if fc not in families:
+                families[fc] = {
+                    'name': r.get('family_name', ''),
+                    'events': []
+                }
+            families[fc]['events'].append(r)
 
-        with cols[4]:
-            # Show engine probability for Phase 1 events, base rate for others
-            engine_data = engine_results.get(risk_id)
-            if engine_data and isinstance(engine_data, dict):
-                prob = engine_data.get("layer1", {}).get("p_global", 0)
-                st.write(f"{format_percentage(prob)} \u25CF")
-            else:
-                prob = risk.get('default_probability', 0)
-                st.write(format_percentage(prob))
+        # Count selected in this domain
+        domain_selected = _count_selected_in_risks(domain_risks)
+
+        st.markdown(
+            f"#### {domain_icon} {domain_key} \u2014 {domain_desc} "
+            f"({domain_selected} selected)"
+        )
+
+        # Display families sorted by code
+        for fc in sorted(families.keys()):
+            fam = families[fc]
+            events = sorted(fam['events'], key=lambda r: r['id'])
+
+            # Count selected in this family
+            fam_selected = _count_selected_in_risks(events)
+
+            # Keep expander open if user just interacted with it
+            keep_open = st.session_state.active_family == fc
+
+            with st.expander(
+                f"**{fc} \u2014 {fam['name']}** ({fam_selected}/{len(events)} selected)",
+                expanded=keep_open,
+            ):
+                # Select all / Deselect all for this family
+                col_a, col_b = st.columns(2)
+                with col_a:
+                    if st.button("Select all", key=f"selall_{fc}"):
+                        st.session_state.active_family = fc
+                        for r in events:
+                            st.session_state.selected_risks.add(r['id'])
+                            st.session_state[f"risk_{r['id']}"] = True
+                        st.rerun()
+                with col_b:
+                    if st.button("Deselect all", key=f"deselall_{fc}"):
+                        st.session_state.active_family = fc
+                        for r in events:
+                            st.session_state.selected_risks.discard(r['id'])
+                            st.session_state[f"risk_{r['id']}"] = False
+                        st.rerun()
+
+                # Event checkboxes with probability
+                for risk in events:
+                    risk_id = risk['id']
+                    is_selected = risk_id in st.session_state.selected_risks
+
+                    # Probability info
+                    prob, source = _get_probability_for_risk(risk, engine_results)
+                    prob_str = format_percentage(prob)
+                    if source == "Engine":
+                        prob_str += " \u25CF"
+
+                    col1, col2 = st.columns([5, 1])
+                    with col1:
+                        checkbox_kwargs = {
+                            "label": f"{risk_id} \u2014 {risk['name']}",
+                            "key": f"risk_{risk_id}",
+                            "on_change": _set_active_family,
+                            "args": (fc,),
+                        }
+                        if f"risk_{risk_id}" not in st.session_state:
+                            checkbox_kwargs["value"] = is_selected
+                        if st.checkbox(**checkbox_kwargs):
+                            st.session_state.selected_risks.add(risk_id)
+                        else:
+                            st.session_state.selected_risks.discard(risk_id)
+                    with col2:
+                        st.write(prob_str)
 
     # ---------- Save inline ----------
     st.divider()
@@ -271,50 +338,64 @@ def probability_overview_interface():
         st.info("Select risks in the 'Select Risks' tab first.")
         return
 
-    # Fetch engine-computed probabilities (Phase 1 events)
-    with st.spinner("Computing probabilities..."):
-        engine_results = api_engine_compute_all() or {}
+    engine_results = _get_engine_results_if_cached()
+
+    # Show compute button if engine hasn't been run yet
+    if not engine_results:
+        st.info("Engine probabilities have not been computed yet. "
+                "Click below to compute live probabilities from external data sources. "
+                "This takes 1-2 minutes on first run.")
+        if st.button("Compute Engine Probabilities", type="primary"):
+            with st.spinner("Computing probabilities for 174 events from live data sources... This may take 1-2 minutes."):
+                engine_results = api_engine_compute_all(use_cache=False)
+                if engine_results:
+                    st.session_state.engine_results = engine_results
+                    st.rerun()
+                else:
+                    st.error("Engine computation failed. Check that the backend is running.")
+                    return
 
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Selected Risks", len(selected_risks))
     with col2:
-        engine_count = sum(1 for r in selected_risks if r['id'] in engine_results)
+        engine_count = sum(1 for r in selected_risks
+                          if engine_results and r['id'] in engine_results)
         st.metric("Engine-Computed", engine_count)
     with col3:
         backend_status = "\U0001F7E2 Online" if is_backend_online() else "\U0001F534 Offline"
         st.write(f"**Backend:** {backend_status}")
+
+    # Refresh button (when engine results already exist)
+    if engine_results:
+        if st.button("Refresh Probabilities"):
+            with st.spinner("Recomputing..."):
+                fresh = api_engine_compute_all(use_cache=False)
+                if fresh:
+                    st.session_state.engine_results = fresh
+                    st.rerun()
 
     st.divider()
 
     # Build results table with engine data
     results_data = []
     for risk in selected_risks:
-        engine_data = engine_results.get(risk['id'])
+        prob, source = _get_probability_for_risk(risk, engine_results)
 
-        if engine_data and isinstance(engine_data, dict):
-            # Engine-computed probability
+        if source == "Engine" and engine_results:
+            engine_data = engine_results.get(risk['id'], {})
             layer1 = engine_data.get("layer1", {})
-            metadata = engine_data.get("metadata", {})
             derivation = layer1.get("derivation", {})
-
-            prob_pct = layer1.get("p_global", 0) * 100
             method = layer1.get("method", "?")
             confidence = derivation.get("confidence", "")
-            source = "Engine"
-            data_src = derivation.get("data_source", "")
         else:
-            # Fallback to base rate
-            prob_pct = risk.get('base_rate_pct', 0)
             method = "-"
             confidence = ""
-            source = "Base Rate"
-            data_src = ""
 
         results_data.append({
             'Event ID': risk['id'],
             'Risk Name': risk['name'],
-            'Probability %': round(prob_pct, 2),
+            'Probability %': round(prob * 100, 2),
             'Method': method,
             'Confidence': confidence,
             'Source': source,
@@ -360,17 +441,15 @@ def save_risks_interface():
 
     st.write(f"**Client:** {client['name']}  \u2014  **Selected Risks:** {len(selected_risks)}")
 
-    # Summary table — show engine probability when available
-    engine_results = api_engine_compute_all() or {}
+    # Summary table — use cached engine results if available
+    engine_results = _get_engine_results_if_cached()
     selected_df = pd.DataFrame([
         {
             'Event ID': r['id'],
             'Risk Name': r['name'],
             'Domain': r['domain'],
             'Family': r.get('family_name', ''),
-            'Probability (%)': f"{engine_results[r['id']]['layer1']['p_global'] * 100:.1f}%"
-                if r['id'] in engine_results and isinstance(engine_results[r['id']], dict)
-                else f"{r.get('default_probability', 0) * 100:.1f}%"
+            'Probability (%)': f"{_get_probability_for_risk(r, engine_results)[0] * 100:.1f}%"
         }
         for r in selected_risks
     ])
@@ -389,19 +468,18 @@ def save_risks_interface():
 def _save_selected_risks(all_risks):
     """Save all selected risks to the client's risk portfolio.
 
-    Uses engine-computed probability for Phase 1 events, otherwise falls
-    back to base_rate_pct.  Probability stored as 0-1 (exposure formula
-    expects this scale).
+    Uses engine-computed probability if available in session state,
+    otherwise falls back to base_rate_pct.  Probability stored as 0-1
+    (exposure formula expects this scale).
     """
+    engine_results = _get_engine_results_if_cached()
     saved = 0
     engine_count = 0
     for risk_id in st.session_state.selected_risks:
         risk = next((r for r in all_risks if r['id'] == risk_id), None)
         if risk:
-            # Use engine probability if available, else fallback to base rate
-            base_prob = risk.get('default_probability', 0.5)
-            prob_01 = get_best_probability(risk_id, fallback=base_prob)
-            if prob_01 != base_prob:
+            prob, source = _get_probability_for_risk(risk, engine_results)
+            if source == "Engine":
                 engine_count += 1
 
             add_client_risk(
@@ -410,7 +488,7 @@ def _save_selected_risks(all_risks):
                 risk_name=risk['name'],
                 domain=risk['domain'],
                 category=risk.get('family_name', ''),
-                probability=prob_01,
+                probability=prob,
                 is_prioritized=1,
                 notes=risk.get('description', ''),
             )
@@ -441,17 +519,10 @@ def import_export_risks():
     selected_risks = [r for r in risks if r['id'] in st.session_state.selected_risks]
 
     if selected_risks:
-        engine_results = api_engine_compute_all() or {}
+        engine_results = _get_engine_results_if_cached()
         export_data = []
         for risk in selected_risks:
-            # Use engine probability if available
-            engine_data = engine_results.get(risk['id'])
-            if engine_data and isinstance(engine_data, dict):
-                prob = engine_data.get("layer1", {}).get("p_global", 0)
-                source = "Engine"
-            else:
-                prob = risk.get('default_probability', 0)
-                source = "Base Rate"
+            prob, source = _get_probability_for_risk(risk, engine_results)
             export_data.append({
                 'Domain': risk['domain'],
                 'Family': risk.get('family_name', ''),
@@ -506,6 +577,11 @@ def import_export_risks():
             if selected_from_upload:
                 if st.button("\u2713 Import & Update Selection"):
                     st.session_state.selected_risks = selected_from_upload
+                    # Reset checkbox widget keys to match import
+                    for key in list(st.session_state.keys()):
+                        if key.startswith("risk_") and key != "risk_search" and key != "risk_upload":
+                            rid = key[5:]
+                            st.session_state[key] = rid in selected_from_upload
                     st.success("Risk selection updated!")
                     st.rerun()
             else:
