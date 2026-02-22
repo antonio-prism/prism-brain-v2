@@ -43,16 +43,25 @@ The app has two parts:
   - Method C family-level calibration for 23 event families
 
 ### What still needs work:
-- ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP (Uppsala Conflict Data Program). Free, no API key, 25-year window. STR-GEO-001 now computes 48% prior (12 war-years in 25).
-- ~~**ERA5 scaling constant 0.15**~~ — **RESOLVED.** Derived coefficient 0.21 via logistic regression on 25yr of ERA5 European summer anomalies vs EM-DAT heatwave events. See `prism_engine/computation/era5_calibration.py`.
-- **Copernicus ERA5 downloads are slow:** cdsapi + xarray + netcdf4 installed and configured. CDS API key works. But ERA5 data requests take 30+ minutes — first download not yet completed. Temperature modifier falls back to 1.0 until first cache.
-- **Method C research in progress:** A parallel Claude session is researching evidence-based sub-probabilities for ~115 Method C events using the PRD at `docs/PRD_Method_C_Research.md`. Output expected as `method_c_research_output.json`.
-- ~~**Legacy V1 routes still active**~~ — **RESOLVED.** V1 data/calculation routes retired from `main.py`. Data Sources page rewired to V2 engine endpoints. Client CRUD routes (`/api/v1/clients/*`) kept (still active).
+- ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP.
+- ~~**ERA5 scaling constant 0.15**~~ — **RESOLVED.** Derived coefficient 0.21 via logistic regression.
+- ~~**Legacy V1 routes still active**~~ — **RESOLVED.** V1 data/calculation routes retired.
+- ~~**Dead files in repo**~~ — **RESOLVED.** Removed `parse_events.py` and `sync_from_railway.py` (commit 4055365).
+- **METHOD C RESEARCH INTEGRATION (NEXT PRIORITY):**
+  - Research output ready: `method_c_v3_complete.json` (1.4MB, 115 events, in project root)
+  - Format: Phase II dynamic scoring functions with indicators, weights, sigmoid normalization
+  - Current loader (`prism_engine/method_c_loader.py`) expects static `p_pre`/`p_trig`/`p_impl` — needs update to handle dynamic scoring functions
+  - PRD: `docs/PRD_Method_C_Research.md`
+  - POST endpoint ready: `/api/v2/engine/load-method-c-research`
+- **Copernicus ERA5 downloads slow:** cdsapi installed, CDS API key works. ERA5 requests take 30+ min. Temperature modifier falls back to 1.0 until first cache populated. Not blocking.
+- **ENTSO-E connector:** Deferred/optional. Would improve PHY-ENE energy supply events.
+- **API keys not configured:** NOAA, EIA (placeholder values in `.env`). Not blocking.
 
 ### Git status:
-- Latest pushed commit: `b798cfc` — Phase 2 engine scaling (all 174 events)
-- Unpushed changes: Connector fixes (FRED AMTMNO, Copernicus cdsapi, ACLED OAuth rewrite)
+- Latest pushed commit: `4055365` — Risk Selection performance fix + UX redesign (Phases 17-18)
+- All code changes committed and pushed
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
+- Untracked files: `PRISM_Implementation_Spec_v2.3.md`, `PRISM_Risk_Catalog.xlsx`, `method_c_v3_complete.json`
 
 ### Rollback if needed:
 ```bash
@@ -329,9 +338,11 @@ The Dockerfile and railway deployment scripts (`railway.toml`, `railway_start.sh
    - **`init_database()` running at module import** — Re-checked/created 5 SQLite tables on every Streamlit rerun. Moved to `@st.cache_resource` (runs only once per session).
    - **`init_external_data_tables()` running at module import** — Created 5 more tables on every import of external_data.py. Changed to lazy initialization (only runs when Data Sources page is visited).
 
-8. **API keys not configured** — The `.env` file has placeholder values for FRED, NOAA, NVD, EIA. These are needed for the data refresh feature but NOT for basic app operation.
+8. ~~**API keys not configured**~~ — **PARTIALLY DONE.** FRED and NVD keys configured. NOAA and EIA still have placeholder values (not blocking — connectors use fallback data).
 
-7. **Git lock files** — The VM creates `.git/index.lock` and `.git/HEAD.lock` files that can't be auto-cleaned. If git commands fail, the user needs to manually run `rm -f .git/index.lock .git/HEAD.lock`.
+9. **Git lock files** — The VM creates `.git/index.lock` and `.git/HEAD.lock` files that can't be auto-cleaned. If git commands fail, the user needs to manually run `rm -f .git/index.lock .git/HEAD.lock`.
+
+10. ~~**Dead code files in repo**~~ — **DONE.** Removed `parse_events.py` (hardcoded VM paths, superseded by seed JSONs) and `sync_from_railway.py` (no longer needed). Session 9, commit 4055365.
 
 ---
 
