@@ -219,4 +219,172 @@ def register_engine_routes(app: FastAPI):
             "stats": integrate_research(data),
         }
 
+    # ── Indicator data management (Phase II Dynamic Scoring) ─────────
+
+    @app.get("/api/v2/engine/indicators/{event_id}")
+    async def get_event_indicators(event_id: str, client_id: Optional[str] = Query(None)):
+        """Get all indicator values for an event, with coverage analysis."""
+        from prism_engine.indicator_store import get_all_values_for_event, get_coverage_for_event
+        from prism_engine.method_c_loader import get_full_research
+
+        values = get_all_values_for_event(event_id, client_id=client_id)
+        research = get_full_research(event_id)
+
+        result = {
+            "event_id": event_id,
+            "values": values,
+            "value_count": len(values),
+        }
+
+        if research and research.get("scoring_functions"):
+            coverage = get_coverage_for_event(
+                event_id, research["scoring_functions"], client_id=client_id
+            )
+            result["coverage"] = coverage
+
+            # Include indicator definitions from research for the UI
+            indicators = []
+            sf = research["scoring_functions"]
+            for sub_key in ("p_preconditions", "p_trigger", "p_implementation"):
+                sub = sf.get(sub_key, {})
+                for ind in sub.get("input_indicators", []):
+                    ind_id = ind.get("indicator_id", "")
+                    indicators.append({
+                        "indicator_id": ind_id,
+                        "name": ind.get("name", ind_id),
+                        "sub_probability": sub_key,
+                        "data_source": ind.get("data_source", ""),
+                        "metric": ind.get("metric", ""),
+                        "weight": ind.get("weight", 0),
+                        "normalization": ind.get("normalization", ""),
+                        "normalization_params": ind.get("normalization_params", {}),
+                        "current_value": values.get(ind_id),
+                    })
+            result["indicators"] = indicators
+
+        return result
+
+    @app.put("/api/v2/engine/indicators")
+    async def set_indicators(request: Request):
+        """Set one or more indicator values.
+
+        Body: {"indicators": [
+            {"event_id": "...", "sub_prob": "...", "indicator_id": "...",
+             "value": 42.0, "tier": 2, "source": "Gartner", "unit": "%"},
+            ...
+        ]}
+        """
+        from prism_engine.indicator_store import (
+            set_indicator_value, save_global_store, save_client_store
+        )
+
+        body = await request.json()
+        indicators = body.get("indicators", [])
+        client_id = body.get("client_id")
+        saved = 0
+
+        for ind in indicators:
+            try:
+                set_indicator_value(
+                    event_id=ind["event_id"],
+                    sub_prob=ind["sub_prob"],
+                    indicator_id=ind["indicator_id"],
+                    value=float(ind["value"]),
+                    tier=int(ind.get("tier", 2)),
+                    source=ind.get("source", "manual"),
+                    unit=ind.get("unit", ""),
+                    client_id=client_id,
+                )
+                saved += 1
+            except (KeyError, ValueError, TypeError) as e:
+                logger.warning(f"Invalid indicator entry: {e}")
+
+        # Persist to disk
+        save_global_store()
+        if client_id:
+            save_client_store(client_id)
+
+        return {"status": "saved", "count": saved, "total": len(indicators)}
+
+    @app.get("/api/v2/engine/indicator-coverage")
+    async def indicator_coverage_summary(client_id: Optional[str] = Query(None)):
+        """Get indicator coverage summary across all Method C events."""
+        from prism_engine.indicator_store import get_freshness_summary, get_coverage_for_event
+        from prism_engine.method_c_loader import get_full_research
+        import json
+        from pathlib import Path
+
+        freshness = get_freshness_summary(client_id)
+
+        # Get coverage per event
+        overrides_path = Path(__file__).parent / "data" / "method_c_overrides.json"
+        event_coverage = {}
+        if overrides_path.exists():
+            with open(overrides_path, "r", encoding="utf-8") as f:
+                overrides = json.load(f).get("overrides", {})
+            for event_id in overrides:
+                research = get_full_research(event_id)
+                if research and research.get("scoring_functions"):
+                    cov = get_coverage_for_event(
+                        event_id, research["scoring_functions"], client_id=client_id
+                    )
+                    if cov["available"] > 0:
+                        event_coverage[event_id] = cov
+
+        return {
+            "freshness": freshness,
+            "events_with_data": len(event_coverage),
+            "total_method_c_events": 115,
+            "event_coverage": event_coverage,
+        }
+
+    @app.get("/api/v2/engine/indicator-sources")
+    async def indicator_sources():
+        """Get all unique data sources from the research scoring functions.
+
+        Used by the Tier 2 UI to group indicators by report source.
+        """
+        from prism_engine.method_c_loader import get_full_research
+        import json
+        from pathlib import Path
+        from collections import defaultdict
+
+        overrides_path = Path(__file__).parent / "data" / "method_c_overrides.json"
+        if not overrides_path.exists():
+            return {"sources": {}}
+
+        with open(overrides_path, "r", encoding="utf-8") as f:
+            overrides = json.load(f).get("overrides", {})
+
+        sources = defaultdict(list)
+        for event_id in overrides:
+            research = get_full_research(event_id)
+            if not research:
+                continue
+            sf = research.get("scoring_functions", {})
+            for sub_key in ("p_preconditions", "p_trigger", "p_implementation"):
+                sub = sf.get(sub_key, {})
+                for ind in sub.get("input_indicators", []):
+                    src = ind.get("data_source", "unknown")
+                    sources[src].append({
+                        "event_id": event_id,
+                        "sub_prob": sub_key,
+                        "indicator_id": ind.get("indicator_id", ""),
+                        "name": ind.get("name", ""),
+                        "metric": ind.get("metric", ""),
+                        "normalization_params": ind.get("normalization_params", {}),
+                    })
+
+        return {
+            "source_count": len(sources),
+            "sources": dict(sources),
+        }
+
+    @app.post("/api/v2/engine/indicator-fetch")
+    async def trigger_indicator_fetch(event_id: Optional[str] = Query(None)):
+        """Trigger Tier 1 auto-fetch of indicator data from public APIs."""
+        from prism_engine.indicator_fetch import fetch_tier1_indicators
+        stats = await asyncio.to_thread(fetch_tier1_indicators, event_id)
+        return {"status": "completed", "stats": stats}
+
     logger.info("Registered prism_engine API routes at /api/v2/engine/*")

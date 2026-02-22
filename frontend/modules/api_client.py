@@ -464,6 +464,55 @@ def fetch_v2_events_normalized(domain: str = None,
     return [normalize_v2_event(e) for e in events]
 
 
+# =============================================================================
+# Indicator Data API (Phase II Dynamic Scoring)
+# =============================================================================
+
+def api_engine_get_indicators(event_id: str, client_id: str = None) -> Optional[Dict]:
+    """Get indicator values and coverage for a specific event."""
+    params = {}
+    if client_id:
+        params["client_id"] = client_id
+    return _api_request("GET", f"/api/v2/engine/indicators/{event_id}", params=params, timeout=5)
+
+
+def api_engine_set_indicators(indicators: List[Dict], client_id: str = None) -> Optional[Dict]:
+    """Set one or more indicator values.
+
+    Args:
+        indicators: List of dicts with event_id, sub_prob, indicator_id, value, tier, source, unit.
+        client_id: Optional client ID for Tier 3 data.
+    """
+    body = {"indicators": indicators}
+    if client_id:
+        body["client_id"] = client_id
+    result = _api_request("PUT", "/api/v2/engine/indicators", json_data=body, timeout=10)
+    if result:
+        clear_cache()  # Invalidate cached probabilities since inputs changed
+    return result
+
+
+def api_engine_indicator_coverage(client_id: str = None) -> Optional[Dict]:
+    """Get indicator coverage summary across all Method C events."""
+    params = {}
+    if client_id:
+        params["client_id"] = client_id
+    return _api_request("GET", "/api/v2/engine/indicator-coverage", params=params, timeout=10)
+
+
+def api_engine_indicator_sources() -> Optional[Dict]:
+    """Get all unique data sources from research scoring functions."""
+    return _api_request("GET", "/api/v2/engine/indicator-sources", timeout=10)
+
+
+def api_engine_trigger_fetch(event_id: str = None) -> Optional[Dict]:
+    """Trigger Tier 1 auto-fetch of indicator data."""
+    params = {}
+    if event_id:
+        params["event_id"] = event_id
+    return _api_request("POST", "/api/v2/engine/indicator-fetch", params=params, timeout=30)
+
+
 # Streamlit-cached version for pages that load events repeatedly
 if _HAS_STREAMLIT:
     @st.cache_data(ttl=300, show_spinner=False)

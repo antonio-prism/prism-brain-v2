@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 22, 2026 — Session 10)
+## 2. CURRENT STATE (as of Feb 22, 2026 — Session 11)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -33,7 +33,7 @@ The app has two parts:
 - **Probability Engine (prism_engine) built and integrated:**
   - **ALL 174 events computing successfully (Phase 2 complete)**
   - Engine version 2.0.0
-  - 11 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, UCDP, EM-DAT, Copernicus, ENTSO-E)
+  - 12 data connectors (USGS, CISA, GPR, NOAA, World Bank, FRED, NVD, UCDP, EM-DAT, Copernicus, ENTSO-E, EIA)
   - 3 computation methods: A (frequency, 33 events), B (incidence rate, 26 events), C (structural calibration, 115 events)
   - **Method C research integrated:** All 115 events use event-specific, evidence-based sub-probabilities (from `method_c_v3_complete.json`). Confidence levels: High (3), Medium (44), Low (68).
   - Modifier system (ratio + categorical)
@@ -42,22 +42,34 @@ The app has two parts:
   - Full derivation trail in JSON output (data source, formula, observation window, confidence)
   - Config-driven dispatch (no hardcoded if/elif chains)
   - Method C family-level calibration for 23 event families (used as fallback when no research override exists)
+- **Phase II Dynamic Scoring (NEW):**
+  - Three-tier indicator system: Tier 1 (auto-fetch APIs, ~5%), Tier 2 (analyst reports, ~25%), Tier 3 (client data, ~25%)
+  - Scoring engine: normalize → weight → sigmoid → clamp pipeline per sub-probability
+  - Priority chain: Phase 1 hand-crafted → Dynamic scoring → Static research → Family defaults → Generic 0.50
+  - Partial coverage handling: re-normalizes weights across available indicators, falls back per sub-probability
+  - Indicator store: JSON-based with global (Tier 1+2) and per-client (Tier 3) stores
+  - EIA energy data connector for petroleum stocks, crude prices, refinery utilization
+  - Indicator Data Entry page (Tab 1: Tier 2 reports, Tab 2: Tier 3 client with Excel export/import)
+  - Dashboard data coverage column (shows Dynamic vs Static per risk)
+  - API endpoints: indicator CRUD, coverage summary, data sources, auto-fetch trigger
+  - Zero regression: all 115 Method C events produce identical results when indicator store is empty
 
 ### What still needs work:
 - ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP.
 - ~~**ERA5 scaling constant 0.15**~~ — **RESOLVED.** Derived coefficient 0.21 via logistic regression.
 - ~~**Legacy V1 routes still active**~~ — **RESOLVED.** V1 data/calculation routes retired.
 - ~~**Dead files in repo**~~ — **RESOLVED.** Removed `parse_events.py` and `sync_from_railway.py` (commit 4055365).
-- ~~**METHOD C RESEARCH INTEGRATION**~~ — **DONE.** All 115 events now use event-specific, evidence-based sub-probabilities from `method_c_v3_complete.json`. Loader updated to handle v3 nested schema. Auto-integration on startup. Phase II scoring functions stored for future use.
-- ~~**Copernicus ERA5 downloads slow**~~ — **RESOLVED.** Rewrote connector to use published C3S/ERA5 anomaly table from `era5_calibration.py` (instant, no CDS download). Raw CDS download preserved as optional cross-validation function.
-- ~~**ENTSO-E connector**~~ — **DONE.** Built `prism_engine/connectors/entso_e.py`. Fetches actual load data from ENTSO-E Transparency Platform, computes peak/average load ratio as grid stress modifier. Wired into engine dispatch at source A10 for PHY-ENE events. Falls back gracefully if no ENTSOE_API_KEY configured (FRED A03 proxy still applies).
-- **API keys not configured:** NOAA, EIA, ENTSO-E (placeholder values in `.env`). Not blocking — connectors use fallback data. To enable ENTSO-E: register free at https://transparency.entsoe.eu/, add `ENTSOE_API_KEY=<token>` to `.env`.
+- ~~**METHOD C RESEARCH INTEGRATION**~~ — **DONE.** All 115 events now use event-specific, evidence-based sub-probabilities from `method_c_v3_complete.json`.
+- ~~**Copernicus ERA5 downloads slow**~~ — **RESOLVED.** Rewrote connector to use published C3S/ERA5 anomaly table.
+- ~~**ENTSO-E connector**~~ — **DONE.** Built and wired into engine dispatch at source A10.
+- ~~**Phase II Dynamic Scoring**~~ — **DONE.** Full three-tier system built, tested, integrated.
+- **API keys not configured:** NOAA, EIA, ENTSO-E (placeholder values in `.env`). Not blocking — connectors use fallback data.
+- **Indicator data population:** Only ~5% of 1,072 indicators auto-fetch from free APIs. Most require manual entry via the Indicator Data Entry page. The system works correctly with any amount of data (zero to full).
 
 ### Git status:
-- Latest pushed commit: `4055365` — Risk Selection performance fix + UX redesign (Phases 17-18)
-- All code changes committed and pushed
+- Latest pushed commit: `f7c14fd` — Method C research integration (Phase 20)
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
-- Untracked files: `PRISM_Implementation_Spec_v2.3.md`, `PRISM_Risk_Catalog.xlsx`, `method_c_v3_complete.json`
+- Uncommitted: Phase II Dynamic Scoring implementation (all sprint 1-5 files)
 
 ### Rollback if needed:
 ```bash
@@ -83,9 +95,13 @@ prism-brain-v2/
 │   ├── annual_data.py         # Annual data update persistence (DBIR, Dragos overrides)
 │   ├── engine.py              # Main orchestrator: compute(), compute_all()
 │   ├── fallback.py            # Loads 174 fallback rates from seed files + Risk Catalog
+│   ├── indicator_store.py     # Phase II: Indicator value store (JSON, tiered, cached)
+│   ├── indicator_fetch.py     # Phase II: Tier 1 auto-fetch orchestrator
+│   ├── method_c_loader.py     # Method C research loader (v2/v3 schema, overrides + full research)
 │   ├── config/
-│   │   ├── credentials.py     # API key management from env vars
+│   │   ├── credentials.py     # API key management from env vars (FRED, EIA, NVD, etc.)
 │   │   ├── event_mapping.py   # All 174 event configs (auto-loaded from seed files)
+│   │   ├── indicator_mapping.py # Phase II: Maps indicator IDs to data connectors
 │   │   ├── regions.py         # Geographic definitions (EU27, OECD, bounding boxes, etc.)
 │   │   └── sources.py         # Type A/B/C data source registry
 │   ├── connectors/
@@ -97,6 +113,7 @@ prism-brain-v2/
 │   │   ├── world_bank.py      # World Bank GDP growth (no key)
 │   │   ├── fred.py            # FRED economic indicators (needs key)
 │   │   ├── nvd.py             # NIST NVD vulnerabilities (needs key)
+│   │   ├── eia.py             # Phase II: EIA energy data (needs key)
 │   │   ├── acled.py           # ACLED conflict data (DEPRECATED — replaced by UCDP)
 │   │   ├── ucdp.py            # UCDP/PRIO conflict data (free, no key)
 │   │   ├── emdat.py           # EM-DAT disasters (local file)
@@ -104,6 +121,7 @@ prism-brain-v2/
 │   │   └── entso_e.py         # ENTSO-E grid stress (optional key, free registration)
 │   ├── computation/
 │   │   ├── priors.py          # Methods A, B, C for prior calculation
+│   │   ├── scoring.py         # Phase II: Dynamic scoring (normalize, weight, sigmoid, compute)
 │   │   ├── modifiers.py       # Ratio and categorical modifier calibration
 │   │   ├── formulas.py        # P_global = prior x modifiers with floor/ceiling
 │   │   ├── era5_calibration.py # ERA5 temperature scaling regression (derived 0.21 coefficient)
@@ -141,7 +159,8 @@ prism-brain-v2/
 │   │   ├── 4_Risk_Assessment.py
 │   │   ├── 5_Results_Dashboard.py
 │   │   ├── 6_Annual_Data_Update.py  # Type B manual entry (DBIR, Dragos, dark figures)
-│   │   └── 7_Data_Sources.py        # Engine status & compute-all (rewired from V1 to V2)
+│   │   ├── 7_Data_Sources.py        # Engine status & compute-all (rewired from V1 to V2)
+│   │   └── 8_Indicator_Data_Entry.py # Phase II: Tier 2 + Tier 3 indicator data entry
 │   ├── data/
 │   │   ├── seeds/             # 4 JSON files with 174 risk event definitions
 │   │   │   ├── physical_domain_seed.json    (44 events)
@@ -204,6 +223,11 @@ prism-brain-v2/
 | GET /api/v2/engine/method-c-status | prism_engine/api_routes.py | Method C integration status & confidence distribution |
 | POST /api/v2/engine/method-c-integrate | prism_engine/api_routes.py | Integrate research from file on disk |
 | POST /api/v2/engine/load-method-c-research | prism_engine/api_routes.py | Load Method C research output JSON (body) |
+| GET /api/v2/engine/indicators/{event_id} | prism_engine/api_routes.py | Phase II: Get indicator values + coverage for an event |
+| PUT /api/v2/engine/indicators | prism_engine/api_routes.py | Phase II: Set indicator values (batch) |
+| GET /api/v2/engine/indicator-coverage | prism_engine/api_routes.py | Phase II: Coverage summary across all events |
+| GET /api/v2/engine/indicator-sources | prism_engine/api_routes.py | Phase II: Unique data sources from research |
+| POST /api/v2/engine/indicator-fetch | prism_engine/api_routes.py | Phase II: Trigger Tier 1 auto-fetch |
 
 **Retired V1 routes** (no longer registered in main.py):
 `/api/v1/events`, `/api/v1/probabilities`, `/api/v1/data-sources/health`, `/api/v1/data/refresh`, `/api/v1/calculations/trigger-full`, `/api/v1/stats`

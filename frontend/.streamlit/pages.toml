@@ -37,3 +37,8 @@ icon = ":material/edit_calendar:"
 path = "pages/7_Data_Sources.py"
 name = "Data Sources"
 icon = ":material/library_books:"
+
+[[pages]]
+path = "pages/8_Indicator_Data_Entry.py"
+name = "Indicator Data Entry"
+icon = ":material/data_thresholding:"

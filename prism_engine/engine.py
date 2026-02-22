@@ -432,10 +432,70 @@ def _compute_method_c(event_id: str, config: dict) -> dict:
     return _build_output(event_id, config, prior_data, modifiers, p_global_result)
 
 
+def _try_dynamic_scoring(event_id: str) -> dict | None:
+    """Attempt dynamic scoring from indicator data for a Method C event.
+
+    Returns a prior_data dict if enough indicator coverage exists,
+    or None to fall through to static research overrides.
+    """
+    from .method_c_loader import get_method_c_override, get_full_research
+    from .computation.scoring import compute_dynamic_prior
+    from .indicator_store import get_all_values_for_event
+
+    # Need both: scoring function definitions AND static fallback values
+    research = get_full_research(event_id)
+    if not research:
+        return None
+
+    scoring_functions = research.get("scoring_functions", {})
+    if not scoring_functions:
+        return None
+
+    # Get indicator values from the store
+    values = get_all_values_for_event(event_id)
+    if not values:
+        return None  # No indicator data at all — skip dynamic scoring
+
+    # Get static fallback values from research overrides
+    override = get_method_c_override(event_id)
+    if not override:
+        return None  # No static values to fall back to for missing sub-probs
+
+    static_fallback = {
+        "p_pre": override["p_pre"],
+        "p_trig": override["p_trig"],
+        "p_impl": override["p_impl"],
+    }
+
+    # Run the dynamic scoring pipeline
+    result = compute_dynamic_prior(scoring_functions, values, static_fallback)
+
+    if not result.get("is_dynamic"):
+        return None  # Coverage too low — fall through to static
+
+    # Convert to engine's prior_data format
+    prior_data = {
+        "prior": result["prior"],
+        "method": "C",
+        "formula": result["formula"],
+        "data_source": result["data_source"],
+        "source_id": "dynamic",
+        "confidence": result["confidence"],
+        "sub_probabilities": result["sub_probabilities"],
+        "dynamic_metadata": result["dynamic_metadata"],
+    }
+    return prior_data
+
+
 def _get_method_c_prior(event_id: str, config: dict) -> dict:
     """Get the Method C prior using structural calibration.
 
-    Priority: Phase 1 hand-crafted > research overrides > family defaults > generic 0.50.
+    Priority:
+      1. Phase 1 hand-crafted (STR-TRD-001, OPS-CMP-001)
+      2. Dynamic scoring (from live indicator data, if enough coverage)
+      3. Static research overrides (from method_c_overrides.json)
+      4. Family-level defaults
+      5. Generic 0.50 fallback
     """
 
     # Phase 1 hand-crafted events with manual_c source
@@ -445,6 +505,11 @@ def _get_method_c_prior(event_id: str, config: dict) -> dict:
             return _prior_tariff(config)
         if event_id == "OPS-CMP-001":
             return _prior_chip_shortage(config)
+
+    # Dynamic scoring from indicator data (Phase II)
+    dynamic_result = _try_dynamic_scoring(event_id)
+    if dynamic_result is not None:
+        return dynamic_result
 
     # Event-specific research overrides (from method_c_research_output.json)
     from .method_c_loader import get_method_c_override
@@ -860,6 +925,7 @@ def _build_output(event_id: str, config: dict, prior_data: dict,
                 "calculation_steps": prior_data.get("calculation_steps", ""),
                 "confidence": prior_data.get("confidence", "Medium"),
                 "sub_probabilities": prior_data.get("sub_probabilities"),
+                "dynamic_metadata": prior_data.get("dynamic_metadata"),
             },
             "modifiers": modifiers,
             "p_global": p_global_result["p_global"],

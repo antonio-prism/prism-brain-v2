@@ -42,8 +42,9 @@ VALID_EVIDENCE_TYPES = {
     "DEFAULT_0.50_NO_DATA",
 }
 
-# In-memory cache for overrides (avoid 115+ file reads during compute-all)
+# In-memory caches (avoid 115+ file reads during compute-all)
 _overrides_cache: dict | None = None
+_full_research_cache: dict | None = None
 
 
 def _detect_schema_version(data: dict) -> str:
@@ -271,9 +272,33 @@ def get_method_c_override(event_id: str) -> dict | None:
 
 
 def invalidate_cache() -> None:
-    """Clear the in-memory overrides cache (call after re-integration)."""
-    global _overrides_cache
+    """Clear all in-memory caches (call after re-integration)."""
+    global _overrides_cache, _full_research_cache
     _overrides_cache = None
+    _full_research_cache = None
+
+
+def get_full_research(event_id: str) -> dict | None:
+    """Get the full Phase II research data for an event.
+
+    Returns dict with scoring_functions, geographic_adjustment, correlation,
+    tail_risk, cascade_participation — or None if not available.
+
+    Uses an in-memory cache to avoid repeated file reads.
+    """
+    global _full_research_cache
+
+    if _full_research_cache is None:
+        if not FULL_RESEARCH_PATH.exists():
+            return None
+        try:
+            with open(FULL_RESEARCH_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            _full_research_cache = data.get("events", {})
+        except Exception:
+            return None
+
+    return _full_research_cache.get(event_id)
 
 
 def load_and_integrate(path: str | Path | None = None) -> dict:

@@ -405,9 +405,31 @@ def detailed_results_tab():
             step=1000
         )
 
+    # Check data coverage for each risk (dynamic vs static scoring)
+    _coverage_cache = {}
+    try:
+        from prism_engine.indicator_store import get_all_values_for_event
+        from prism_engine.method_c_loader import get_full_research
+        for a in summary['assessments']:
+            rid = a.get('risk_id', '')
+            if rid and rid not in _coverage_cache:
+                vals = get_all_values_for_event(rid)
+                research = get_full_research(rid)
+                if research and research.get("scoring_functions") and vals:
+                    total = sum(
+                        len(sf.get("input_indicators", []))
+                        for sf in research["scoring_functions"].values()
+                    )
+                    _coverage_cache[rid] = f"{len(vals)}/{total}" if total > 0 else "Static"
+                else:
+                    _coverage_cache[rid] = "Static"
+    except Exception:
+        pass
+
     # Prepare data
     data = []
     for a in summary['assessments']:
+        rid = a.get('risk_id', '')
         data.append({
             "Process": a['process_name'],
             "Risk": a['risk_name'],
@@ -417,6 +439,7 @@ def detailed_results_tab():
             "Resilience (%)": a['resilience'] * 100,
             "Downtime (days)": a['expected_downtime'],
             "Probability (%)": a['probability'] * 100,
+            "Data": _coverage_cache.get(rid, "Static"),
             f"Exposure ({symbol}/yr)": a['exposure']
         })
 
