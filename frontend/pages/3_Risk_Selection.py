@@ -513,24 +513,33 @@ def import_export_risks():
     client = get_client(st.session_state.current_client_id)
     risks = load_risks()
 
-    # --- Download ---
-    st.markdown("### \U0001F4E5 Download Risk Selection")
+    if not risks:
+        st.error("Could not load risk events from the backend.")
+        return
 
-    selected_risks = [r for r in risks if r['id'] in st.session_state.selected_risks]
+    col_dl, col_ul = st.columns(2)
 
-    if selected_risks:
+    # --- Download template with ALL 174 risks ---
+    with col_dl:
+        st.markdown("#### Download Risk Template")
+        st.markdown(
+            "Download a template with **all 174 risk events**. "
+            "Review each risk and set the **Selected** column to "
+            "**Yes** or **No** to indicate relevance for this client. "
+            "Currently selected risks are pre-marked as Yes."
+        )
+
         engine_results = _get_engine_results_if_cached()
         export_data = []
-        for risk in selected_risks:
+        for risk in sorted(risks, key=lambda r: (r.get('domain', ''), r.get('family_code', ''), r['id'])):
             prob, source = _get_probability_for_risk(risk, engine_results)
             export_data.append({
                 'Domain': risk['domain'],
                 'Family': risk.get('family_name', ''),
-                'Event ID': risk['id'],
-                'Event Name': risk['name'],
-                'Probability (%)': round(prob * 100, 2),
-                'Source': source,
-                'Selected': 'Yes'
+                'Risk ID': risk['id'],
+                'Risk Name': risk['name'],
+                'Global Probability (%)': round(prob * 100, 2),
+                'Selected': 'Yes' if risk['id'] in st.session_state.selected_risks else 'No',
             })
 
         export_df = pd.DataFrame(export_data)
@@ -538,27 +547,35 @@ def import_export_risks():
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             export_df.to_excel(writer, sheet_name='Risk Selection', index=False)
+
+            # Auto-fit column widths
+            ws = writer.sheets['Risk Selection']
+            for col_idx, col_name in enumerate(export_df.columns, 1):
+                max_len = max(len(str(col_name)), export_df.iloc[:, col_idx - 1].astype(str).str.len().max())
+                ws.column_dimensions[ws.cell(row=1, column=col_idx).column_letter].width = min(max_len + 3, 50)
+
         output.seek(0)
 
         st.download_button(
-            label="\u2B07\uFE0F Download Risk Selection (XLSX)",
+            label="Download Risk Template (.xlsx)",
             data=output.getvalue(),
-            file_name=f"{client['name']}_Risk_Selection.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            file_name=f"PRISM_Risk_Selection_{client['name'].replace(' ', '_')}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
-    else:
-        st.info("No risks selected. Select risks to download.")
 
-    st.divider()
+    # --- Upload filled template ---
+    with col_ul:
+        st.markdown("#### Upload Risk Selection")
+        st.markdown(
+            "Upload the completed template. Risks with **Selected = Yes** "
+            "will replace the current selection."
+        )
 
-    # --- Upload ---
-    st.markdown("### \U0001F4E4 Upload Risk Selection")
-
-    uploaded_file = st.file_uploader(
-        "Select an XLSX file to upload risk selections",
-        type=['xlsx'],
-        key="risk_upload"
-    )
+        uploaded_file = st.file_uploader(
+            "Upload completed risk template",
+            type=['xlsx'],
+            key="risk_upload",
+        )
 
     if uploaded_file:
         try:
@@ -566,26 +583,47 @@ def import_export_risks():
 
             valid_ids = {r['id'] for r in risks}
             selected_from_upload = set()
+
+            # Support both old "Event ID" and new "Risk ID" column names
+            id_col = 'Risk ID' if 'Risk ID' in upload_df.columns else 'Event ID'
+            sel_col = 'Selected' if 'Selected' in upload_df.columns else None
+
+            if id_col not in upload_df.columns or sel_col is None:
+                st.error(
+                    "File must have columns 'Risk ID' (or 'Event ID') and 'Selected'. "
+                    "Please use the PRISM Risk Template."
+                )
+                return
+
             for _, row in upload_df.iterrows():
-                if str(row.get('Selected', '')).lower() == 'yes':
-                    event_id = str(row.get('Event ID', ''))
+                if str(row.get(sel_col, '')).strip().lower() == 'yes':
+                    event_id = str(row.get(id_col, '')).strip()
                     if event_id in valid_ids:
                         selected_from_upload.add(event_id)
 
-            st.write(f"Found {len(selected_from_upload)} valid risks in file")
+            st.info(f"Found **{len(selected_from_upload)}** risks marked as Selected in the file.")
 
             if selected_from_upload:
-                if st.button("\u2713 Import & Update Selection"):
+                # Preview
+                preview_risks = [r for r in risks if r['id'] in selected_from_upload]
+                preview_df = pd.DataFrame([
+                    {"Domain": r['domain'], "Risk ID": r['id'], "Risk Name": r['name']}
+                    for r in sorted(preview_risks, key=lambda r: r['id'])
+                ])
+                st.dataframe(preview_df, hide_index=True, use_container_width=True)
+
+                if st.button("Apply Import", type="primary", key="apply_risk_upload"):
                     st.session_state.selected_risks = selected_from_upload
-                    # Reset checkbox widget keys to match import
+                    # Do NOT modify risk_* widget keys here — the checkboxes
+                    # in Tab 1 are already instantiated in this script run.
+                    # On rerun, checkboxes will re-sync from selected_risks.
                     for key in list(st.session_state.keys()):
-                        if key.startswith("risk_") and key != "risk_search" and key != "risk_upload":
-                            rid = key[5:]
-                            st.session_state[key] = rid in selected_from_upload
-                    st.success("Risk selection updated!")
+                        if key.startswith("risk_") and key not in ("risk_search", "risk_upload"):
+                            del st.session_state[key]
+                    st.success(f"Imported {len(selected_from_upload)} risks!")
                     st.rerun()
             else:
-                st.warning("No matching V2 event IDs found in the uploaded file.")
+                st.warning("No risks marked as 'Yes' in the Selected column.")
 
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")
