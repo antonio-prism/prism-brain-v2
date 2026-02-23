@@ -609,11 +609,11 @@ def import_export_assessments(client, processes, risks, assessments):
             if missing_cols:
                 st.error(f"Missing required columns: {', '.join(missing_cols)}. Please use the PRISM Assessment Template.")
             else:
-                # Count rows that have assessment data filled in
+                # Count rows that have at least one assessment field filled
                 filled_rows = df_import[
                     df_import['Vulnerability (%)'].notna()
-                    & df_import['Resilience (%)'].notna()
-                    & df_import['Downtime (days)'].notna()
+                    | df_import['Resilience (%)'].notna()
+                    | df_import['Downtime (days)'].notna()
                 ]
 
                 st.info(f"Found **{len(filled_rows)}** rows with assessment data out of {len(df_import)} total rows.")
@@ -635,13 +635,16 @@ def import_export_assessments(client, processes, risks, assessments):
 
                         for idx, row in filled_rows.iterrows():
                             try:
+                                vuln = float(row['Vulnerability (%)']) / 100 if pd.notna(row['Vulnerability (%)']) else 0
+                                resil = float(row['Resilience (%)']) / 100 if pd.notna(row['Resilience (%)']) else 0
+                                down = int(row['Downtime (days)']) if pd.notna(row['Downtime (days)']) else 0
                                 save_assessment(
                                     client_id=st.session_state.current_client_id,
-                                    process_id=row['Process ID'],
-                                    risk_id=row['Risk ID'],
-                                    vulnerability=float(row['Vulnerability (%)']) / 100,
-                                    resilience=float(row['Resilience (%)']) / 100,
-                                    expected_downtime=int(row['Downtime (days)']),
+                                    process_id=int(row['Process ID']),
+                                    risk_id=int(row['Risk ID']),
+                                    vulnerability=vuln,
+                                    resilience=resil,
+                                    expected_downtime=down,
                                     notes=""
                                 )
                                 saved_count += 1
@@ -654,7 +657,7 @@ def import_export_assessments(client, processes, risks, assessments):
                             st.warning(f"{error_count} rows had errors")
                         st.rerun()
                 else:
-                    st.warning("No rows have all three assessment columns filled in (Vulnerability, Resilience, Downtime).")
+                    st.warning("No rows have any assessment data filled in (Vulnerability, Resilience, or Downtime).")
 
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")
