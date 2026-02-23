@@ -279,8 +279,9 @@ def heatmap_chart(summary, currency):
     if not heatmap_data:
         return None
 
-    # Use actual domains from data (in case they don't match RISK_DOMAINS keys)
-    domains = sorted(actual_domains)
+    # Always show all 4 domains on x-axis, even if some have no exposure
+    ALL_DOMAINS = ["Digital", "Operational", "Physical", "Structural"]
+    domains = ALL_DOMAINS
     processes = list(heatmap_data.keys())
 
     z_data = []

@@ -274,8 +274,19 @@ class ProbabilitySnapshot(Base):
     calculation_id = Column(String(50))
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # History archive columns (Phase 21)
+    prior = Column(Float)
+    method = Column(String(10))
+    data_source = Column(String(200))
+    is_dynamic = Column(Boolean, default=False)
+    modifier_count = Column(Integer, default=0)
+    domain = Column(String(100))
+    family = Column(String(100))
+    event_name = Column(String(500))
+
     __table_args__ = (
         Index('idx_event_snapshot_date', 'event_id', 'snapshot_date'),
+        Index('idx_calculation_id_snap', 'calculation_id'),
     )
 
 

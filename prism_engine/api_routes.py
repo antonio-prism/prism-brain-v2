@@ -11,6 +11,10 @@ Adds endpoints that expose the probability engine to the existing app:
   PUT  /api/v2/engine/annual-data         — Save annual update data
   GET  /api/v2/engine/method-c-status     — Method C integration status
   POST /api/v2/engine/method-c-integrate  — Integrate research from file
+  GET  /api/v2/engine/history/runs         — List historical compute runs
+  GET  /api/v2/engine/history/runs/{id}    — Event snapshots for a run
+  GET  /api/v2/engine/history/events/{id}  — Probability history for one event
+  GET  /api/v2/engine/history/compare      — Compare two runs side-by-side
 """
 
 import asyncio
@@ -39,11 +43,27 @@ def register_engine_routes(app: FastAPI):
 
         Runs in a thread pool so it doesn't block the event loop — other
         endpoints (health, events, etc.) remain responsive while this runs.
+        Results are automatically archived for historical tracking.
         """
         from prism_engine.engine import compute_all
+        from prism_engine.history import generate_calculation_id, archive_compute_run
+
+        calculation_id = generate_calculation_id()
+        start_time = datetime.utcnow()
+
         results = await asyncio.to_thread(compute_all)
 
-        # Optional domain filter
+        end_time = datetime.utcnow()
+
+        # Archive in background (fire-and-forget — don't block the response)
+        loop = asyncio.get_event_loop()
+        loop.run_in_executor(
+            None,
+            archive_compute_run,
+            results, calculation_id, start_time, end_time, "manual",
+        )
+
+        # Optional domain filter (applied after archival captures ALL events)
         if domain:
             domain_lower = domain.lower()
             results = {
@@ -59,6 +79,7 @@ def register_engine_routes(app: FastAPI):
 
         return {
             "computed_at": datetime.utcnow().isoformat() + "Z",
+            "calculation_id": calculation_id,
             "event_count": len(results),
             "methods": methods,
             "domain_filter": domain,
@@ -386,5 +407,51 @@ def register_engine_routes(app: FastAPI):
         from prism_engine.indicator_fetch import fetch_tier1_indicators
         stats = await asyncio.to_thread(fetch_tier1_indicators, event_id)
         return {"status": "completed", "stats": stats}
+
+    # ── Probability History Archive ────────────────────────────────
+
+    @app.get("/api/v2/engine/history/runs")
+    async def get_history_runs(limit: int = Query(50), offset: int = Query(0)):
+        """Get list of historical compute runs, most recent first."""
+        from prism_engine.history import get_run_list
+        runs = await asyncio.to_thread(get_run_list, limit, offset)
+        return {"runs": runs, "count": len(runs)}
+
+    @app.get("/api/v2/engine/history/runs/{calculation_id}")
+    async def get_history_run_detail(calculation_id: str):
+        """Get all event snapshots for a specific compute run."""
+        from prism_engine.history import get_run_detail
+        snapshots = await asyncio.to_thread(get_run_detail, calculation_id)
+        return {
+            "calculation_id": calculation_id,
+            "event_count": len(snapshots),
+            "snapshots": snapshots,
+        }
+
+    @app.get("/api/v2/engine/history/events/{event_id}")
+    async def get_history_event(event_id: str, limit: int = Query(100)):
+        """Get probability history for a single event across all runs."""
+        from prism_engine.history import get_event_history
+        history = await asyncio.to_thread(get_event_history, event_id, limit)
+        return {
+            "event_id": event_id,
+            "run_count": len(history),
+            "history": history,
+        }
+
+    @app.get("/api/v2/engine/history/compare")
+    async def compare_history_runs(
+        run_a: str = Query(..., description="First calculation_id"),
+        run_b: str = Query(..., description="Second calculation_id"),
+    ):
+        """Compare two compute runs side-by-side."""
+        from prism_engine.history import compare_runs
+        comparison = await asyncio.to_thread(compare_runs, run_a, run_b)
+        return {
+            "run_a": run_a,
+            "run_b": run_b,
+            "event_count": len(comparison),
+            "comparison": comparison,
+        }
 
     logger.info("Registered prism_engine API routes at /api/v2/engine/*")

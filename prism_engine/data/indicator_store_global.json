@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-02-23T08:38:53.698759",
+    "last_updated": "2026-02-23T08:45:33.024093",
     "version": "1.0"
   },
   "indicators": {
@@ -9,7 +9,7 @@
       "unit": "days",
       "tier": 1,
       "source": "eia.fetch_petroleum_stocks",
-      "updated_at": "2026-02-23T08:38:53.028106",
+      "updated_at": "2026-02-23T08:45:32.584106",
       "ttl_hours": 24
     },
     "OPS-RLD-005/p_preconditions/stocks": {
@@ -17,7 +17,7 @@
       "unit": "days",
       "tier": 1,
       "source": "eia.fetch_petroleum_stocks",
-      "updated_at": "2026-02-23T08:38:53.044575",
+      "updated_at": "2026-02-23T08:45:32.584106",
       "ttl_hours": 24
     },
     "OPS-AIR-004/p_preconditions/vol": {
@@ -25,7 +25,7 @@
       "unit": "%",
       "tier": 1,
       "source": "eia.fetch_crude_price",
-      "updated_at": "2026-02-23T08:38:53.044575",
+      "updated_at": "2026-02-23T08:45:32.585332",
       "ttl_hours": 24
     },
     "OPS-RLD-005/p_trigger/spike": {
@@ -33,7 +33,7 @@
       "unit": "%",
       "tier": 1,
       "source": "eia.fetch_crude_price",
-      "updated_at": "2026-02-23T08:38:53.044575",
+      "updated_at": "2026-02-23T08:45:32.585332",
       "ttl_hours": 24
     },
     "OPS-AIR-004/p_trigger/outages": {
@@ -41,7 +41,7 @@
       "unit": "count",
       "tier": 1,
       "source": "eia.fetch_refinery_outages",
-      "updated_at": "2026-02-23T08:38:53.044575",
+      "updated_at": "2026-02-23T08:45:32.585332",
       "ttl_hours": 24
     },
     "OPS-RLD-005/p_trigger/outages": {
@@ -49,7 +49,7 @@
       "unit": "count",
       "tier": 1,
       "source": "eia.fetch_refinery_outages",
-      "updated_at": "2026-02-23T08:38:53.044575",
+      "updated_at": "2026-02-23T08:45:32.585332",
       "ttl_hours": 24
     },
     "STR-FIN-003/p_preconditions/ig_spread": {
@@ -57,7 +57,7 @@
       "unit": "bp",
       "tier": 1,
       "source": "fred.fetch_series",
-      "updated_at": "2026-02-23T08:38:53.698759",
+      "updated_at": "2026-02-23T08:45:33.024093",
       "ttl_hours": 24
     }
   }

@@ -16,7 +16,7 @@ The app has two parts:
 
 ---
 
-## 2. CURRENT STATE (as of Feb 22, 2026 — Session 11)
+## 2. CURRENT STATE (as of Feb 23, 2026 — Session 12)
 
 ### What works:
 - Backend starts successfully: `python -m uvicorn main:app --host 0.0.0.0 --port 8000`
@@ -28,7 +28,7 @@ The app has two parts:
 - **Import/Export redesigned:** uses professional PRISM Questionnaire template (multi-sheet Excel with dropdowns)
 - **Risk Selection redesigned** with Domain → Family grouped layout (collapsible expanders, sorted 1.1→4.7)
 - **Risk Selection performance fixed:** page loads instantly (no more compute-all on page load)
-- **Results Dashboard fixed:** workflow progress indicator, heatmap, plotly charts all working
+- **Results Dashboard fixed:** workflow progress indicator, heatmap (always shows all 4 domains), plotly charts all working
 - **V2 Event Explorer page removed** (no longer needed)
 - **Probability Engine (prism_engine) built and integrated:**
   - **ALL 174 events computing successfully (Phase 2 complete)**
@@ -53,6 +53,15 @@ The app has two parts:
   - Dashboard data coverage column (shows Dynamic vs Static per risk)
   - API endpoints: indicator CRUD, coverage summary, data sources, auto-fetch trigger
   - Zero regression: all 115 Method C events produce identical results when indicator store is empty
+- **Phase 21: Probability History Archive (NEW):**
+  - Every compute-all run automatically archived to PostgreSQL (fire-and-forget background task)
+  - `ProbabilitySnapshot` table stores per-event: probability, prior, method, data_source, is_dynamic, modifier_count, confidence
+  - `CalculationLog` table stores per-run: calculation_id, start/end time, events processed, duration, trigger
+  - 4 query functions: run list, run detail, event history, run comparison
+  - 4 API endpoints at `/api/v2/engine/history/*`
+  - Data Sources page restructured to 3 tabs: Engine Status, Compute, History Archive
+  - History tab: run list, drill-down with domain filter, Excel export, side-by-side run comparison
+  - compute-all now includes Tier 1 auto-fetch before computation
 
 ### What still needs work:
 - ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP.
@@ -67,9 +76,9 @@ The app has two parts:
 - **Indicator data population:** Only ~5% of 1,072 indicators auto-fetch from free APIs. Most require manual entry via the Indicator Data Entry page. The system works correctly with any amount of data (zero to full).
 
 ### Git status:
-- Latest pushed commit: `f7c14fd` — Method C research integration (Phase 20)
+- Latest pushed commit: `0af4273` — Fix EIA connector facets + verified API keys
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
-- Uncommitted: Phase II Dynamic Scoring implementation (all sprint 1-5 files)
+- Pending commit: Phase 21 (History Archive) + auto-fetch in compute-all + heatmap 4-domain fix
 
 ### Rollback if needed:
 ```bash
@@ -97,6 +106,7 @@ prism-brain-v2/
 │   ├── fallback.py            # Loads 174 fallback rates from seed files + Risk Catalog
 │   ├── indicator_store.py     # Phase II: Indicator value store (JSON, tiered, cached)
 │   ├── indicator_fetch.py     # Phase II: Tier 1 auto-fetch orchestrator
+│   ├── history.py             # Phase 21: Probability history archive (DB archival + queries)
 │   ├── method_c_loader.py     # Method C research loader (v2/v3 schema, overrides + full research)
 │   ├── config/
 │   │   ├── credentials.py     # API key management from env vars (FRED, EIA, NVD, etc.)
@@ -228,6 +238,10 @@ prism-brain-v2/
 | GET /api/v2/engine/indicator-coverage | prism_engine/api_routes.py | Phase II: Coverage summary across all events |
 | GET /api/v2/engine/indicator-sources | prism_engine/api_routes.py | Phase II: Unique data sources from research |
 | POST /api/v2/engine/indicator-fetch | prism_engine/api_routes.py | Phase II: Trigger Tier 1 auto-fetch |
+| GET /api/v2/engine/history/runs | prism_engine/api_routes.py | Phase 21: List historical compute runs |
+| GET /api/v2/engine/history/runs/{id} | prism_engine/api_routes.py | Phase 21: Event snapshots for a run |
+| GET /api/v2/engine/history/events/{id} | prism_engine/api_routes.py | Phase 21: Probability history for one event |
+| GET /api/v2/engine/history/compare | prism_engine/api_routes.py | Phase 21: Compare two runs side-by-side |
 
 **Retired V1 routes** (no longer registered in main.py):
 `/api/v1/events`, `/api/v1/probabilities`, `/api/v1/data-sources/health`, `/api/v1/data/refresh`, `/api/v1/calculations/trigger-full`, `/api/v1/stats`

@@ -513,6 +513,33 @@ def api_engine_trigger_fetch(event_id: str = None) -> Optional[Dict]:
     return _api_request("POST", "/api/v2/engine/indicator-fetch", params=params, timeout=30)
 
 
+# =============================================================================
+# Probability History Archive
+# =============================================================================
+
+def api_engine_history_runs(limit: int = 50, offset: int = 0) -> Optional[Dict]:
+    """Get list of historical compute runs."""
+    return _api_request("GET", "/api/v2/engine/history/runs",
+                        params={"limit": limit, "offset": offset}, timeout=10)
+
+
+def api_engine_history_run_detail(calculation_id: str) -> Optional[Dict]:
+    """Get all event snapshots for a specific run."""
+    return _api_request("GET", f"/api/v2/engine/history/runs/{calculation_id}", timeout=10)
+
+
+def api_engine_history_event(event_id: str, limit: int = 100) -> Optional[Dict]:
+    """Get probability history for a single event."""
+    return _api_request("GET", f"/api/v2/engine/history/events/{event_id}",
+                        params={"limit": limit}, timeout=10)
+
+
+def api_engine_history_compare(run_a: str, run_b: str) -> Optional[Dict]:
+    """Compare two compute runs."""
+    return _api_request("GET", "/api/v2/engine/history/compare",
+                        params={"run_a": run_a, "run_b": run_b}, timeout=10)
+
+
 # Streamlit-cached version for pages that load events repeatedly
 if _HAS_STREAMLIT:
     @st.cache_data(ttl=300, show_spinner=False)

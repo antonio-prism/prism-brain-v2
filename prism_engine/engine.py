@@ -65,7 +65,21 @@ def compute(event_id: str) -> dict:
 
 
 def compute_all() -> dict[str, dict]:
-    """Compute all 174 events (Phase 1 hand-crafted + auto-loaded)."""
+    """Compute all 174 events (Phase 1 hand-crafted + auto-loaded).
+
+    Automatically runs Tier 1 auto-fetch first to ensure indicator store
+    has the latest data from public APIs (FRED, EIA, NVD).
+    """
+    try:
+        from .indicator_fetch import fetch_tier1_indicators
+        stats = fetch_tier1_indicators()
+        logger.info(
+            f"Tier 1 auto-fetch: {stats['fetched']} indicators refreshed, "
+            f"{stats['failed']} failed"
+        )
+    except Exception as e:
+        logger.warning(f"Tier 1 auto-fetch skipped: {e}")
+
     results = {}
     all_ids = get_all_event_ids()
     for event_id in all_ids:

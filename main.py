@@ -101,10 +101,20 @@ def ensure_schema_updates(session):
         "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS momentum FLOAT",
         "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS trend VARCHAR(20)",
         "ALTER TABLE indicator_values ADD COLUMN IF NOT EXISTS is_anomaly BOOLEAN DEFAULT FALSE",
+        # Phase 21: Probability History Archive
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS prior FLOAT",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS method VARCHAR(10)",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS data_source VARCHAR(200)",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS is_dynamic BOOLEAN DEFAULT FALSE",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS modifier_count INTEGER DEFAULT 0",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS domain VARCHAR(100)",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS family VARCHAR(100)",
+        "ALTER TABLE probability_snapshots ADD COLUMN IF NOT EXISTS event_name VARCHAR(500)",
     ]
+    from sqlalchemy import text
     for stmt in alter_statements:
         try:
-            session.execute(stmt)
+            session.execute(text(stmt))
         except Exception as e:
             # Column might already exist or DB might not support IF NOT EXISTS
             logger.debug(f"Schema update note: {e}")
