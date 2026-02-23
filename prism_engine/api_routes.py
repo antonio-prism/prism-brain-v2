@@ -11,6 +11,7 @@ Adds endpoints that expose the probability engine to the existing app:
   PUT  /api/v2/engine/annual-data         — Save annual update data
   GET  /api/v2/engine/method-c-status     — Method C integration status
   POST /api/v2/engine/method-c-integrate  — Integrate research from file
+  POST /api/v2/engine/ai-prefill          — AI-powered client prefill
   GET  /api/v2/engine/history/runs         — List historical compute runs
   GET  /api/v2/engine/history/runs/{id}    — Event snapshots for a run
   GET  /api/v2/engine/history/events/{id}  — Probability history for one event
@@ -20,9 +21,9 @@ Adds endpoints that expose the probability engine to the existing app:
 import asyncio
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from fastapi import FastAPI, Query, Request
+from fastapi import FastAPI, File, Form, Query, Request, UploadFile
 
 logger = logging.getLogger(__name__)
 
@@ -407,6 +408,67 @@ def register_engine_routes(app: FastAPI):
         from prism_engine.indicator_fetch import fetch_tier1_indicators
         stats = await asyncio.to_thread(fetch_tier1_indicators, event_id)
         return {"status": "completed", "stats": stats}
+
+    # ── AI-Powered Client Prefill ─────────────────────────────────
+
+    @app.post("/api/v2/engine/ai-prefill")
+    async def ai_prefill(
+        client_id: int = Form(...),
+        files: List[UploadFile] = File(default=[]),
+    ):
+        """AI-powered client prefill using Claude with web search + documents.
+
+        Accepts multipart/form-data with:
+        - client_id: The client to analyze
+        - files[]: Optional uploaded documents (PDF, DOCX, XLSX, TXT, CSV)
+
+        Returns suggested processes and risks with V/R estimates.
+        """
+        from config.settings import get_settings
+        from prism_engine.ai_prefill import run_prefill
+
+        settings = get_settings()
+        if not settings.anthropic_api_key:
+            return {"status": "error", "message": "ANTHROPIC_API_KEY not configured"}
+
+        # Get client data from the database
+        try:
+            from database.connection import get_db_session
+            from database.models import Client
+            with get_db_session() as session:
+                client_row = session.query(Client).filter(Client.id == client_id).first()
+                if not client_row:
+                    return {"status": "error", "message": f"Client {client_id} not found"}
+                client = {
+                    "name": client_row.name,
+                    "industry": client_row.industry or "",
+                    "location": client_row.location or "",
+                    "revenue": client_row.revenue or 0,
+                    "currency": client_row.currency or "EUR",
+                    "employees": client_row.employees or 0,
+                    "sectors": client_row.sectors or "",
+                    "primary_markets": client_row.primary_markets or "",
+                    "export_percentage": client_row.export_percentage or 0,
+                    "notes": client_row.notes or "",
+                }
+        except Exception as e:
+            logger.error(f"Failed to load client {client_id}: {e}")
+            return {"status": "error", "message": f"Failed to load client: {e}"}
+
+        # Filter out empty file uploads (browsers sometimes send empty entries)
+        actual_files = [f for f in files if f.filename and f.size and f.size > 0]
+
+        try:
+            result = await asyncio.to_thread(
+                run_prefill, client, settings.anthropic_api_key, actual_files or None
+            )
+            result["status"] = "success"
+            return result
+        except ValueError as e:
+            return {"status": "error", "message": str(e)}
+        except Exception as e:
+            logger.error(f"AI prefill failed: {e}", exc_info=True)
+            return {"status": "error", "message": f"AI analysis failed: {e}"}
 
     # ── Probability History Archive ────────────────────────────────
 

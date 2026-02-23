@@ -513,6 +513,47 @@ def api_engine_trigger_fetch(event_id: str = None) -> Optional[Dict]:
     return _api_request("POST", "/api/v2/engine/indicator-fetch", params=params, timeout=30)
 
 
+def api_engine_ai_prefill(client_id: int, files: list = None) -> Optional[Dict]:
+    """Call the AI prefill endpoint with optional document uploads.
+
+    Args:
+        client_id: The client to analyze
+        files: Optional list of Streamlit UploadedFile objects
+
+    Returns:
+        Dict with company_analysis, processes, risks, or error
+    """
+    url = f"{API_BASE_URL}/api/v2/engine/ai-prefill"
+    try:
+        # Build multipart form data
+        form_data = {"client_id": (None, str(client_id))}
+        file_tuples = []
+        if files:
+            for f in files:
+                file_tuples.append(
+                    ("files", (f.name, f.getvalue(), f.type or "application/octet-stream"))
+                )
+
+        resp = _http_session.post(
+            url,
+            data={"client_id": str(client_id)},
+            files=file_tuples if file_tuples else None,
+            timeout=150,  # AI calls can take 60-120s
+        )
+        if resp.status_code == 200:
+            return resp.json()
+        else:
+            logger.error(f"AI prefill returned HTTP {resp.status_code}: {resp.text[:500]}")
+            return {"status": "error", "message": f"Backend returned HTTP {resp.status_code}"}
+    except requests.exceptions.Timeout:
+        return {"status": "error", "message": "AI analysis timed out. Please try again."}
+    except requests.exceptions.ConnectionError:
+        return {"status": "error", "message": "Cannot reach backend server"}
+    except Exception as e:
+        logger.error(f"AI prefill request failed: {e}")
+        return {"status": "error", "message": str(e)}
+
+
 # =============================================================================
 # Probability History Archive
 # =============================================================================

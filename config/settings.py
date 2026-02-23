@@ -32,6 +32,7 @@ class Settings:
         self.otx_api_key = os.getenv("OTX_API_KEY", "")
         self.acled_email = os.getenv("ACLED_EMAIL", "")
         self.acled_password = os.getenv("ACLED_PASSWORD", "")
+        self.anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", "")
 
         # Server settings
         self.host = os.getenv("HOST", "0.0.0.0")

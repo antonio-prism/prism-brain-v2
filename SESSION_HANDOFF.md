@@ -62,6 +62,18 @@ The app has two parts:
   - Data Sources page restructured to 3 tabs: Engine Status, Compute, History Archive
   - History tab: run list, drill-down with domain filter, Excel export, side-by-side run comparison
   - compute-all now includes Tier 1 auto-fetch before computation
+- **Phase 22: AI-Powered Client Prefill (NEW):**
+  - Single "Run AI Analysis" button on Client Setup page
+  - Uses Claude Sonnet with built-in web search to research the company
+  - Optional document upload (PDF, Word, Excel, TXT, CSV — up to 5 files, 20MB)
+  - PDFs sent natively to Claude API (reads pages directly), Word/Excel extracted to text
+  - Maps findings to PRISM's exact 190 sub-processes and 174 risk events
+  - Returns V/R estimates per risk with 1-sentence rationale for each selection
+  - Review screen with checkboxes — user can uncheck before applying
+  - Apply saves processes and risks to database, stores V/R suggestions in session state
+  - API endpoint: `POST /api/v2/engine/ai-prefill` (multipart/form-data)
+  - New file: `prism_engine/ai_prefill.py` (catalog builder, document processor, prompt builder, Claude caller, response validator)
+  - Requires: `ANTHROPIC_API_KEY` in `.env`
 
 ### What still needs work:
 - ~~**ACLED API access tier**~~ — **RESOLVED.** Replaced ACLED with UCDP.
@@ -76,9 +88,13 @@ The app has two parts:
 - **Indicator data population:** Only ~5% of 1,072 indicators auto-fetch from free APIs. Most require manual entry via the Indicator Data Entry page. The system works correctly with any amount of data (zero to full).
 
 ### Git status:
-- Latest commit: `08a7ce8` — Redesign Risk Selection import/export: full 174-risk template with Yes/No
+- Latest commit: `57ef7aa` — Allow partial risk assessment import: save rows with 1-2 filled fields
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
-- Pending: Risk Selection checkbox sync fix (not yet committed)
+- Recent commits:
+  - `57ef7aa` — Allow partial risk assessment import: save rows with 1-2 filled fields
+  - `f62f3aa` — Style Excel exports: formatted headers, color-coded input columns, zebra rows
+  - `16d5885` — Fix Risk Selection: checkbox sync after import preserves all selections
+  - `08a7ce8` — Redesign Risk Selection import/export: full 174-risk template with Yes/No
 
 ### Rollback if needed:
 ```bash
@@ -832,7 +848,7 @@ Already fully implemented and committed in `28575f7` (previous session). Verifie
 - Fixed the same widget-key bug as Process Criticality (used `del st.session_state[key]` initially)
 - File: `frontend/pages/3_Risk_Selection.py` — complete rewrite of `import_export_risks()` function
 
-**Risk Selection Checkbox Sync Fix (pending commit):**
+**Risk Selection Checkbox Sync Fix (commit 16d5885):**
 - Bug: After importing risks via template upload, clicking to select/deselect a single risk caused all other selections to be lost — only the clicked risk remained
 - Root cause: The import handler used `del st.session_state[key]` to remove risk_* widget keys, but this approach didn't reliably re-initialize checkbox states on subsequent user interactions
 - Fix: Adopted the same sync-flag pattern used by Process Criticality:
@@ -842,6 +858,49 @@ Already fully implemented and committed in `28575f7` (previous session). Verifie
   4. All bulk action buttons (Select All, Clear, family Select/Deselect) also use the sync flag
 - Key insight: Setting widget keys BEFORE widgets render is safe and documented by Streamlit; deleting keys and hoping Streamlit recreates them correctly is fragile
 - File: `frontend/pages/3_Risk_Selection.py`
+
+**Excel Spreadsheet Formatting (commit f62f3aa):**
+- Professional Excel styling for both Risk Assessment and Risk Selection templates
+- Blue headers for read-only/info columns, orange headers for user-input columns
+- Risk Assessment: yellow highlight on empty input cells (V/R/Downtime), zebra stripes, borders, frozen header, auto-fit widths
+- Risk Selection: green rows for "Yes" selections, zebra stripes
+- Also improved Risk Assessment Streamlit UI: single-click download, Domain column, better file naming
+- Files: `frontend/pages/3_Risk_Selection.py`, `frontend/pages/4_Risk_Assessment.py`
+
+**Partial Risk Assessment Import (commit 57ef7aa):**
+- Changed import logic: rows with any 1 of 3 assessment fields filled are now saved (was requiring all 3)
+- Missing fields default to 0 (vulnerability=0, resilience=0, downtime=0)
+- Added `int()` casting for Process ID and Risk ID from Excel to prevent pandas float64 type mismatches
+- File: `frontend/pages/4_Risk_Assessment.py`
+
+### Session 13: AI-Powered Client Prefill (Phase 22)
+
+**AI Prefill Feature (NEW):**
+- Built complete AI-powered client onboarding feature
+- **Backend (`prism_engine/ai_prefill.py`):**
+  - `build_compact_catalogs()` — loads 190 sub-processes + 174 risk events into compact pipe-delimited text for the prompt, cached with `@lru_cache`
+  - `process_uploaded_files()` — handles PDF (native base64 for Claude), DOCX (python-docx text extraction), XLSX (openpyxl table extraction), TXT/CSV (direct read)
+  - `build_prefill_prompt()` — constructs system prompt + multi-block user message with client profile, documents, instructions, and catalogs
+  - `call_claude_with_search()` — calls Claude Sonnet with `web_search_20250305` tool, JSON extraction with retry, 90-120s timeout
+  - `validate_ai_response()` — drops invalid process/event IDs, clamps V/R to [0.05, 0.95], enriches with catalog data
+  - `run_prefill()` — orchestrates full pipeline: catalogs → documents → prompt → Claude → validate
+- **API endpoint (`prism_engine/api_routes.py`):**
+  - `POST /api/v2/engine/ai-prefill` — multipart/form-data with `client_id` + optional `files[]`
+  - Loads client from PostgreSQL, filters empty file uploads, runs in thread pool
+- **Frontend API client (`frontend/modules/api_client.py`):**
+  - `api_engine_ai_prefill()` — sends multipart form with Streamlit UploadedFile objects, 150s timeout
+- **Frontend UI (`frontend/pages/1_Client_Setup.py`):**
+  - AI section appears below company profile form when client is saved
+  - File uploader: PDF/DOCX/XLSX/TXT/CSV, max 5 files, 20MB total
+  - "Run AI Analysis" button (disabled if no API key or backend offline)
+  - Spinner with contextual message during analysis
+  - Review screen: company analysis text, documents analyzed, checkbox tables for processes and risks
+  - Apply: saves processes and risks to database, stores V/R suggestions in session state, resets sync flags
+  - Discard: clears results and returns to idle state
+- **Config changes:**
+  - `config/settings.py` — added `anthropic_api_key` env var
+  - `prism_engine/config/credentials.py` — added `anthropic` to credential check
+  - `requirements.txt` — added `anthropic>=0.49.0`, `python-docx>=1.1.0`, `python-multipart>=0.0.9`
 
 ---
 
