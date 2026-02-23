@@ -1,0 +1,64 @@
+{
+  "metadata": {
+    "last_updated": "2026-02-23T08:38:53.698759",
+    "version": "1.0"
+  },
+  "indicators": {
+    "OPS-AIR-004/p_preconditions/stocks": {
+      "value": 21.0,
+      "unit": "days",
+      "tier": 1,
+      "source": "eia.fetch_petroleum_stocks",
+      "updated_at": "2026-02-23T08:38:53.028106",
+      "ttl_hours": 24
+    },
+    "OPS-RLD-005/p_preconditions/stocks": {
+      "value": 21.0,
+      "unit": "days",
+      "tier": 1,
+      "source": "eia.fetch_petroleum_stocks",
+      "updated_at": "2026-02-23T08:38:53.044575",
+      "ttl_hours": 24
+    },
+    "OPS-AIR-004/p_preconditions/vol": {
+      "value": 2.3,
+      "unit": "%",
+      "tier": 1,
+      "source": "eia.fetch_crude_price",
+      "updated_at": "2026-02-23T08:38:53.044575",
+      "ttl_hours": 24
+    },
+    "OPS-RLD-005/p_trigger/spike": {
+      "value": -11.3,
+      "unit": "%",
+      "tier": 1,
+      "source": "eia.fetch_crude_price",
+      "updated_at": "2026-02-23T08:38:53.044575",
+      "ttl_hours": 24
+    },
+    "OPS-AIR-004/p_trigger/outages": {
+      "value": 8.0,
+      "unit": "count",
+      "tier": 1,
+      "source": "eia.fetch_refinery_outages",
+      "updated_at": "2026-02-23T08:38:53.044575",
+      "ttl_hours": 24
+    },
+    "OPS-RLD-005/p_trigger/outages": {
+      "value": 8.0,
+      "unit": "count",
+      "tier": 1,
+      "source": "eia.fetch_refinery_outages",
+      "updated_at": "2026-02-23T08:38:53.044575",
+      "ttl_hours": 24
+    },
+    "STR-FIN-003/p_preconditions/ig_spread": {
+      "value": 0.99,
+      "unit": "bp",
+      "tier": 1,
+      "source": "fred.fetch_series",
+      "updated_at": "2026-02-23T08:38:53.698759",
+      "ttl_hours": 24
+    }
+  }
+}

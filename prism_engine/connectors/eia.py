@@ -44,14 +44,15 @@ def fetch_petroleum_stocks() -> ConnectorResult:
     if cached:
         return ConnectorResult(source_id="EIA", success=True, data=cached, cached=True)
 
-    # Fetch crude oil stocks from EIA v2 API
+    # Fetch crude oil stocks from EIA v2 API (excluding SPR = commercial stocks)
     url = f"{EIA_BASE}/petroleum/stoc/wstk/data/"
     params = {
         "api_key": api_key,
         "frequency": "weekly",
         "data[0]": "value",
-        "facets[product][]": "EPC0",  # Crude oil
-        "facets[duoarea][]": "NUS",   # National US
+        "facets[product][]": "EPC0",     # Crude oil
+        "facets[duoarea][]": "NUS",      # National US
+        "facets[process][]": "SAX",      # Excluding SPR (commercial stocks)
         "sort[0][column]": "period",
         "sort[0][direction]": "desc",
         "length": 52,  # Last year of weekly data
@@ -124,7 +125,7 @@ def fetch_crude_price() -> ConnectorResult:
         "frequency": "weekly",
         "data[0]": "value",
         "facets[product][]": "EPCWTI",  # WTI Crude
-        "facets[duoarea][]": "Y35NY",   # Cushing, OK
+        "facets[duoarea][]": "YCUOK",   # Cushing, OK
         "sort[0][column]": "period",
         "sort[0][direction]": "desc",
         "length": 104,  # ~2 years of weekly data
@@ -206,15 +207,17 @@ def fetch_refinery_outages() -> ConnectorResult:
     if cached:
         return ConnectorResult(source_id="EIA", success=True, data=cached, cached=True)
 
+    # EIA reports utilization by PADD region, not national total.
+    # Fetch all PADD regions and compute weighted average per period.
     url = f"{EIA_BASE}/petroleum/pnp/wiup/data/"
     params = {
         "api_key": api_key,
         "frequency": "weekly",
         "data[0]": "value",
-        "facets[duoarea][]": "NUS",
+        "facets[process][]": "YUP",     # % Utilization Refinery Operable Capacity
         "sort[0][column]": "period",
         "sort[0][direction]": "desc",
-        "length": 52,
+        "length": 260,  # ~52 weeks * 5 PADDs
     }
 
     resp = fetch_with_retry(url, params=params, timeout=30)
@@ -228,19 +231,29 @@ def fetch_refinery_outages() -> ConnectorResult:
     except Exception as e:
         return ConnectorResult(source_id="EIA", success=False, error=f"Parse error: {e}")
 
-    utilization_values = []
+    # Group by period and average across PADDs
+    from collections import defaultdict
+    period_values: dict[str, list[float]] = defaultdict(list)
     for record in records:
         val = record.get("value")
-        if val is not None:
+        period = record.get("period", "")
+        if val is not None and period:
             try:
-                utilization_values.append(float(val))
+                period_values[period].append(float(val))
             except (ValueError, TypeError):
                 continue
 
-    if not utilization_values:
+    if not period_values:
         return ConnectorResult(source_id="EIA", success=False, error="No utilization data")
 
-    latest_util = utilization_values[0]
+    # Compute average utilization per week, sorted by period descending
+    weekly_avg = []
+    for period in sorted(period_values.keys(), reverse=True):
+        vals = period_values[period]
+        weekly_avg.append({"period": period, "util": sum(vals) / len(vals)})
+
+    latest_util = round(weekly_avg[0]["util"], 1)
+    utilization_values = [w["util"] for w in weekly_avg]
     avg_util = sum(utilization_values) / len(utilization_values)
 
     # Count weeks with utilization below 85% as proxy for significant outage periods
@@ -250,7 +263,7 @@ def fetch_refinery_outages() -> ConnectorResult:
         "latest_utilization_pct": latest_util,
         "avg_utilization_pct": round(avg_util, 1),
         "outage_weeks": outage_weeks,
-        "period": records[0].get("period", "") if records else "",
+        "period": weekly_avg[0]["period"],
     }
 
     save_cache("eia", cache_params, data)

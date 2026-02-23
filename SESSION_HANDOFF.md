@@ -63,7 +63,7 @@ The app has two parts:
 - ~~**Copernicus ERA5 downloads slow**~~ — **RESOLVED.** Rewrote connector to use published C3S/ERA5 anomaly table.
 - ~~**ENTSO-E connector**~~ — **DONE.** Built and wired into engine dispatch at source A10.
 - ~~**Phase II Dynamic Scoring**~~ — **DONE.** Full three-tier system built, tested, integrated.
-- **API keys not configured:** NOAA, EIA, ENTSO-E (placeholder values in `.env`). Not blocking — connectors use fallback data.
+- **API keys configured and verified:** FRED, NVD, EIA (all working, tested Feb 22). NOAA and ENTSO-E still have placeholder values (not blocking — connectors use fallback data).
 - **Indicator data population:** Only ~5% of 1,072 indicators auto-fetch from free APIs. Most require manual entry via the Indicator Data Entry page. The system works correctly with any amount of data (zero to full).
 
 ### Git status:
@@ -249,7 +249,7 @@ DEBUG=true
 FRED_API_KEY=<configured>
 NOAA_API_KEY=your_key_here
 NVD_API_KEY=<configured>
-EIA_API_KEY=your_key_here
+EIA_API_KEY=<configured>
 CDS_API_KEY=<configured>
 ACLED_EMAIL=<configured>
 ACLED_PASSWORD=<configured>
