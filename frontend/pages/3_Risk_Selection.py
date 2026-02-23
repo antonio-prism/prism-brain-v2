@@ -56,6 +56,9 @@ if 'engine_results' not in st.session_state:
 if 'active_family' not in st.session_state:
     st.session_state.active_family = None
 
+if '_risks_synced_for' not in st.session_state:
+    st.session_state._risks_synced_for = None
+
 # Domain display order (matches family code numbering: 1.x, 2.x, 3.x, 4.x)
 _DOMAIN_ORDER = [
     ("PHYSICAL", "Physical"),
@@ -184,6 +187,13 @@ def risk_selection_interface():
                  "Make sure the backend is running.")
         return
 
+    # Sync risk_* widget keys from selected_risks BEFORE any checkbox renders.
+    # Runs once after import, client change, or bulk action (when flag is reset).
+    if st.session_state._risks_synced_for != st.session_state.current_client_id:
+        for risk in risks:
+            st.session_state[f"risk_{risk['id']}"] = risk['id'] in st.session_state.selected_risks
+        st.session_state._risks_synced_for = st.session_state.current_client_id
+
     st.markdown(f"## Select Risks for {client['name']}")
     st.markdown("Browse risks by domain and family, then check the ones relevant to this client.")
 
@@ -207,14 +217,12 @@ def risk_selection_interface():
         if st.button("\u2713 Select All Visible"):
             for r in filtered_risks:
                 st.session_state.selected_risks.add(r['id'])
-                st.session_state[f"risk_{r['id']}"] = True
+            st.session_state._risks_synced_for = None
             st.rerun()
     with col2:
         if st.button("\u2717 Clear Selection"):
             st.session_state.selected_risks.clear()
-            for key in list(st.session_state.keys()):
-                if key.startswith("risk_") and key != "risk_search" and key != "risk_upload":
-                    st.session_state[key] = False
+            st.session_state._risks_synced_for = None
             st.rerun()
     with col3:
         total_selected = _count_selected_in_risks(risks)
@@ -281,14 +289,14 @@ def risk_selection_interface():
                         st.session_state.active_family = fc
                         for r in events:
                             st.session_state.selected_risks.add(r['id'])
-                            st.session_state[f"risk_{r['id']}"] = True
+                        st.session_state._risks_synced_for = None
                         st.rerun()
                 with col_b:
                     if st.button("Deselect all", key=f"deselall_{fc}"):
                         st.session_state.active_family = fc
                         for r in events:
                             st.session_state.selected_risks.discard(r['id'])
-                            st.session_state[f"risk_{r['id']}"] = False
+                        st.session_state._risks_synced_for = None
                         st.rerun()
 
                 # Event checkboxes with probability
@@ -614,12 +622,9 @@ def import_export_risks():
 
                 if st.button("Apply Import", type="primary", key="apply_risk_upload"):
                     st.session_state.selected_risks = selected_from_upload
-                    # Do NOT modify risk_* widget keys here — the checkboxes
-                    # in Tab 1 are already instantiated in this script run.
-                    # On rerun, checkboxes will re-sync from selected_risks.
-                    for key in list(st.session_state.keys()):
-                        if key.startswith("risk_") and key not in ("risk_search", "risk_upload"):
-                            del st.session_state[key]
+                    # Force risk_* widget keys to re-sync from selected_risks
+                    # on the next rerun (sync runs BEFORE checkboxes render).
+                    st.session_state._risks_synced_for = None
                     st.success(f"Imported {len(selected_from_upload)} risks!")
                     st.rerun()
             else:

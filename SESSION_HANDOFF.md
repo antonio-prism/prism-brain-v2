@@ -76,9 +76,9 @@ The app has two parts:
 - **Indicator data population:** Only ~5% of 1,072 indicators auto-fetch from free APIs. Most require manual entry via the Indicator Data Entry page. The system works correctly with any amount of data (zero to full).
 
 ### Git status:
-- Latest pushed commit: `0af4273` — Fix EIA connector facets + verified API keys
+- Latest commit: `08a7ce8` — Redesign Risk Selection import/export: full 174-risk template with Yes/No
 - Remote: `https://github.com/antonio-prism/prism-brain-v2` (main branch)
-- Pending commit: Phase 21 (History Archive) + auto-fetch in compute-all + heatmap 4-domain fix
+- Pending: Risk Selection checkbox sync fix (not yet committed)
 
 ### Rollback if needed:
 ```bash
@@ -124,7 +124,7 @@ prism-brain-v2/
 │   │   ├── fred.py            # FRED economic indicators (needs key)
 │   │   ├── nvd.py             # NIST NVD vulnerabilities (needs key)
 │   │   ├── eia.py             # Phase II: EIA energy data (needs key)
-│   │   ├── acled.py           # ACLED conflict data (DEPRECATED — replaced by UCDP)
+│   │   ├── acled.py           # REMOVED in Session 12 cleanup
 │   │   ├── ucdp.py            # UCDP/PRIO conflict data (free, no key)
 │   │   ├── emdat.py           # EM-DAT disasters (local file)
 │   │   ├── copernicus.py      # Copernicus ERA5 climate (uses published anomaly table, instant)
@@ -159,9 +159,7 @@ prism-brain-v2/
 │   ├── Welcome.py             # Streamlit entry point
 │   ├── modules/
 │   │   ├── api_client.py      # Frontend → Backend API communication
-│   │   ├── database.py        # SQLite client data + backend API bridge
-│   │   ├── external_data.py   # External data fetching helpers
-│   │   └── probability_engine.py # Client-side probability calculations
+│   │   └── database.py        # SQLite client data + backend API bridge
 │   ├── pages/
 │   │   ├── 1_Client_Setup.py
 │   │   ├── 2_Process_Criticality.py
@@ -190,20 +188,15 @@ prism-brain-v2/
 │       ├── pages.toml
 │       └── secrets.toml
 ├── method_c_v3_complete.json   # Method C research output (115 events, v3 schema, 1.4MB)
-├── load_events.py             # Script to load seed JSON → PostgreSQL
-├── migrate.py                 # Database migration (for existing tables only)
-├── regenerate_weights.py      # Regenerate indicator weights
 ├── start_backend.bat          # Windows: double-click to start backend
 ├── start_frontend.bat         # Windows: double-click to start frontend
-├── load_data.bat              # Windows: double-click to load events into DB
-├── cleanup_files.bat          # Windows: removes leftover files from cleanup
-├── CLEANUP_LOG.md             # Documents what was changed + rollback instructions
 ├── requirements.txt           # Python backend dependencies
 ├── runtime.txt                # Python version spec
 ├── Procfile                   # Railway deployment config
 ├── .env                       # Local environment variables (NOT in git)
 ├── .gitignore                 # venv, __pycache__, .env, docs/
 └── docs/
+    ├── PRISM_Functional_Specification.md  # Comprehensive end-to-end functional spec (1,221 lines)
     ├── source_data/           # Original taxonomy MD files, Excel
     │   ├── Risk_Family_Taxonomy_REVISED_v2.1.md
     │   ├── DOMAIN_2_STRUCTURAL_COMPLETE v2.md
@@ -211,9 +204,7 @@ prism-brain-v2/
     │   ├── DOMAIN_4_OPERATIONAL_MASTER (2).md
     │   ├── Family_1.1 through 1.7 (7 MD files)
     │   └── 20260217-Expanded Process Masterist-NEW-v02.xlsx
-    ├── setup_guides/          # Old setup guide Word docs (v1-v4)
-    ├── AUDIT_REPORT.md
-    └── SETUP_TODO.md
+    └── setup_guides/          # Old setup guide Word docs (v1-v4)
 ```
 
 ### Active API Endpoints (v3.1.0):
@@ -822,6 +813,35 @@ Integrated the 115 event-specific research sub-probabilities from `method_c_v3_c
 The v3 research file includes dynamic scoring functions (indicators, weights, sigmoid parameters) for each sub-probability. These are preserved in `method_c_full_research.json` for future implementation of dynamic recalculation based on live indicator data. The current implementation uses the static calibrated values.
 
 Files modified: `prism_engine/method_c_loader.py`, `prism_engine/engine.py`, `prism_engine/api_routes.py`, `main.py`
+
+### Phase 21: Probability History Archive (Session 11)
+Already fully implemented and committed in `28575f7` (previous session). Verified all 6 files, tested imports and DB queries (found 2 existing runs with 10 snapshots). See "Phase 21" bullet in Section 2 for feature description.
+
+### Session 12: Process Criticality Import Fix + Risk Selection Improvements
+
+**Process Criticality Import Bug Fix (commit d8e2629):**
+- Bug: Clicking "Apply Import" crashed with `st.session_state.proc_8.6 cannot be modified after the widget with key proc_8.6 is instantiated`
+- Root cause: Import handler (Tab 4) tried to set `st.session_state[key]` for all `proc_*` keys, but Tab 1 checkboxes were already rendered in the same script run — Streamlit forbids modifying widget-bound keys after instantiation
+- Fix: Replaced direct key modification with `st.session_state._processes_synced_for = None` to force the sidebar sync mechanism to update all widget keys on the next rerun (sidebar runs BEFORE widgets)
+- File: `frontend/pages/2_Process_Criticality.py`
+
+**Risk Selection Import/Export Redesign (commit 08a7ce8):**
+- Download template now exports ALL 174 risks (sorted by domain/family/ID) with columns: Domain, Family, Risk ID, Risk Name, Global Probability (%), Selected (Yes/No)
+- Currently selected risks are pre-marked as "Yes"
+- Upload reads the "Selected" column and replaces current selection with imported risks
+- Fixed the same widget-key bug as Process Criticality (used `del st.session_state[key]` initially)
+- File: `frontend/pages/3_Risk_Selection.py` — complete rewrite of `import_export_risks()` function
+
+**Risk Selection Checkbox Sync Fix (pending commit):**
+- Bug: After importing risks via template upload, clicking to select/deselect a single risk caused all other selections to be lost — only the clicked risk remained
+- Root cause: The import handler used `del st.session_state[key]` to remove risk_* widget keys, but this approach didn't reliably re-initialize checkbox states on subsequent user interactions
+- Fix: Adopted the same sync-flag pattern used by Process Criticality:
+  1. Added `_risks_synced_for` session state flag
+  2. Added sync logic at the top of `risk_selection_interface()` (runs BEFORE any checkbox renders): when flag doesn't match current client, sets ALL `risk_*` keys from `selected_risks`
+  3. Import handler now sets `_risks_synced_for = None` instead of deleting keys
+  4. All bulk action buttons (Select All, Clear, family Select/Deselect) also use the sync flag
+- Key insight: Setting widget keys BEFORE widgets render is safe and documented by Streamlit; deleting keys and hoping Streamlit recreates them correctly is fragile
+- File: `frontend/pages/3_Risk_Selection.py`
 
 ---
 
