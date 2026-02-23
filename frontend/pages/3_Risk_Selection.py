@@ -11,6 +11,8 @@ import pandas as pd
 import sys
 import io
 from pathlib import Path
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
 from utils.theme import inject_prism_theme
 
 APP_DIR = Path(__file__).parent.parent
@@ -555,12 +557,70 @@ def import_export_risks():
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='openpyxl') as writer:
             export_df.to_excel(writer, sheet_name='Risk Selection', index=False)
-
-            # Auto-fit column widths
             ws = writer.sheets['Risk Selection']
+
+            # --- Style definitions ---
+            thin_border = Border(
+                left=Side(style='thin', color='D9D9D9'),
+                right=Side(style='thin', color='D9D9D9'),
+                top=Side(style='thin', color='D9D9D9'),
+                bottom=Side(style='thin', color='D9D9D9'),
+            )
+            header_font = Font(bold=True, color='FFFFFF', size=11)
+            header_fill_info = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
+            header_fill_input = PatternFill(start_color='ED7D31', end_color='ED7D31', fill_type='solid')
+            yes_fill = PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid')
+            no_fill = PatternFill(start_color='FFFFFF', end_color='FFFFFF', fill_type='solid')
+            zebra_fill = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
+
+            num_cols = len(export_df.columns)
+            num_rows = len(export_df)
+            # "Selected" is the last column
+            selected_col_idx = num_cols
+
+            # --- Format header row ---
+            for col_idx in range(1, num_cols + 1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.font = header_font
+                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                cell.border = thin_border
+                if col_idx == selected_col_idx:
+                    cell.fill = header_fill_input
+                else:
+                    cell.fill = header_fill_info
+
+            # --- Format data rows ---
+            for row_idx in range(2, num_rows + 2):
+                is_odd = (row_idx % 2) == 1
+                selected_val = str(ws.cell(row=row_idx, column=selected_col_idx).value).strip().lower()
+                for col_idx in range(1, num_cols + 1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.border = thin_border
+                    cell.alignment = Alignment(vertical='center')
+
+                    if col_idx == selected_col_idx:
+                        cell.alignment = Alignment(horizontal='center', vertical='center')
+                        cell.font = Font(bold=True)
+                        if selected_val == 'yes':
+                            cell.fill = yes_fill
+                        else:
+                            cell.fill = no_fill
+                    elif selected_val == 'yes':
+                        cell.fill = yes_fill
+                    elif is_odd:
+                        cell.fill = zebra_fill
+
+            # --- Auto-fit column widths ---
             for col_idx, col_name in enumerate(export_df.columns, 1):
-                max_len = max(len(str(col_name)), export_df.iloc[:, col_idx - 1].astype(str).str.len().max())
-                ws.column_dimensions[ws.cell(row=1, column=col_idx).column_letter].width = min(max_len + 3, 50)
+                max_len = max(
+                    len(str(col_name)),
+                    export_df.iloc[:, col_idx - 1].astype(str).str.len().max()
+                )
+                ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len + 4, 45)
+
+            # --- Freeze header row ---
+            ws.freeze_panes = 'A2'
+            ws.row_dimensions[1].height = 30
 
         output.seek(0)
 

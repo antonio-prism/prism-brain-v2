@@ -8,6 +8,8 @@ import pandas as pd
 import io
 import sys
 from pathlib import Path
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
 from utils.theme import inject_prism_theme
 
 APP_DIR = Path(__file__).parent.parent
@@ -453,7 +455,7 @@ def batch_assessment(client, processes, risks, assessments):
 
 def import_export_assessments(client, processes, risks, assessments):
     """Import/Export assessments via XLSX."""
-    st.subheader("📥 Import / Export")
+    st.subheader("📥 Import / Export Assessments")
 
     if not st.session_state.current_client_id:
         st.warning("Please select a client to continue")
@@ -464,95 +466,182 @@ def import_export_assessments(client, processes, risks, assessments):
         return
 
     currency = client.get('currency', 'EUR')
+    client_name_safe = client['name'].replace(' ', '_')
 
-    # Create tabs for download and upload
-    col1, col2 = st.columns(2)
+    col_dl, col_ul = st.columns(2)
 
-    # Download section
-    with col1:
-        st.markdown("### 📥 Download Template")
-        st.markdown("Export current assessments or download a blank template to fill in.")
-
-        if st.button("📥 Download XLSX Template", width="stretch"):
-            # Build export data
-            assessment_lookup = {(a['process_id'], a['risk_id']): a for a in assessments}
-            export_data = []
-
-            for proc in processes:
-                for risk in risks:
-                    existing = assessment_lookup.get((proc['id'], risk['id']))
-                    export_data.append({
-                        'Process Name': proc['process_name'],
-                        'Process ID': proc['id'],
-                        'Risk Name': risk['risk_name'],
-                        'Risk ID': risk['id'],
-                        'Criticality/Day': proc['criticality_per_day'],
-                        'Probability (%)': risk['probability'] * 100,
-                        'Vulnerability (%)': int(existing['vulnerability'] * 100) if existing else '',
-                        'Resilience (%)': int(existing['resilience'] * 100) if existing else '',
-                        'Downtime (days)': existing['expected_downtime'] if existing else ''
-                    })
-
-            df_export = pd.DataFrame(export_data)
-
-            # Create Excel file in memory
-            output = io.BytesIO()
-            with pd.ExcelWriter(output, engine='openpyxl') as writer:
-                df_export.to_excel(writer, sheet_name='Assessments', index=False)
-
-            output.seek(0)
-
-            st.download_button(
-                label="⬇️ Download XLSX",
-                data=output.getvalue(),
-                file_name=f"risk_assessments_{st.session_state.current_client_id}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-
-    # Upload section
-    with col2:
-        st.markdown("### 📤 Upload XLSX")
-        st.markdown("Upload a completed assessment file to import values.")
-
-        uploaded_file = st.file_uploader(
-            "Choose XLSX file",
-            type=["xlsx", "xls"],
-            label_visibility="collapsed"
+    # --- Download template ---
+    with col_dl:
+        st.markdown("#### Download Assessment Template")
+        st.markdown(
+            "Download a spreadsheet with **all process-risk combinations**. "
+            "Fill in the three assessment columns "
+            "(**Vulnerability %**, **Resilience %**, **Downtime days**) "
+            "and upload it back to import your values."
         )
 
-        if uploaded_file:
-            try:
-                df_import = pd.read_excel(uploaded_file)
+        # Build export data
+        assessment_lookup = {(a['process_id'], a['risk_id']): a for a in assessments}
+        export_data = []
 
-                # Validate required columns
-                required_cols = ['Process ID', 'Risk ID', 'Vulnerability (%)', 'Resilience (%)', 'Downtime (days)']
-                missing_cols = [col for col in required_cols if col not in df_import.columns]
+        for proc in processes:
+            for risk in risks:
+                existing = assessment_lookup.get((proc['id'], risk['id']))
+                export_data.append({
+                    'Process ID': proc['id'],
+                    'Process Name': proc['process_name'],
+                    'Risk ID': risk['id'],
+                    'Risk Name': risk['risk_name'],
+                    'Domain': risk['domain'],
+                    'Criticality/Day': proc['criticality_per_day'],
+                    'Probability (%)': round(risk['probability'] * 100, 2),
+                    'Vulnerability (%)': int(existing['vulnerability'] * 100) if existing else '',
+                    'Resilience (%)': int(existing['resilience'] * 100) if existing else '',
+                    'Downtime (days)': existing['expected_downtime'] if existing else '',
+                })
 
-                if missing_cols:
-                    st.error(f"Missing columns: {', '.join(missing_cols)}")
+        df_export = pd.DataFrame(export_data)
+
+        # Create formatted Excel file
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df_export.to_excel(writer, sheet_name='Assessments', index=False)
+            ws = writer.sheets['Assessments']
+
+            # --- Style definitions ---
+            thin_border = Border(
+                left=Side(style='thin', color='D9D9D9'),
+                right=Side(style='thin', color='D9D9D9'),
+                top=Side(style='thin', color='D9D9D9'),
+                bottom=Side(style='thin', color='D9D9D9'),
+            )
+            header_font = Font(bold=True, color='FFFFFF', size=11)
+            header_fill_info = PatternFill(start_color='4472C4', end_color='4472C4', fill_type='solid')
+            header_fill_input = PatternFill(start_color='ED7D31', end_color='ED7D31', fill_type='solid')
+            input_fill = PatternFill(start_color='FFF2CC', end_color='FFF2CC', fill_type='solid')
+            zebra_fill = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
+
+            # Input columns (the ones the user fills): Vulnerability, Resilience, Downtime
+            input_col_indices = []
+            for col_idx, col_name in enumerate(df_export.columns, 1):
+                if col_name in ('Vulnerability (%)', 'Resilience (%)', 'Downtime (days)'):
+                    input_col_indices.append(col_idx)
+
+            num_cols = len(df_export.columns)
+            num_rows = len(df_export)
+
+            # --- Format header row ---
+            for col_idx in range(1, num_cols + 1):
+                cell = ws.cell(row=1, column=col_idx)
+                cell.font = header_font
+                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                cell.border = thin_border
+                if col_idx in input_col_indices:
+                    cell.fill = header_fill_input
                 else:
-                    st.markdown("### Preview of imported data")
-                    st.dataframe(df_import, width="stretch")
+                    cell.fill = header_fill_info
 
-                    if st.button("💾 Save Imported Assessments", type="primary", width="stretch"):
+            # --- Format data rows ---
+            for row_idx in range(2, num_rows + 2):
+                is_odd = (row_idx % 2) == 1
+                for col_idx in range(1, num_cols + 1):
+                    cell = ws.cell(row=row_idx, column=col_idx)
+                    cell.border = thin_border
+                    cell.alignment = Alignment(vertical='center')
+
+                    if col_idx in input_col_indices:
+                        # Input columns: yellow highlight so user knows what to fill
+                        if cell.value == '' or cell.value is None:
+                            cell.fill = input_fill
+                        cell.alignment = Alignment(horizontal='center', vertical='center')
+                    elif is_odd:
+                        cell.fill = zebra_fill
+
+            # --- Auto-fit column widths ---
+            for col_idx, col_name in enumerate(df_export.columns, 1):
+                max_len = max(
+                    len(str(col_name)),
+                    df_export.iloc[:, col_idx - 1].astype(str).str.len().max()
+                )
+                ws.column_dimensions[get_column_letter(col_idx)].width = min(max_len + 4, 45)
+
+            # --- Freeze header row ---
+            ws.freeze_panes = 'A2'
+
+            # --- Set row height for header ---
+            ws.row_dimensions[1].height = 30
+
+        output.seek(0)
+
+        total_combos = len(export_data)
+        filled = sum(1 for d in export_data if d['Vulnerability (%)'] != '')
+
+        st.download_button(
+            label=f"Download Template (.xlsx) -- {total_combos} combinations, {filled} filled",
+            data=output.getvalue(),
+            file_name=f"PRISM_Risk_Assessment_{client_name_safe}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+
+    # --- Upload completed template ---
+    with col_ul:
+        st.markdown("#### Upload Assessment File")
+        st.markdown(
+            "Upload the completed template. Rows with values in "
+            "**Vulnerability**, **Resilience**, and **Downtime** columns "
+            "will be imported and saved."
+        )
+
+        uploaded_file = st.file_uploader(
+            "Upload completed assessment template",
+            type=["xlsx"],
+            key="assessment_upload",
+        )
+
+    # --- Process uploaded file (below both columns) ---
+    if uploaded_file:
+        try:
+            df_import = pd.read_excel(uploaded_file)
+
+            required_cols = ['Process ID', 'Risk ID', 'Vulnerability (%)', 'Resilience (%)', 'Downtime (days)']
+            missing_cols = [col for col in required_cols if col not in df_import.columns]
+
+            if missing_cols:
+                st.error(f"Missing required columns: {', '.join(missing_cols)}. Please use the PRISM Assessment Template.")
+            else:
+                # Count rows that have assessment data filled in
+                filled_rows = df_import[
+                    df_import['Vulnerability (%)'].notna()
+                    & df_import['Resilience (%)'].notna()
+                    & df_import['Downtime (days)'].notna()
+                ]
+
+                st.info(f"Found **{len(filled_rows)}** rows with assessment data out of {len(df_import)} total rows.")
+
+                if len(filled_rows) > 0:
+                    # Show preview with only the key columns
+                    preview_cols = ['Process ID', 'Risk ID', 'Vulnerability (%)', 'Resilience (%)', 'Downtime (days)']
+                    if 'Process Name' in df_import.columns:
+                        preview_cols = ['Process Name'] + preview_cols
+                    st.dataframe(
+                        filled_rows[preview_cols].reset_index(drop=True),
+                        hide_index=True,
+                        use_container_width=True,
+                    )
+
+                    if st.button("Apply Import", type="primary", key="apply_assessment_upload"):
                         saved_count = 0
                         error_count = 0
 
-                        for idx, row in df_import.iterrows():
+                        for idx, row in filled_rows.iterrows():
                             try:
-                                process_id = row['Process ID']
-                                risk_id = row['Risk ID']
-                                vulnerability = float(row['Vulnerability (%)']) / 100 if pd.notna(row['Vulnerability (%)']) else 0
-                                resilience = float(row['Resilience (%)']) / 100 if pd.notna(row['Resilience (%)']) else 0
-                                downtime = int(row['Downtime (days)']) if pd.notna(row['Downtime (days)']) else 0
-
                                 save_assessment(
                                     client_id=st.session_state.current_client_id,
-                                    process_id=process_id,
-                                    risk_id=risk_id,
-                                    vulnerability=vulnerability,
-                                    resilience=resilience,
-                                    expected_downtime=downtime,
+                                    process_id=row['Process ID'],
+                                    risk_id=row['Risk ID'],
+                                    vulnerability=float(row['Vulnerability (%)']) / 100,
+                                    resilience=float(row['Resilience (%)']) / 100,
+                                    expected_downtime=int(row['Downtime (days)']),
                                     notes=""
                                 )
                                 saved_count += 1
@@ -560,13 +649,15 @@ def import_export_assessments(client, processes, risks, assessments):
                                 error_count += 1
                                 st.warning(f"Row {idx + 2}: {str(e)}")
 
-                        st.success(f"✅ Imported {saved_count} assessments!")
+                        st.success(f"Imported {saved_count} assessments!")
                         if error_count > 0:
-                            st.warning(f"⚠️ {error_count} rows had errors")
+                            st.warning(f"{error_count} rows had errors")
                         st.rerun()
+                else:
+                    st.warning("No rows have all three assessment columns filled in (Vulnerability, Resilience, Downtime).")
 
-            except Exception as e:
-                st.error(f"Error reading file: {str(e)}")
+        except Exception as e:
+            st.error(f"Error reading file: {str(e)}")
 
 
 def main():
