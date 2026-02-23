@@ -661,14 +661,13 @@ def import_export_section():
                             delete_client_process(saved["id"])
                             removed += 1
 
-                    # Update session state: set selected_processes AND
-                    # reset all checkbox widget keys so Process Selection
-                    # tab reflects the import (not stale checkbox values)
+                    # Update session state and force the sidebar sync
+                    # to refresh checkbox widget keys on the next rerun.
+                    # We must NOT modify proc_* widget keys here because
+                    # the checkbox widgets (Tab 1) are already instantiated
+                    # in this script run — Streamlit forbids that.
                     st.session_state.selected_processes = new_selected
-                    for key in list(st.session_state.keys()):
-                        if key.startswith("proc_"):
-                            pid = key[5:]  # strip "proc_" prefix
-                            st.session_state[key] = pid in new_selected
+                    st.session_state._processes_synced_for = None
 
                     st.success(
                         f"✅ Import complete! Added {added}, removed {removed}, "
